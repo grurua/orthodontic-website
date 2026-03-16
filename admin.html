@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Dr. Smile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">
+        <i class="fas fa-tooth"></i>
+        <h1>Admin Panel</h1>
+        <p>Enter your password to manage your website</p>
+      </div>
+      <form id="loginForm">
+        <div class="login-field">
+          <input type="password" id="loginPassword" placeholder="Password" autofocus />
+        </div>
+        <button type="submit" class="btn-login">Sign In</button>
+        <p class="login-hint" id="loginHint"></p>
+        <p class="login-note">Default password: <strong>admin123</strong><br/>Change it in Settings after login.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div class="admin-panel" id="adminPanel" style="display:none;">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-tooth"></i>
+        <span>Admin Panel</span>
+        <button class="sidebar-toggle-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="#" class="nav-item" data-tab="hero"><i class="fas fa-image"></i> Hero Section</a>
+        <a href="#" class="nav-item" data-tab="about"><i class="fas fa-user-md"></i> About Me</a>
+        <a href="#" class="nav-item" data-tab="services"><i class="fas fa-th-list"></i> Services</a>
+        <a href="#" class="nav-item" data-tab="results"><i class="fas fa-exchange-alt"></i> Before / After</a>
+        <a href="#" class="nav-item" data-tab="contact"><i class="fas fa-address-book"></i> Contact Info</a>
+        <a href="#" class="nav-item" data-tab="social"><i class="fas fa-share-alt"></i> Social Links</a>
+        <a href="#" class="nav-item" data-tab="translations"><i class="fas fa-language"></i> Translations</a>
+        <a href="#" class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="index.html" target="_blank" class="btn-view-site"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <h2 id="pageTitle">Dashboard</h2>
+        <div class="topbar-actions">
+          <button class="btn-save" id="btnSaveAll" title="Save all changes"><i class="fas fa-save"></i> Save All</button>
+        </div>
+      </header>
+
+      <div class="content-area">
+
+        <!-- Dashboard Tab -->
+        <section class="tab-panel active" id="tab-dashboard">
+          <div class="dashboard-cards">
+            <div class="dash-card">
+              <i class="fas fa-image"></i>
+              <h3>Images</h3>
+              <p id="dashImageCount">0 uploaded</p>
+            </div>
+            <div class="dash-card">
+              <i class="fas fa-th-list"></i>
+              <h3>Services</h3>
+              <p id="dashServiceCount">9 active</p>
+            </div>
+            <div class="dash-card">
+              <i class="fas fa-exchange-alt"></i>
+              <h3>Results</h3>
+              <p id="dashResultCount">4 cases</p>
+            </div>
+            <div class="dash-card">
+              <i class="fas fa-language"></i>
+              <h3>Languages</h3>
+              <p>3 active (EN, KA, RU)</p>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3>Quick Guide</h3>
+            <ul class="guide-list">
+              <li><strong>Hero Section</strong> — Edit the main banner photo, headline text, and statistics.</li>
+              <li><strong>About Me</strong> — Update your biography photo and text.</li>
+              <li><strong>Services</strong> — Add, edit, or remove orthodontic services.</li>
+              <li><strong>Before / After</strong> — Upload treatment result photos with captions.</li>
+              <li><strong>Contact Info</strong> — Set your address, phone, email, and hours.</li>
+              <li><strong>Social Links</strong> — Add your social media profile URLs.</li>
+              <li><strong>Translations</strong> — Edit every text in all 3 languages directly.</li>
+              <li><strong>Settings</strong> — Change admin password and export/import data.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Hero Tab -->
+        <section class="tab-panel" id="tab-hero">
+          <div class="panel-card">
+            <h3>Hero Photo</h3>
+            <p class="field-help">This photo appears in the main banner area. Recommended: portrait orientation, minimum 600x800px.</p>
+            <div class="image-upload-area" data-key="hero_photo">
+              <div class="image-preview" id="preview-hero_photo">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click or drag to upload</span>
+              </div>
+              <input type="file" accept="image/*" class="file-input" data-key="hero_photo" />
+              <button class="btn-remove-img" data-key="hero_photo" style="display:none;">Remove</button>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h3>Statistics Banner</h3>
+            <p class="field-help">The numbers displayed in the banner below the hero.</p>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Stat 1 — Number</label>
+                <input type="text" data-admin="stat1_number" placeholder="15+" />
+              </div>
+              <div class="form-field">
+                <label>Stat 2 — Number</label>
+                <input type="text" data-admin="stat2_number" placeholder="5000+" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Stat 3 — Number</label>
+                <input type="text" data-admin="stat3_number" placeholder="98%" />
+              </div>
+              <div class="form-field">
+                <label>Stat 4 — Number</label>
+                <input type="text" data-admin="stat4_number" placeholder="10+" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About Tab -->
+        <section class="tab-panel" id="tab-about">
+          <div class="panel-card">
+            <h3>About Photo</h3>
+            <p class="field-help">Your professional photo for the About section. Recommended: minimum 500x600px.</p>
+            <div class="image-upload-area" data-key="about_photo">
+              <div class="image-preview" id="preview-about_photo">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click or drag to upload</span>
+              </div>
+              <input type="file" accept="image/*" class="file-input" data-key="about_photo" />
+              <button class="btn-remove-img" data-key="about_photo" style="display:none;">Remove</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Services Tab -->
+        <section class="tab-panel" id="tab-services">
+          <div class="panel-card">
+            <h3>Manage Services</h3>
+            <p class="field-help">Edit, reorder, or add/remove services. Icon uses Font Awesome class names (e.g. <code>fas fa-child</code>).</p>
+            <div id="servicesList"></div>
+            <button class="btn-add" id="btnAddService"><i class="fas fa-plus"></i> Add Service</button>
+          </div>
+        </section>
+
+        <!-- Before/After Tab -->
+        <section class="tab-panel" id="tab-results">
+          <div class="panel-card">
+            <h3>Before / After Cases</h3>
+            <p class="field-help">Upload before and after photos for each treatment case.</p>
+            <div id="resultsList"></div>
+            <button class="btn-add" id="btnAddResult"><i class="fas fa-plus"></i> Add Case</button>
+          </div>
+        </section>
+
+        <!-- Contact Tab -->
+        <section class="tab-panel" id="tab-contact">
+          <div class="panel-card">
+            <h3>Contact Information</h3>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Phone Number</label>
+                <input type="text" data-admin="contact_phone" placeholder="+995 555 123 456" />
+              </div>
+              <div class="form-field">
+                <label>Email Address</label>
+                <input type="email" data-admin="contact_email" placeholder="info@drsmile.ge" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field full">
+                <label>Map Embed URL (optional)</label>
+                <input type="url" data-admin="contact_map" placeholder="https://www.google.com/maps/embed?..." />
+                <span class="field-hint">Paste Google Maps embed URL to show a map on the contact section.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Social Links Tab -->
+        <section class="tab-panel" id="tab-social">
+          <div class="panel-card">
+            <h3>Social Media Links</h3>
+            <p class="field-help">Add your profile URLs. Leave empty to hide a social icon on the site.</p>
+            <div class="form-field">
+              <label><i class="fab fa-instagram"></i> Instagram</label>
+              <input type="url" data-admin="social_instagram" placeholder="https://instagram.com/yourprofile" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-facebook-f"></i> Facebook</label>
+              <input type="url" data-admin="social_facebook" placeholder="https://facebook.com/yourpage" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-telegram-plane"></i> Telegram</label>
+              <input type="url" data-admin="social_telegram" placeholder="https://t.me/yourusername" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-whatsapp"></i> WhatsApp</label>
+              <input type="url" data-admin="social_whatsapp" placeholder="https://wa.me/995555123456" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-viber"></i> Viber</label>
+              <input type="url" data-admin="social_viber" placeholder="viber://chat?number=+995555123456" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-tiktok"></i> TikTok</label>
+              <input type="url" data-admin="social_tiktok" placeholder="https://tiktok.com/@yourprofile" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-youtube"></i> YouTube</label>
+              <input type="url" data-admin="social_youtube" placeholder="https://youtube.com/@yourchannel" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Translations Tab -->
+        <section class="tab-panel" id="tab-translations">
+          <div class="panel-card">
+            <h3>Edit Translations</h3>
+            <p class="field-help">Edit every text on the website in all three languages. Changes here override the default language files.</p>
+            <div class="lang-tabs">
+              <button class="lang-tab active" data-tlang="en">English</button>
+              <button class="lang-tab" data-tlang="ka">Georgian</button>
+              <button class="lang-tab" data-tlang="ru">Russian</button>
+            </div>
+            <div id="translationFields"></div>
+          </div>
+        </section>
+
+        <!-- Settings Tab -->
+        <section class="tab-panel" id="tab-settings">
+          <div class="panel-card">
+            <h3>Change Password</h3>
+            <div class="form-field">
+              <label>Current Password</label>
+              <input type="password" id="currentPassword" />
+            </div>
+            <div class="form-field">
+              <label>New Password</label>
+              <input type="password" id="newPassword" />
+            </div>
+            <div class="form-field">
+              <label>Confirm New Password</label>
+              <input type="password" id="confirmPassword" />
+            </div>
+            <button class="btn-save" id="btnChangePassword"><i class="fas fa-key"></i> Change Password</button>
+            <p class="settings-msg" id="passwordMsg"></p>
+          </div>
+
+          <div class="panel-card">
+            <h3>Data Management</h3>
+            <p class="field-help">Export all admin data as a JSON file for backup, or import a previously exported file to restore.</p>
+            <div class="settings-actions">
+              <button class="btn-export" id="btnExport"><i class="fas fa-download"></i> Export Data</button>
+              <label class="btn-import">
+                <i class="fas fa-upload"></i> Import Data
+                <input type="file" accept=".json" id="btnImport" style="display:none;" />
+              </label>
+            </div>
+          </div>
+
+          <div class="panel-card danger-zone">
+            <h3>Danger Zone</h3>
+            <p class="field-help">Reset all admin data to defaults. This cannot be undone.</p>
+            <button class="btn-danger" id="btnReset"><i class="fas fa-trash"></i> Reset All Data</button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

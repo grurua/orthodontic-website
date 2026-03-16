@@ -1,7 +1,145 @@
 /**
- * Main JavaScript — Navigation, smooth scroll, form, animations
+ * Main JavaScript — Navigation, smooth scroll, form, animations, admin data integration.
  */
 document.addEventListener('DOMContentLoaded', () => {
+  // ---- Load admin data ----
+  let adminData = null;
+  try {
+    const raw = localStorage.getItem('admin_data');
+    if (raw) adminData = JSON.parse(raw);
+  } catch { /* ignore */ }
+
+  // ---- Apply admin images ----
+  if (adminData && adminData.images) {
+    const imgs = adminData.images;
+
+    // Hero photo
+    if (imgs.hero_photo) {
+      const heroPlaceholder = document.querySelector('.hero-photo-placeholder');
+      if (heroPlaceholder) {
+        heroPlaceholder.innerHTML = '';
+        heroPlaceholder.style.backgroundImage = `url(${imgs.hero_photo})`;
+        heroPlaceholder.style.backgroundSize = 'cover';
+        heroPlaceholder.style.backgroundPosition = 'center';
+        heroPlaceholder.style.border = 'none';
+      }
+    }
+
+    // About photo
+    if (imgs.about_photo) {
+      const aboutPlaceholder = document.querySelector('.about-photo-placeholder');
+      if (aboutPlaceholder) {
+        aboutPlaceholder.innerHTML = '';
+        aboutPlaceholder.style.backgroundImage = `url(${imgs.about_photo})`;
+        aboutPlaceholder.style.backgroundSize = 'cover';
+        aboutPlaceholder.style.backgroundPosition = 'center';
+        aboutPlaceholder.style.border = 'none';
+      }
+    }
+
+    // Before/After photos
+    if (adminData.results) {
+      const resultCards = document.querySelectorAll('.result-card');
+      adminData.results.forEach((res, idx) => {
+        const card = resultCards[idx];
+        if (!card) return;
+
+        const beforeKey = `result_${res.id}_before`;
+        const afterKey = `result_${res.id}_after`;
+
+        if (imgs[beforeKey]) {
+          const beforeDiv = card.querySelector('.result-img.before .result-placeholder');
+          if (beforeDiv) {
+            beforeDiv.innerHTML = '';
+            beforeDiv.style.backgroundImage = `url(${imgs[beforeKey]})`;
+            beforeDiv.style.backgroundSize = 'cover';
+            beforeDiv.style.backgroundPosition = 'center';
+          }
+        }
+
+        if (imgs[afterKey]) {
+          const afterDiv = card.querySelector('.result-img.after .result-placeholder');
+          if (afterDiv) {
+            afterDiv.innerHTML = '';
+            afterDiv.style.backgroundImage = `url(${imgs[afterKey]})`;
+            afterDiv.style.backgroundSize = 'cover';
+            afterDiv.style.backgroundPosition = 'center';
+          }
+        }
+      });
+    }
+  }
+
+  // ---- Apply admin stats ----
+  if (adminData && adminData.stats) {
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const keys = ['stat1_number', 'stat2_number', 'stat3_number', 'stat4_number'];
+    keys.forEach((key, idx) => {
+      if (adminData.stats[key] && statNumbers[idx]) {
+        statNumbers[idx].textContent = adminData.stats[key];
+      }
+    });
+  }
+
+  // ---- Apply admin social links ----
+  if (adminData && adminData.social) {
+    const socialMap = {
+      social_instagram: '.social-icon.instagram',
+      social_facebook: '.social-icon.facebook',
+      social_telegram: '.social-icon.telegram',
+      social_whatsapp: '.social-icon.whatsapp',
+      social_viber: '.social-icon.viber',
+      social_tiktok: '.social-icon.tiktok',
+      social_youtube: '.social-icon.youtube',
+    };
+
+    Object.entries(socialMap).forEach(([key, selector]) => {
+      const url = adminData.social[key];
+      document.querySelectorAll(selector).forEach(el => {
+        if (url) {
+          el.href = url;
+          el.style.display = '';
+        }
+      });
+    });
+
+    // Also update footer social links by matching aria-label
+    const footerSocialMap = {
+      social_instagram: 'Instagram',
+      social_facebook: 'Facebook',
+      social_telegram: 'Telegram',
+      social_whatsapp: 'WhatsApp',
+      social_viber: 'Viber',
+    };
+    Object.entries(footerSocialMap).forEach(([key, label]) => {
+      const url = adminData.social[key];
+      if (url) {
+        document.querySelectorAll(`.footer-social a[aria-label="${label}"]`).forEach(el => {
+          el.href = url;
+        });
+      }
+    });
+  }
+
+  // ---- Apply admin contact info ----
+  if (adminData && adminData.contact) {
+    if (adminData.contact.contact_phone) {
+      const phoneLink = document.querySelector('.contact-item a[href^="tel:"]');
+      if (phoneLink) {
+        const cleanPhone = adminData.contact.contact_phone.replace(/\s/g, '');
+        phoneLink.href = `tel:${cleanPhone}`;
+        phoneLink.textContent = adminData.contact.contact_phone;
+      }
+    }
+    if (adminData.contact.contact_email) {
+      const emailLink = document.querySelector('.contact-item a[href^="mailto:"]');
+      if (emailLink) {
+        emailLink.href = `mailto:${adminData.contact.contact_email}`;
+        emailLink.textContent = adminData.contact.contact_email;
+      }
+    }
+  }
+
   // ---- Navbar scroll effect ----
   const navbar = document.getElementById('navbar');
   const onScroll = () => {
@@ -98,13 +236,13 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      console.log('Form submitted:', data);
+      const formEntries = Object.fromEntries(formData.entries());
+      console.log('Form submitted:', formEntries);
 
       // Show success feedback
       const btn = form.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
-      btn.textContent = '✓';
+      btn.textContent = '\u2713';
       btn.style.background = '#00c9a7';
       btn.style.borderColor = '#00c9a7';
       btn.disabled = true;
