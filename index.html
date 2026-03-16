@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Professional Orthodontist — Braces, Aligners, Pediatric Orthodontics. Book your consultation today." />
+  <title>Dr. Smile — Orthodontist</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <i class="fas fa-tooth"></i>
+        <span data-i18n="logo">Dr. Smile</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" data-i18n="nav.home">Home</a></li>
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#services" data-i18n="nav.services">Services</a></li>
+        <li><a href="#results" data-i18n="nav.results">Results</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="ka">GE</button>
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <p class="hero-subtitle" data-i18n="hero.subtitle">Welcome to Our Practice</p>
+        <h1 class="hero-title" data-i18n="hero.title">Your Perfect Smile Starts Here</h1>
+        <p class="hero-description" data-i18n="hero.description">Expert orthodontic care for the whole family. We combine modern technology with a personalized approach to give you the smile you've always wanted.</p>
+        <div class="hero-buttons">
+          <a href="#contact" class="btn btn-primary" data-i18n="hero.cta">Book a Consultation</a>
+          <a href="#services" class="btn btn-outline" data-i18n="hero.learnMore">Our Services</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-photo-placeholder">
+          <i class="fas fa-user-doctor"></i>
+          <span data-i18n="hero.photoLabel">Doctor Photo</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-banner">
+      <div class="container banner-stats">
+        <div class="stat">
+          <span class="stat-number">15+</span>
+          <span class="stat-label" data-i18n="hero.stat1">Years Experience</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5000+</span>
+          <span class="stat-label" data-i18n="hero.stat2">Happy Patients</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">98%</span>
+          <span class="stat-label" data-i18n="hero.stat3">Satisfaction Rate</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">10+</span>
+          <span class="stat-label" data-i18n="hero.stat4">Certifications</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container about-container">
+      <div class="about-image">
+        <div class="about-photo-placeholder">
+          <i class="fas fa-stethoscope"></i>
+          <span data-i18n="about.photoLabel">About Photo</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="section-subtitle" data-i18n="about.subtitle">About Me</p>
+        <h2 class="section-title" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h2>
+        <p class="about-description" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
+        <p class="about-description" data-i18n="about.description2">My philosophy is simple: every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</p>
+        <div class="about-highlights">
+          <div class="highlight">
+            <i class="fas fa-graduation-cap"></i>
+            <span data-i18n="about.highlight1">Board Certified Orthodontist</span>
+          </div>
+          <div class="highlight">
+            <i class="fas fa-award"></i>
+            <span data-i18n="about.highlight2">International Training</span>
+          </div>
+          <div class="highlight">
+            <i class="fas fa-heart"></i>
+            <span data-i18n="about.highlight3">Patient-Centered Care</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services / Specializations Section -->
+  <section class="services" id="services">
+    <div class="container">
+      <p class="section-subtitle center" data-i18n="services.subtitle">Our Specializations</p>
+      <h2 class="section-title center" data-i18n="services.title">Comprehensive Orthodontic Services</h2>
+      <div class="services-grid">
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-child"></i></div>
+          <h3 data-i18n="services.pediatric.title">Pediatric Orthodontics</h3>
+          <p data-i18n="services.pediatric.desc">Early evaluation and treatment for children. We monitor jaw growth and development, using interceptive techniques to guide teeth into proper alignment from a young age.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-teeth"></i></div>
+          <h3 data-i18n="services.braces.title">Metal Braces</h3>
+          <p data-i18n="services.braces.desc">Traditional metal braces remain the most effective solution for complex orthodontic cases. Modern brackets are smaller, more comfortable, and work faster than ever before.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-gem"></i></div>
+          <h3 data-i18n="services.ceramic.title">Ceramic Braces</h3>
+          <p data-i18n="services.ceramic.desc">Tooth-colored ceramic brackets offer a discreet alternative to metal braces. They blend naturally with your teeth while providing the same effective treatment results.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-magic"></i></div>
+          <h3 data-i18n="services.aligners.title">Clear Aligners</h3>
+          <p data-i18n="services.aligners.desc">Nearly invisible removable aligners that straighten teeth without brackets or wires. Perfect for adults and teens who want a discreet treatment option with maximum comfort.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 data-i18n="services.splints.title">Orthodontic Splints</h3>
+          <p data-i18n="services.splints.desc">Custom-made splints for TMJ disorders, bruxism, and bite correction. We design precise appliances to relieve jaw pain and protect your teeth from grinding damage.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-eye-slash"></i></div>
+          <h3 data-i18n="services.lingual.title">Lingual Braces</h3>
+          <p data-i18n="services.lingual.desc">Braces placed behind the teeth for completely invisible treatment. Ideal for professionals and anyone who wants effective orthodontic care without visible appliances.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-sync-alt"></i></div>
+          <h3 data-i18n="services.retainers.title">Retainers & Maintenance</h3>
+          <p data-i18n="services.retainers.desc">Post-treatment retainers to maintain your new smile for life. We offer both fixed and removable options with regular follow-up care to ensure lasting results.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-x-ray"></i></div>
+          <h3 data-i18n="services.digital.title">Digital Treatment Planning</h3>
+          <p data-i18n="services.digital.desc">3D scanning, digital X-rays, and computer-simulated treatment outcomes. See your future smile before treatment begins with our state-of-the-art imaging technology.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon"><i class="fas fa-bone"></i></div>
+          <h3 data-i18n="services.jaw.title">Jaw Correction (Orthognathic)</h3>
+          <p data-i18n="services.jaw.desc">Comprehensive treatment for jaw misalignment and skeletal discrepancies. We work with oral surgeons to plan and execute complex cases for optimal functional and aesthetic outcomes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Before / After Section -->
+  <section class="results" id="results">
+    <div class="container">
+      <p class="section-subtitle center" data-i18n="results.subtitle">Treatment Results</p>
+      <h2 class="section-title center" data-i18n="results.title">Before & After</h2>
+      <p class="section-description center" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
+
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-images">
+            <div class="result-img before">
+              <span class="result-label" data-i18n="results.before">Before</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+            <div class="result-img after">
+              <span class="result-label" data-i18n="results.after">After</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+          </div>
+          <p class="result-caption" data-i18n="results.case1">Crowding correction — 14 months with ceramic braces</p>
+        </div>
+
+        <div class="result-card">
+          <div class="result-images">
+            <div class="result-img before">
+              <span class="result-label" data-i18n="results.before">Before</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+            <div class="result-img after">
+              <span class="result-label" data-i18n="results.after">After</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+          </div>
+          <p class="result-caption" data-i18n="results.case2">Open bite treatment — 18 months with clear aligners</p>
+        </div>
+
+        <div class="result-card">
+          <div class="result-images">
+            <div class="result-img before">
+              <span class="result-label" data-i18n="results.before">Before</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+            <div class="result-img after">
+              <span class="result-label" data-i18n="results.after">After</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+          </div>
+          <p class="result-caption" data-i18n="results.case3">Overbite correction — 12 months with metal braces</p>
+        </div>
+
+        <div class="result-card">
+          <div class="result-images">
+            <div class="result-img before">
+              <span class="result-label" data-i18n="results.before">Before</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+            <div class="result-img after">
+              <span class="result-label" data-i18n="results.after">After</span>
+              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+            </div>
+          </div>
+          <p class="result-caption" data-i18n="results.case4">Spacing treatment — 10 months with lingual braces</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Social Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <p class="section-subtitle center" data-i18n="contact.subtitle">Get in Touch</p>
+      <h2 class="section-title center" data-i18n="contact.title">Book Your Consultation</h2>
+
+      <div class="contact-container">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <h4 data-i18n="contact.addressLabel">Address</h4>
+              <p data-i18n="contact.address">123 Rustaveli Ave, Tbilisi, Georgia</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div>
+              <h4 data-i18n="contact.phoneLabel">Phone</h4>
+              <p><a href="tel:+995555123456">+995 555 123 456</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>
+              <h4 data-i18n="contact.emailLabel">Email</h4>
+              <p><a href="mailto:info@drsmile.ge">info@drsmile.ge</a></p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-clock"></i>
+            <div>
+              <h4 data-i18n="contact.hoursLabel">Working Hours</h4>
+              <p data-i18n="contact.hours">Mon – Fri: 09:00 – 18:00<br/>Sat: 10:00 – 15:00</p>
+            </div>
+          </div>
+
+          <div class="social-links">
+            <h4 data-i18n="contact.followUs">Follow Us</h4>
+            <div class="social-icons">
+              <a href="#" class="social-icon instagram" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon facebook" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon telegram" aria-label="Telegram" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+              <a href="#" class="social-icon whatsapp" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+              <a href="#" class="social-icon viber" aria-label="Viber" title="Viber"><i class="fab fa-viber"></i></a>
+              <a href="#" class="social-icon tiktok" aria-label="TikTok" title="TikTok"><i class="fab fa-tiktok"></i></a>
+              <a href="#" class="social-icon youtube" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <input type="text" id="name" name="name" required />
+            <label for="name" data-i18n="contact.form.name">Full Name</label>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="phone" name="phone" required />
+            <label for="phone" data-i18n="contact.form.phone">Phone Number</label>
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" name="email" />
+            <label for="email" data-i18n="contact.form.email">Email (optional)</label>
+          </div>
+          <div class="form-group">
+            <textarea id="message" name="message" rows="4"></textarea>
+            <label for="message" data-i18n="contact.form.message">Message</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" data-i18n="contact.form.submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <i class="fas fa-tooth"></i>
+          <span data-i18n="logo">Dr. Smile</span>
+        </a>
+        <p data-i18n="footer.tagline">Professional orthodontic care for the whole family.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#hero" data-i18n="nav.home">Home</a>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#services" data-i18n="nav.services">Services</a>
+        <a href="#results" data-i18n="nav.results">Results</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" aria-label="Viber"><i class="fab fa-viber"></i></a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Dr. Smile. <span data-i18n="footer.rights">All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

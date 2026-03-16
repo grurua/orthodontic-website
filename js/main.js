@@ -1,0 +1,121 @@
+/**
+ * Main JavaScript — Navigation, smooth scroll, form, animations
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  // ---- Navbar scroll effect ----
+  const navbar = document.getElementById('navbar');
+  const onScroll = () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- Mobile nav toggle ----
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  // Close mobile nav on link click
+  navLinks.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // ---- Smooth scroll for anchor links ----
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      const targetId = anchor.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const navHeight = navbar.offsetHeight;
+        const targetPos = target.getBoundingClientRect().top + window.scrollY - navHeight;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ---- Active nav link highlighting ----
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-links a');
+
+  const observerOptions = {
+    rootMargin: '-20% 0px -60% 0px',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach((item) => {
+          item.classList.toggle('active', item.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach((section) => observer.observe(section));
+
+  // ---- Scroll-triggered animations ----
+  const animateElements = document.querySelectorAll(
+    '.service-card, .result-card, .about-text, .about-image, .contact-info, .contact-form, .stat'
+  );
+
+  const animObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          animObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  animateElements.forEach((el) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    animObserver.observe(el);
+  });
+
+  // CSS class for animation
+  const style = document.createElement('style');
+  style.textContent = `.animate-in { opacity: 1 !important; transform: translateY(0) !important; }`;
+  document.head.appendChild(style);
+
+  // ---- Contact form handling ----
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      console.log('Form submitted:', data);
+
+      // Show success feedback
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+      btn.textContent = '✓';
+      btn.style.background = '#00c9a7';
+      btn.style.borderColor = '#00c9a7';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.borderColor = '';
+        btn.disabled = false;
+        form.reset();
+      }, 2500);
+    });
+  }
+});
