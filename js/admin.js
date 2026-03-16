@@ -63,7 +63,15 @@
   }
 
   function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      if (e.name === 'QuotaExceededError' || e.code === 22) {
+        toast('Storage full! Try removing some images or exporting data first.', 'error');
+      } else {
+        toast('Failed to save data.', 'error');
+      }
+    }
   }
 
   function getDefaultData() {
@@ -223,16 +231,39 @@
     });
   }
 
-  function handleImageFile(file, key) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      data.images[key] = e.target.result;
+  function compressImage(file, maxWidth, quality) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth) {
+          h = Math.round(h * maxWidth / w);
+          w = maxWidth;
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  async function handleImageFile(file, key) {
+    try {
+      const compressed = await compressImage(file, 800, 0.7);
+      data.images[key] = compressed;
       saveData(data);
       updateImagePreview(key);
       toast('Image uploaded', 'success');
       updateDashboard();
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      toast('Failed to upload image. Please try another file.', 'error');
+    }
   }
 
   function updateImagePreview(key) {
@@ -252,16 +283,17 @@
   }
 
   // Small image previews (for before/after)
-  function handleSmallImageFile(file, key) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      data.images[key] = e.target.result;
+  async function handleSmallImageFile(file, key) {
+    try {
+      const compressed = await compressImage(file, 600, 0.7);
+      data.images[key] = compressed;
       saveData(data);
       updateSmallImagePreview(key);
       toast('Image uploaded', 'success');
       updateDashboard();
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      toast('Failed to upload image. Please try another file.', 'error');
+    }
   }
 
   function updateSmallImagePreview(key) {
@@ -327,6 +359,7 @@
         data.translations[lang][`services.${key}.desc`] = 'Service description...';
       });
 
+      saveData(data);
       renderServices();
       toast('Service added. Edit its text in the Translations tab.', 'success');
     });
@@ -361,13 +394,17 @@
       // Icon edit
       div.querySelector(`[data-field="icon"]`).addEventListener('input', (e) => {
         const s = data.services.find(x => x.id === svc.id);
-        if (s) s.icon = e.target.value;
+        if (s) {
+          s.icon = e.target.value;
+          saveData(data);
+        }
       });
 
       // Delete
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this service?')) {
           data.services = data.services.filter(x => x.id !== svc.id);
+          saveData(data);
           renderServices();
           toast('Service removed', 'success');
         }
@@ -395,6 +432,7 @@
         data.translations[lang][captionKey] = 'New case description';
       });
 
+      saveData(data);
       renderResults();
       toast('Case added. Upload photos and edit caption in Translations.', 'success');
     });
@@ -610,6 +648,11 @@
       reader.onload = (ev) => {
         try {
           const imported = JSON.parse(ev.target.result);
+          // Validate required structure
+          if (!imported.images || !imported.translations || !imported.services || !imported.results) {
+            toast('Invalid backup file: missing required fields.', 'error');
+            return;
+          }
           data = imported;
           saveData(data);
           populateAll();

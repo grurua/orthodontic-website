@@ -6,6 +6,7 @@
 const I18n = (() => {
   const cache = {};
   let currentLang = localStorage.getItem('lang') || 'en';
+  let pendingLang = null; // Guards against race conditions
 
   function getAdminOverrides(lang) {
     try {
@@ -20,31 +21,29 @@ const I18n = (() => {
 
   async function loadLanguage(lang) {
     if (cache[lang]) return cache[lang];
+    let base = {};
     try {
       const response = await fetch(`lang/${lang}.json`);
-      if (!response.ok) throw new Error(`Failed to load ${lang}`);
-      const base = await response.json();
-      // Merge admin overrides on top of defaults
-      const overrides = getAdminOverrides(lang);
-      cache[lang] = { ...base, ...overrides };
-      return cache[lang];
+      if (response.ok) {
+        base = await response.json();
+      }
     } catch (err) {
       console.error(`i18n: Could not load language "${lang}"`, err);
-      // Still try to return overrides even if file fails
-      const overrides = getAdminOverrides(lang);
-      if (Object.keys(overrides).length > 0) {
-        cache[lang] = overrides;
-        return cache[lang];
-      }
-      return null;
     }
+    // Merge admin overrides on top of defaults
+    const overrides = getAdminOverrides(lang);
+    cache[lang] = { ...base, ...overrides };
+    return cache[lang];
   }
 
   async function setLanguage(lang) {
     // Clear cache to pick up any new admin overrides
     delete cache[lang];
+    pendingLang = lang;
     const translations = await loadLanguage(lang);
-    if (!translations) return;
+
+    // If another setLanguage call happened while we were loading, abort this one
+    if (pendingLang !== lang) return;
 
     currentLang = lang;
     localStorage.setItem('lang', lang);

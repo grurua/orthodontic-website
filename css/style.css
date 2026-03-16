@@ -1077,7 +1077,7 @@ img {
   }
 
   .lang-switcher {
-    position: absolute;
-    right: 60px;
+    margin-right: 48px;
+    flex-shrink: 0;
   }
 }

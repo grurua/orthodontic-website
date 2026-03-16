@@ -110,6 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
       social_telegram: 'Telegram',
       social_whatsapp: 'WhatsApp',
       social_viber: 'Viber',
+      social_tiktok: 'TikTok',
+      social_youtube: 'YouTube',
     };
     Object.entries(footerSocialMap).forEach(([key, label]) => {
       const url = adminData.social[key];
