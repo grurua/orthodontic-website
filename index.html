@@ -5,23 +5,1137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Professional Orthodontist — Braces, Aligners, Pediatric Orthodontics. Book your consultation today." />
   <title>Dr. Smile — Orthodontist</title>
-  <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    /* ========================================
+       Variables & Reset
+       ======================================== */
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #d4bc8e;
+      --gold-dark: #b08f52;
+      --gold-bg: rgba(201,169,110,0.08);
+      --dark: #1a1a1a;
+      --dark-soft: #2a2a2a;
+      --text: #333333;
+      --text-light: #666666;
+      --text-muted: #999999;
+      --cream: #f8f6f3;
+      --cream-dark: #f0ece5;
+      --white: #ffffff;
+      --border: #e8e4de;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', -apple-system, sans-serif;
+      --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========================================
+       Typography
+       ======================================== */
+    .section-label {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: 2.75rem;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-light);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    .text-center { text-align: center; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+
+    /* ========================================
+       Buttons
+       ======================================== */
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: var(--font-sans);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--white);
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201,169,110,0.35);
+    }
+
+    .btn-outline-light {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.4);
+    }
+
+    .btn-outline-light:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      color: var(--dark);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-outline-dark:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 20px 0;
+      transition: all var(--transition);
+    }
+
+    .navbar.scrolled {
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--border);
+      padding: 12px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--white);
+      transition: color var(--transition);
+      letter-spacing: 0.5px;
+    }
+
+    .navbar.scrolled .logo { color: var(--dark); }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 36px;
+    }
+
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.5px;
+      transition: color var(--transition);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      transition: width var(--transition);
+    }
+
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .navbar.scrolled .nav-links a { color: var(--text-light); }
+    .navbar.scrolled .nav-links a:hover { color: var(--dark); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 2px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+      padding: 2px;
+    }
+
+    .navbar.scrolled .lang-switch {
+      background: var(--cream);
+    }
+
+    .lang-btn {
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1px;
+      border-radius: 3px;
+      transition: all var(--transition);
+    }
+
+    .navbar.scrolled .lang-btn { color: var(--text-muted); }
+
+    .lang-btn.active {
+      background: var(--gold);
+      color: var(--white) !important;
+    }
+
+    /* Mobile toggle */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--white);
+      transition: all var(--transition);
+    }
+
+    .navbar.scrolled .nav-toggle span { background: var(--dark); }
+
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 4px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -4px); }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--dark);
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2318 50%, #1a1a1a 100%);
+      opacity: 1;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(201,169,110,0.08) 0%, transparent 60%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      padding: 120px 0 60px;
+    }
+
+    .hero-text { max-width: 520px; }
+
+    .hero-label {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 440px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-photo {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .hero-photo-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+
+    .hero-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .hero-photo-wrapper img.loaded { opacity: 1; }
+
+    .hero-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.2);
+    }
+
+    .hero-photo-placeholder i { font-size: 2.5rem; }
+    .hero-photo-placeholder span { font-size: 0.8rem; letter-spacing: 1px; }
+
+    .hero-photo-badge {
+      position: absolute;
+      bottom: 24px;
+      left: -20px;
+      background: var(--gold);
+      color: var(--white);
+      padding: 16px 24px;
+      z-index: 3;
+    }
+
+    .hero-photo-badge .badge-number {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+      display: block;
+    }
+
+    .hero-photo-badge .badge-text {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    /* Stats Banner */
+    .stats-bar {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      font-weight: 500;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-text {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* ========================================
+       About Section
+       ======================================== */
+    .about {
+      padding: 120px 0;
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-photo {
+      position: relative;
+    }
+
+    .about-photo-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+    }
+
+    .about-photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .about-photo-placeholder i { font-size: 2.5rem; }
+    .about-photo-placeholder span { font-size: 0.8rem; }
+
+    .about-photo-accent {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--gold);
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .about-text .section-heading {
+      max-width: 440px;
+    }
+
+    .about-desc {
+      font-size: 1rem;
+      color: var(--text-light);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .highlight-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gold-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .highlight-icon i {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+
+    .highlight-item span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* ========================================
+       Services Section
+       ======================================== */
+    .services {
+      padding: 120px 0;
+      background: var(--cream);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .service-card {
+      background: var(--white);
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gold);
+      transition: width var(--transition);
+    }
+
+    .service-card:hover::before { width: 100%; }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .service-icon i {
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+
+    .service-card h3 {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* ========================================
+       Before / After Results
+       ======================================== */
+    .results {
+      padding: 120px 0;
+      background: var(--white);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+
+    .result-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .result-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    /* Before/After Slider */
+    .ba-slider {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      cursor: ew-resize;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .ba-slider img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ba-before {
+      z-index: 1;
+    }
+
+    .ba-after-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      clip-path: inset(0 0 0 50%);
+    }
+
+    .ba-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: var(--white);
+      z-index: 3;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .ba-handle::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: var(--white);
+      border-radius: 50%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .ba-handle::after {
+      content: '\f0d9\00a0\00a0\f0da';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.65rem;
+      color: var(--dark);
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    .ba-label {
+      position: absolute;
+      bottom: 12px;
+      padding: 4px 14px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--white);
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .ba-label-before {
+      left: 12px;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .ba-label-after {
+      right: 12px;
+      background: var(--gold);
+    }
+
+    /* Placeholder for when no images uploaded */
+    .ba-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      gap: 0;
+    }
+
+    .ba-placeholder-half {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .ba-placeholder-half:first-child {
+      background: #f0ece5;
+      border-right: 1px solid var(--border);
+    }
+
+    .ba-placeholder-half:last-child {
+      background: #e8f0e5;
+    }
+
+    .ba-placeholder-half i { font-size: 1.5rem; }
+
+    .result-caption {
+      padding: 16px 20px;
+      font-size: 0.88rem;
+      color: var(--text-light);
+      text-align: center;
+      font-style: italic;
+      font-family: var(--font-serif);
+      font-size: 1rem;
+    }
+
+    /* ========================================
+       Contact Section
+       ======================================== */
+    .contact {
+      padding: 120px 0;
+      background: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      margin-top: 56px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--gold-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .contact-item-icon i {
+      color: var(--gold);
+      font-size: 0.95rem;
+    }
+
+    .contact-item h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-item p { font-size: 0.95rem; color: var(--text); }
+    .contact-item a { color: var(--gold); }
+    .contact-item a:hover { color: var(--gold-dark); }
+
+    .social-section { margin-top: 16px; }
+
+    .social-section h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .social-icon {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: all var(--transition);
+    }
+
+    .social-icon:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: var(--white);
+      padding: 48px;
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 0;
+      font-size: 0.95rem;
+      font-family: var(--font-sans);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 14px;
+      left: 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: all var(--transition);
+    }
+
+    .form-group input:focus ~ label,
+    .form-group input:not(:placeholder-shown) ~ label,
+    .form-group textarea:focus ~ label,
+    .form-group textarea:not(:placeholder-shown) ~ label {
+      top: -10px;
+      font-size: 0.7rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: transparent; }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: var(--white);
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-submit:hover {
+      background: var(--gold-dark);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      background: var(--dark);
+      padding: 56px 0 24px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    .footer .logo {
+      color: var(--white);
+      font-size: 1.4rem;
+    }
+
+    .footer-tagline {
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-nav a {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+      transition: color var(--transition);
+    }
+
+    .footer-nav a:hover { color: var(--gold); }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-social a {
+      color: rgba(255,255,255,0.35);
+      font-size: 1rem;
+      transition: color var(--transition);
+    }
+
+    .footer-social a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 12px;
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ========================================
+       Animations
+       ======================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+    .stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+    .stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+    .stagger > .reveal:nth-child(5) { transition-delay: 0.4s; }
+    .stagger > .reveal:nth-child(6) { transition-delay: 0.5s; }
+    .stagger > .reveal:nth-child(7) { transition-delay: 0.6s; }
+    .stagger > .reveal:nth-child(8) { transition-delay: 0.7s; }
+    .stagger > .reveal:nth-child(9) { transition-delay: 0.8s; }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 1024px) {
+      .hero-title { font-size: 2.75rem; }
+      .section-heading { font-size: 2.25rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-toggle { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(26,26,26,0.98);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 24px;
+        gap: 16px;
+      }
+
+      .navbar.scrolled .nav-links {
+        background: rgba(255,255,255,0.98);
+      }
+
+      .nav-links.open { display: flex; }
+
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding: 100px 0 40px;
+        text-align: center;
+      }
+
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+
+      .hero-photo { justify-content: center; }
+      .hero-photo-wrapper { max-width: 300px; }
+      .hero-photo-badge { left: 0; bottom: 16px; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .about-photo-wrapper { max-width: 360px; margin: 0 auto; }
+
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 2rem; }
+      .section-heading { font-size: 1.85rem; }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-buttons .btn { text-align: center; }
+
+      .services-grid { grid-template-columns: 1fr; }
+
+      .about, .services, .results, .contact { padding: 80px 0; }
+
+      .contact-form { padding: 32px 24px; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .stat-number { font-size: 1.75rem; }
+
+      .service-card { padding: 32px 24px; }
+
+      .nav-right { gap: 12px; }
+      .lang-switch { margin-right: 44px; }
+    }
+  </style>
 </head>
 <body>
+
   <!-- Navigation -->
   <nav class="navbar" id="navbar">
-    <div class="container nav-container">
-      <a href="#" class="logo">
-        <i class="fas fa-tooth"></i>
-        <span data-i18n="logo">Dr. Smile</span>
-      </a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
+    <div class="container nav-inner">
+      <a href="#" class="logo" data-i18n="logo">Dr. Smile</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#hero" data-i18n="nav.home">Home</a></li>
         <li><a href="#about" data-i18n="nav.about">About</a></li>
@@ -29,81 +1143,97 @@
         <li><a href="#results" data-i18n="nav.results">Results</a></li>
         <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
       </ul>
-      <div class="lang-switcher">
-        <button class="lang-btn" data-lang="ka">GE</button>
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <button class="lang-btn" data-lang="ru">RU</button>
+      <div class="nav-right">
+        <div class="lang-switch">
+          <button class="lang-btn" data-lang="ka">GE</button>
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ru">RU</button>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero" id="hero">
-    <div class="hero-overlay"></div>
+    <div class="hero-bg"></div>
     <div class="container hero-content">
       <div class="hero-text">
-        <p class="hero-subtitle" data-i18n="hero.subtitle">Welcome to Our Practice</p>
-        <h1 class="hero-title" data-i18n="hero.title">Your Perfect Smile Starts Here</h1>
-        <p class="hero-description" data-i18n="hero.description">Expert orthodontic care for the whole family. We combine modern technology with a personalized approach to give you the smile you've always wanted.</p>
+        <span class="hero-label" data-i18n="hero.subtitle">Welcome to Our Practice</span>
+        <h1 class="hero-title" data-i18n="hero.title">Your Perfect <em>Smile</em> Starts Here</h1>
+        <p class="hero-desc" data-i18n="hero.description">Expert orthodontic care for the whole family. We combine modern technology with a personalized approach to give you the smile you've always wanted.</p>
         <div class="hero-buttons">
-          <a href="#contact" class="btn btn-primary" data-i18n="hero.cta">Book a Consultation</a>
-          <a href="#services" class="btn btn-outline" data-i18n="hero.learnMore">Our Services</a>
+          <a href="#contact" class="btn btn-gold" data-i18n="hero.cta">Book a Consultation</a>
+          <a href="#services" class="btn btn-outline-light" data-i18n="hero.learnMore">Our Services</a>
         </div>
       </div>
-      <div class="hero-image">
-        <div class="hero-photo-placeholder">
-          <i class="fas fa-user-doctor"></i>
-          <span data-i18n="hero.photoLabel">Doctor Photo</span>
+      <div class="hero-photo">
+        <div class="hero-photo-wrapper" id="heroPhotoWrapper">
+          <div class="hero-photo-placeholder" id="heroPlaceholder">
+            <i class="fas fa-user-doctor"></i>
+            <span data-i18n="hero.photoLabel">Doctor Photo</span>
+          </div>
+        </div>
+        <div class="hero-photo-badge">
+          <span class="badge-number" data-i18n="hero.stat1_number">15+</span>
+          <span class="badge-text" data-i18n="hero.stat1">Years Experience</span>
         </div>
       </div>
     </div>
-    <div class="hero-banner">
-      <div class="container banner-stats">
-        <div class="stat">
-          <span class="stat-number">15+</span>
-          <span class="stat-label" data-i18n="hero.stat1">Years Experience</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">5000+</span>
-          <span class="stat-label" data-i18n="hero.stat2">Happy Patients</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">98%</span>
-          <span class="stat-label" data-i18n="hero.stat3">Satisfaction Rate</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">10+</span>
-          <span class="stat-label" data-i18n="hero.stat4">Certifications</span>
+    <div class="stats-bar">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat">
+            <span class="stat-number" data-i18n="hero.stat1_number">15+</span>
+            <span class="stat-text" data-i18n="hero.stat1">Years Experience</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-i18n="hero.stat2_number">5000+</span>
+            <span class="stat-text" data-i18n="hero.stat2">Happy Patients</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-i18n="hero.stat3_number">98%</span>
+            <span class="stat-text" data-i18n="hero.stat3">Satisfaction Rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-i18n="hero.stat4_number">10+</span>
+            <span class="stat-text" data-i18n="hero.stat4">Certifications</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- About -->
   <section class="about" id="about">
-    <div class="container about-container">
-      <div class="about-image">
-        <div class="about-photo-placeholder">
-          <i class="fas fa-stethoscope"></i>
-          <span data-i18n="about.photoLabel">About Photo</span>
+    <div class="container about-grid">
+      <div class="about-photo reveal">
+        <div class="about-photo-wrapper" id="aboutPhotoWrapper">
+          <div class="about-photo-placeholder" id="aboutPlaceholder">
+            <i class="fas fa-stethoscope"></i>
+            <span data-i18n="about.photoLabel">About Photo</span>
+          </div>
         </div>
+        <div class="about-photo-accent"></div>
       </div>
-      <div class="about-text">
-        <p class="section-subtitle" data-i18n="about.subtitle">About Me</p>
-        <h2 class="section-title" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h2>
-        <p class="about-description" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
-        <p class="about-description" data-i18n="about.description2">My philosophy is simple: every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</p>
+      <div class="about-text reveal">
+        <span class="section-label" data-i18n="about.subtitle">About Me</span>
+        <h2 class="section-heading" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h2>
+        <p class="about-desc" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
+        <p class="about-desc" data-i18n="about.description2">My philosophy is simple: every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</p>
         <div class="about-highlights">
-          <div class="highlight">
-            <i class="fas fa-graduation-cap"></i>
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
             <span data-i18n="about.highlight1">Board Certified Orthodontist</span>
           </div>
-          <div class="highlight">
-            <i class="fas fa-award"></i>
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-award"></i></div>
             <span data-i18n="about.highlight2">International Training</span>
           </div>
-          <div class="highlight">
-            <i class="fas fa-heart"></i>
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-heart"></i></div>
             <span data-i18n="about.highlight3">Patient-Centered Care</span>
           </div>
         </div>
@@ -111,131 +1241,114 @@
     </div>
   </section>
 
-  <!-- Services / Specializations Section -->
+  <!-- Services -->
   <section class="services" id="services">
     <div class="container">
-      <p class="section-subtitle center" data-i18n="services.subtitle">Our Specializations</p>
-      <h2 class="section-title center" data-i18n="services.title">Comprehensive Orthodontic Services</h2>
-      <div class="services-grid">
-
-        <div class="service-card">
+      <div class="text-center">
+        <span class="section-label" data-i18n="services.subtitle">Our Specializations</span>
+        <h2 class="section-heading" data-i18n="services.title">Comprehensive Orthodontic Services</h2>
+        <p class="section-desc mx-auto" data-i18n="services.description">We offer a full range of orthodontic treatments tailored to your unique needs.</p>
+      </div>
+      <div class="services-grid stagger" id="servicesGrid">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-child"></i></div>
           <h3 data-i18n="services.pediatric.title">Pediatric Orthodontics</h3>
           <p data-i18n="services.pediatric.desc">Early evaluation and treatment for children. We monitor jaw growth and development, using interceptive techniques to guide teeth into proper alignment from a young age.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-teeth"></i></div>
           <h3 data-i18n="services.braces.title">Metal Braces</h3>
           <p data-i18n="services.braces.desc">Traditional metal braces remain the most effective solution for complex orthodontic cases. Modern brackets are smaller, more comfortable, and work faster than ever before.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-gem"></i></div>
           <h3 data-i18n="services.ceramic.title">Ceramic Braces</h3>
           <p data-i18n="services.ceramic.desc">Tooth-colored ceramic brackets offer a discreet alternative to metal braces. They blend naturally with your teeth while providing the same effective treatment results.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-magic"></i></div>
           <h3 data-i18n="services.aligners.title">Clear Aligners</h3>
           <p data-i18n="services.aligners.desc">Nearly invisible removable aligners that straighten teeth without brackets or wires. Perfect for adults and teens who want a discreet treatment option with maximum comfort.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
           <h3 data-i18n="services.splints.title">Orthodontic Splints</h3>
           <p data-i18n="services.splints.desc">Custom-made splints for TMJ disorders, bruxism, and bite correction. We design precise appliances to relieve jaw pain and protect your teeth from grinding damage.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-eye-slash"></i></div>
           <h3 data-i18n="services.lingual.title">Lingual Braces</h3>
           <p data-i18n="services.lingual.desc">Braces placed behind the teeth for completely invisible treatment. Ideal for professionals and anyone who wants effective orthodontic care without visible appliances.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-sync-alt"></i></div>
-          <h3 data-i18n="services.retainers.title">Retainers & Maintenance</h3>
+          <h3 data-i18n="services.retainers.title">Retainers &amp; Maintenance</h3>
           <p data-i18n="services.retainers.desc">Post-treatment retainers to maintain your new smile for life. We offer both fixed and removable options with regular follow-up care to ensure lasting results.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-x-ray"></i></div>
           <h3 data-i18n="services.digital.title">Digital Treatment Planning</h3>
           <p data-i18n="services.digital.desc">3D scanning, digital X-rays, and computer-simulated treatment outcomes. See your future smile before treatment begins with our state-of-the-art imaging technology.</p>
         </div>
-
-        <div class="service-card">
+        <div class="service-card reveal">
           <div class="service-icon"><i class="fas fa-bone"></i></div>
-          <h3 data-i18n="services.jaw.title">Jaw Correction (Orthognathic)</h3>
+          <h3 data-i18n="services.jaw.title">Jaw Correction</h3>
           <p data-i18n="services.jaw.desc">Comprehensive treatment for jaw misalignment and skeletal discrepancies. We work with oral surgeons to plan and execute complex cases for optimal functional and aesthetic outcomes.</p>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- Before / After Section -->
+  <!-- Results -->
   <section class="results" id="results">
     <div class="container">
-      <p class="section-subtitle center" data-i18n="results.subtitle">Treatment Results</p>
-      <h2 class="section-title center" data-i18n="results.title">Before & After</h2>
-      <p class="section-description center" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
-
-      <div class="results-grid">
-        <div class="result-card">
-          <div class="result-images">
-            <div class="result-img before">
-              <span class="result-label" data-i18n="results.before">Before</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+      <div class="text-center">
+        <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
+        <h2 class="section-heading" data-i18n="results.title">Before &amp; After</h2>
+        <p class="section-desc mx-auto" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
+      </div>
+      <div class="results-grid stagger" id="resultsGrid">
+        <div class="result-card reveal">
+          <div class="ba-slider" data-idx="0">
+            <div class="ba-placeholder">
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
             </div>
-            <div class="result-img after">
-              <span class="result-label" data-i18n="results.after">After</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
-            </div>
+            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
           </div>
           <p class="result-caption" data-i18n="results.case1">Crowding correction — 14 months with ceramic braces</p>
         </div>
-
-        <div class="result-card">
-          <div class="result-images">
-            <div class="result-img before">
-              <span class="result-label" data-i18n="results.before">Before</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+        <div class="result-card reveal">
+          <div class="ba-slider" data-idx="1">
+            <div class="ba-placeholder">
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
             </div>
-            <div class="result-img after">
-              <span class="result-label" data-i18n="results.after">After</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
-            </div>
+            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
           </div>
           <p class="result-caption" data-i18n="results.case2">Open bite treatment — 18 months with clear aligners</p>
         </div>
-
-        <div class="result-card">
-          <div class="result-images">
-            <div class="result-img before">
-              <span class="result-label" data-i18n="results.before">Before</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+        <div class="result-card reveal">
+          <div class="ba-slider" data-idx="2">
+            <div class="ba-placeholder">
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
             </div>
-            <div class="result-img after">
-              <span class="result-label" data-i18n="results.after">After</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
-            </div>
+            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
           </div>
           <p class="result-caption" data-i18n="results.case3">Overbite correction — 12 months with metal braces</p>
         </div>
-
-        <div class="result-card">
-          <div class="result-images">
-            <div class="result-img before">
-              <span class="result-label" data-i18n="results.before">Before</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
+        <div class="result-card reveal">
+          <div class="ba-slider" data-idx="3">
+            <div class="ba-placeholder">
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
             </div>
-            <div class="result-img after">
-              <span class="result-label" data-i18n="results.after">After</span>
-              <div class="result-placeholder"><i class="fas fa-image"></i></div>
-            </div>
+            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
           </div>
           <p class="result-caption" data-i18n="results.case4">Spacing treatment — 10 months with lingual braces</p>
         </div>
@@ -243,75 +1356,74 @@
     </div>
   </section>
 
-  <!-- Contact / Social Section -->
+  <!-- Contact -->
   <section class="contact" id="contact">
     <div class="container">
-      <p class="section-subtitle center" data-i18n="contact.subtitle">Get in Touch</p>
-      <h2 class="section-title center" data-i18n="contact.title">Book Your Consultation</h2>
-
-      <div class="contact-container">
-        <div class="contact-info">
+      <div class="text-center">
+        <span class="section-label" data-i18n="contact.subtitle">Get in Touch</span>
+        <h2 class="section-heading" data-i18n="contact.title">Book Your Consultation</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
           <div class="contact-item">
-            <i class="fas fa-map-marker-alt"></i>
+            <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
             <div>
               <h4 data-i18n="contact.addressLabel">Address</h4>
               <p data-i18n="contact.address">123 Rustaveli Ave, Tbilisi, Georgia</p>
             </div>
           </div>
           <div class="contact-item">
-            <i class="fas fa-phone"></i>
+            <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
             <div>
               <h4 data-i18n="contact.phoneLabel">Phone</h4>
               <p><a href="tel:+995555123456">+995 555 123 456</a></p>
             </div>
           </div>
           <div class="contact-item">
-            <i class="fas fa-envelope"></i>
+            <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
             <div>
               <h4 data-i18n="contact.emailLabel">Email</h4>
               <p><a href="mailto:info@drsmile.ge">info@drsmile.ge</a></p>
             </div>
           </div>
           <div class="contact-item">
-            <i class="fas fa-clock"></i>
+            <div class="contact-item-icon"><i class="fas fa-clock"></i></div>
             <div>
               <h4 data-i18n="contact.hoursLabel">Working Hours</h4>
               <p data-i18n="contact.hours">Mon – Fri: 09:00 – 18:00<br/>Sat: 10:00 – 15:00</p>
             </div>
           </div>
-
-          <div class="social-links">
+          <div class="social-section">
             <h4 data-i18n="contact.followUs">Follow Us</h4>
             <div class="social-icons">
-              <a href="#" class="social-icon instagram" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="social-icon facebook" aria-label="Facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="social-icon telegram" aria-label="Telegram" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
-              <a href="#" class="social-icon whatsapp" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-              <a href="#" class="social-icon viber" aria-label="Viber" title="Viber"><i class="fab fa-viber"></i></a>
-              <a href="#" class="social-icon tiktok" aria-label="TikTok" title="TikTok"><i class="fab fa-tiktok"></i></a>
-              <a href="#" class="social-icon youtube" aria-label="YouTube" title="YouTube"><i class="fab fa-youtube"></i></a>
+              <a href="#" class="social-icon" data-social="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon" data-social="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon" data-social="telegram" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+              <a href="#" class="social-icon" data-social="whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+              <a href="#" class="social-icon" data-social="viber" aria-label="Viber"><i class="fab fa-viber"></i></a>
+              <a href="#" class="social-icon" data-social="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+              <a href="#" class="social-icon" data-social="youtube" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>
-
-        <form class="contact-form" id="contactForm">
+        <form class="contact-form reveal" id="contactForm">
           <div class="form-group">
-            <input type="text" id="name" name="name" required />
+            <input type="text" id="name" name="name" placeholder=" " required />
             <label for="name" data-i18n="contact.form.name">Full Name</label>
           </div>
           <div class="form-group">
-            <input type="tel" id="phone" name="phone" required />
+            <input type="tel" id="phone" name="phone" placeholder=" " required />
             <label for="phone" data-i18n="contact.form.phone">Phone Number</label>
           </div>
           <div class="form-group">
-            <input type="email" id="email" name="email" />
+            <input type="email" id="email" name="email" placeholder=" " />
             <label for="email" data-i18n="contact.form.email">Email (optional)</label>
           </div>
           <div class="form-group">
-            <textarea id="message" name="message" rows="4"></textarea>
+            <textarea id="message" name="message" rows="3" placeholder=" "></textarea>
             <label for="message" data-i18n="contact.form.message">Message</label>
           </div>
-          <button type="submit" class="btn btn-primary btn-full" data-i18n="contact.form.submit">Send Message</button>
+          <button type="submit" class="btn-submit" data-i18n="contact.form.submit">Send Message</button>
         </form>
       </div>
     </div>
@@ -319,33 +1431,344 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="container footer-container">
-      <div class="footer-brand">
-        <a href="#" class="logo">
-          <i class="fas fa-tooth"></i>
-          <span data-i18n="logo">Dr. Smile</span>
-        </a>
-        <p data-i18n="footer.tagline">Professional orthodontic care for the whole family.</p>
+    <div class="container footer-inner">
+      <div>
+        <a href="#" class="logo" data-i18n="logo">Dr. Smile</a>
+        <p class="footer-tagline" data-i18n="footer.tagline">Professional orthodontic care for the whole family.</p>
       </div>
-      <div class="footer-links">
+      <div class="footer-divider"></div>
+      <nav class="footer-nav">
         <a href="#hero" data-i18n="nav.home">Home</a>
         <a href="#about" data-i18n="nav.about">About</a>
         <a href="#services" data-i18n="nav.services">Services</a>
         <a href="#results" data-i18n="nav.results">Results</a>
         <a href="#contact" data-i18n="nav.contact">Contact</a>
-      </div>
+      </nav>
       <div class="footer-social">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="#" aria-label="Viber"><i class="fab fa-viber"></i></a>
+        <a href="#" aria-label="Instagram" data-social="instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook" data-social="facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Telegram" data-social="telegram"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#" aria-label="WhatsApp" data-social="whatsapp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" aria-label="Viber" data-social="viber"><i class="fab fa-viber"></i></a>
       </div>
-      <p class="footer-copy">&copy; 2026 Dr. Smile. <span data-i18n="footer.rights">All rights reserved.</span></p>
+      <p class="footer-copy">&copy; <span id="footerYear"></span> Dr. Smile. <span data-i18n="footer.rights">All rights reserved.</span></p>
     </div>
   </footer>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/main.js"></script>
+  <!-- ======================================== -->
+  <!-- Scripts -->
+  <!-- ======================================== -->
+  <script>
+  (() => {
+    'use strict';
+
+    // ---- Admin Data ----
+    let adminData = null;
+    try {
+      const raw = localStorage.getItem('admin_data');
+      if (raw) adminData = JSON.parse(raw);
+    } catch { /* ignore */ }
+
+    // ---- Footer Year ----
+    const yearEl = document.getElementById('footerYear');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // ---- Apply Admin Images ----
+    function applyAdminImages() {
+      if (!adminData || !adminData.images) return;
+      const imgs = adminData.images;
+
+      // Hero photo
+      if (imgs.hero_photo) {
+        const wrapper = document.getElementById('heroPhotoWrapper');
+        const placeholder = document.getElementById('heroPlaceholder');
+        if (wrapper && placeholder) {
+          placeholder.style.display = 'none';
+          const img = document.createElement('img');
+          img.alt = 'Doctor Photo';
+          img.onload = function() { this.classList.add('loaded'); };
+          img.src = imgs.hero_photo;
+          wrapper.appendChild(img);
+        }
+      }
+
+      // About photo
+      if (imgs.about_photo) {
+        const wrapper = document.getElementById('aboutPhotoWrapper');
+        const placeholder = document.getElementById('aboutPlaceholder');
+        if (wrapper && placeholder) {
+          placeholder.style.display = 'none';
+          const img = document.createElement('img');
+          img.alt = 'About Photo';
+          img.src = imgs.about_photo;
+          wrapper.appendChild(img);
+        }
+      }
+
+      // Before/After photos
+      if (adminData.results) {
+        const sliders = document.querySelectorAll('.ba-slider');
+        adminData.results.forEach((res, idx) => {
+          const slider = sliders[idx];
+          if (!slider) return;
+
+          const beforeKey = `result_${res.id}_before`;
+          const afterKey = `result_${res.id}_after`;
+
+          if (imgs[beforeKey] && imgs[afterKey]) {
+            const placeholder = slider.querySelector('.ba-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+
+            const beforeImg = document.createElement('img');
+            beforeImg.className = 'ba-before';
+            beforeImg.alt = 'Before';
+            beforeImg.src = imgs[beforeKey];
+
+            const afterWrap = document.createElement('div');
+            afterWrap.className = 'ba-after-wrap';
+            const afterImg = document.createElement('img');
+            afterImg.alt = 'After';
+            afterImg.src = imgs[afterKey];
+            afterWrap.appendChild(afterImg);
+
+            const handle = document.createElement('div');
+            handle.className = 'ba-handle';
+
+            slider.appendChild(beforeImg);
+            slider.appendChild(afterWrap);
+            slider.appendChild(handle);
+
+            initSlider(slider, afterWrap, handle);
+          }
+        });
+      }
+    }
+
+    // ---- Before/After Slider Logic ----
+    function initSlider(slider, afterWrap, handle) {
+      let dragging = false;
+
+      function update(x) {
+        const rect = slider.getBoundingClientRect();
+        let pct = ((x - rect.left) / rect.width) * 100;
+        pct = Math.max(2, Math.min(98, pct));
+        afterWrap.style.clipPath = `inset(0 0 0 ${pct}%)`;
+        handle.style.left = pct + '%';
+      }
+
+      slider.addEventListener('mousedown', (e) => { dragging = true; update(e.clientX); });
+      slider.addEventListener('touchstart', (e) => { dragging = true; update(e.touches[0].clientX); }, { passive: true });
+
+      document.addEventListener('mousemove', (e) => { if (dragging) update(e.clientX); });
+      document.addEventListener('touchmove', (e) => { if (dragging) update(e.touches[0].clientX); }, { passive: true });
+
+      document.addEventListener('mouseup', () => { dragging = false; });
+      document.addEventListener('touchend', () => { dragging = false; });
+    }
+
+    // ---- Apply Admin Stats ----
+    function applyAdminStats() {
+      if (!adminData || !adminData.stats) return;
+      const map = {
+        stat1_number: 'hero.stat1_number',
+        stat2_number: 'hero.stat2_number',
+        stat3_number: 'hero.stat3_number',
+        stat4_number: 'hero.stat4_number',
+      };
+      Object.entries(map).forEach(([key, attr]) => {
+        if (adminData.stats[key]) {
+          document.querySelectorAll(`[data-i18n="${attr}"]`).forEach(el => {
+            el.textContent = adminData.stats[key];
+          });
+        }
+      });
+    }
+
+    // ---- Apply Admin Social Links ----
+    function applyAdminSocial() {
+      if (!adminData || !adminData.social) return;
+      const map = {
+        social_instagram: 'instagram',
+        social_facebook: 'facebook',
+        social_telegram: 'telegram',
+        social_whatsapp: 'whatsapp',
+        social_viber: 'viber',
+        social_tiktok: 'tiktok',
+        social_youtube: 'youtube',
+      };
+      Object.entries(map).forEach(([key, name]) => {
+        const url = adminData.social[key];
+        if (url) {
+          document.querySelectorAll(`[data-social="${name}"]`).forEach(el => {
+            el.href = url;
+          });
+        }
+      });
+    }
+
+    // ---- Apply Admin Contact Info ----
+    function applyAdminContact() {
+      if (!adminData || !adminData.contact) return;
+      if (adminData.contact.contact_phone) {
+        const phoneLink = document.querySelector('.contact-item a[href^="tel:"]');
+        if (phoneLink) {
+          phoneLink.href = `tel:${adminData.contact.contact_phone.replace(/\s/g, '')}`;
+          phoneLink.textContent = adminData.contact.contact_phone;
+        }
+      }
+      if (adminData.contact.contact_email) {
+        const emailLink = document.querySelector('.contact-item a[href^="mailto:"]');
+        if (emailLink) {
+          emailLink.href = `mailto:${adminData.contact.contact_email}`;
+          emailLink.textContent = adminData.contact.contact_email;
+        }
+      }
+    }
+
+    // ---- i18n ----
+    const langCache = {};
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function getAdminOverrides(lang) {
+      if (!adminData || !adminData.translations) return {};
+      return adminData.translations[lang] || {};
+    }
+
+    async function loadLang(lang) {
+      if (langCache[lang]) return langCache[lang];
+      let base = {};
+      try {
+        const res = await fetch(`lang/${lang}.json`);
+        if (res.ok) base = await res.json();
+      } catch { /* ignore */ }
+      langCache[lang] = { ...base, ...getAdminOverrides(lang) };
+      return langCache[lang];
+    }
+
+    async function setLang(lang) {
+      delete langCache[lang];
+      const t = await loadLang(lang);
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (!t[key]) return;
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = t[key];
+        } else {
+          el.textContent = t[key];
+        }
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      const logoText = t['logo'] || 'Dr. Smile';
+      document.title = `${logoText} — ${t['nav.home'] || 'Orthodontist'}`;
+    }
+
+    // ---- Navbar Scroll ----
+    const navbar = document.getElementById('navbar');
+    function onScroll() {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ---- Mobile Nav ----
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // ---- Smooth Scroll ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', e => {
+        const id = anchor.getAttribute('href');
+        if (id === '#') return;
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          const offset = navbar.offsetHeight;
+          window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // ---- Active Nav ----
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    const navObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navItems.forEach(item => {
+            item.classList.toggle('active', item.getAttribute('href') === `#${id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach(s => navObserver.observe(s));
+
+    // ---- Scroll Reveal ----
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ---- Contact Form ----
+    const form = document.getElementById('contactForm');
+    if (form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = form.querySelector('.btn-submit');
+        const original = btn.textContent;
+        btn.textContent = '\u2713';
+        btn.style.background = '#4CAF50';
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.background = '';
+          btn.disabled = false;
+          form.reset();
+        }, 2500);
+      });
+    }
+
+    // ---- Lang Buttons ----
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
+    // ---- Init ----
+    applyAdminImages();
+    applyAdminStats();
+    applyAdminSocial();
+    applyAdminContact();
+    setLang(currentLang);
+  })();
+  </script>
+
 </body>
 </html>
