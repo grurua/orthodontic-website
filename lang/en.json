@@ -72,6 +72,11 @@
   "contact.form.message": "Message",
   "contact.form.submit": "Send Message",
 
+  "landing.aboutBtn": "Learn More About Me",
+  "landing.servicesBtn": "View All Services",
+  "landing.resultsBtn": "See All Results",
+  "landing.contactBtn": "Book a Consultation",
+
   "footer.tagline": "Professional orthodontic care for the whole family.",
   "footer.rights": "All rights reserved."
 }

@@ -49,6 +49,7 @@
     ],
     'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
+    'Landing Page Buttons': ['landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
 
@@ -83,6 +84,15 @@
         social_instagram: '', social_facebook: '', social_telegram: '',
         social_whatsapp: '', social_viber: '', social_tiktok: '', social_youtube: '',
       },
+      landing: {
+        landing_about_desc: '',
+        landing_about_btn: '',
+        landing_about_highlights: '3',
+        landing_services_count: '3',
+        landing_services_btn: '',
+        landing_results_count: '2',
+        landing_results_btn: '',
+      },
       services: DEFAULT_SERVICES.map(s => ({ ...s })),
       results: DEFAULT_RESULTS.map(r => ({ ...r })),
       translations: { en: {}, ka: {}, ru: {} },  // overrides only
@@ -115,6 +125,7 @@
     setupSidebar();
     setupImageUploads();
     setupSaveButton();
+    setupLanding();
     setupServices();
     setupResults();
     setupSocial();
@@ -306,6 +317,22 @@
       preview.style.backgroundImage = '';
       preview.classList.remove('has-image');
     }
+  }
+
+  // ========================================
+  // Landing Page Settings
+  // ========================================
+  function setupLanding() {
+    if (!data.landing) data.landing = getDefaultData().landing;
+
+    document.querySelectorAll('[data-admin-landing]').forEach(input => {
+      input.addEventListener('input', () => {
+        data.landing[input.dataset.adminLanding] = input.value;
+      });
+      input.addEventListener('change', () => {
+        data.landing[input.dataset.adminLanding] = input.value;
+      });
+    });
   }
 
   // ========================================
@@ -707,6 +734,14 @@
       const input = document.querySelector(`[data-admin="${key}"]`);
       if (input) input.value = val || '';
     });
+
+    // Landing
+    if (data.landing) {
+      Object.entries(data.landing).forEach(([key, val]) => {
+        const input = document.querySelector(`[data-admin-landing="${key}"]`);
+        if (input) input.value = val || '';
+      });
+    }
 
     // Images
     ['hero_photo', 'about_photo'].forEach(key => updateImagePreview(key));

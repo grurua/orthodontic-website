@@ -42,11 +42,20 @@
       </div>
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+
+        <div class="sidebar-group-label"><i class="fas fa-home"></i> Landing Page</div>
         <a href="#" class="nav-item" data-tab="hero"><i class="fas fa-image"></i> Hero Section</a>
-        <a href="#" class="nav-item" data-tab="about"><i class="fas fa-user-md"></i> About Me</a>
-        <a href="#" class="nav-item" data-tab="services"><i class="fas fa-th-list"></i> Services</a>
-        <a href="#" class="nav-item" data-tab="results"><i class="fas fa-exchange-alt"></i> Before / After</a>
+        <a href="#" class="nav-item" data-tab="landing-about"><i class="fas fa-user-md"></i> About Preview</a>
+        <a href="#" class="nav-item" data-tab="landing-services"><i class="fas fa-th-list"></i> Services Preview</a>
+        <a href="#" class="nav-item" data-tab="landing-results"><i class="fas fa-exchange-alt"></i> Results Preview</a>
+
+        <div class="sidebar-group-label"><i class="fas fa-file-alt"></i> Inner Pages</div>
+        <a href="#" class="nav-item" data-tab="about"><i class="fas fa-user-md"></i> About Page</a>
+        <a href="#" class="nav-item" data-tab="services"><i class="fas fa-th-list"></i> Services Page</a>
+        <a href="#" class="nav-item" data-tab="results"><i class="fas fa-exchange-alt"></i> Results Page</a>
         <a href="#" class="nav-item" data-tab="contact"><i class="fas fa-address-book"></i> Contact Info</a>
+
+        <div class="sidebar-group-label"><i class="fas fa-globe"></i> General</div>
         <a href="#" class="nav-item" data-tab="social"><i class="fas fa-share-alt"></i> Social Links</a>
         <a href="#" class="nav-item" data-tab="translations"><i class="fas fa-language"></i> Translations</a>
         <a href="#" class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> Settings</a>
@@ -96,10 +105,10 @@
           <div class="panel-card">
             <h3>Quick Guide</h3>
             <ul class="guide-list">
+              <li><strong>Landing Page</strong> — Control what visitors see on the main page: hero banner, and preview cards for About, Services, and Results with "View More" buttons.</li>
+              <li><strong>Inner Pages</strong> — Manage the full content on each standalone page: About, Services, Results, and Contact.</li>
               <li><strong>Hero Section</strong> — Edit the main banner photo, headline text, and statistics.</li>
-              <li><strong>About Me</strong> — Update your biography photo and text.</li>
-              <li><strong>Services</strong> — Add, edit, or remove orthodontic services.</li>
-              <li><strong>Before / After</strong> — Upload treatment result photos with captions.</li>
+              <li><strong>About / Services / Results Previews</strong> — Control how many items show on the landing page and button text.</li>
               <li><strong>Contact Info</strong> — Set your address, phone, email, and hours.</li>
               <li><strong>Social Links</strong> — Add your social media profile URLs.</li>
               <li><strong>Translations</strong> — Edit every text in all 3 languages directly.</li>
@@ -145,6 +154,74 @@
                 <label>Stat 4 — Number</label>
                 <input type="text" data-admin="stat4_number" placeholder="10+" />
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Landing About Preview Tab -->
+        <section class="tab-panel" id="tab-landing-about">
+          <div class="panel-card">
+            <h3>About Preview — Landing Page</h3>
+            <p class="field-help">Controls what visitors see in the About section on the landing page. The full About page content is managed under <strong>Inner Pages → About Page</strong>.</p>
+            <div class="form-field">
+              <label>Preview Description (shown on landing page)</label>
+              <textarea data-admin-landing="landing_about_desc" rows="4" placeholder="Short description shown on the landing page..."></textarea>
+              <span class="field-hint">Leave empty to use the default about description from translations.</span>
+            </div>
+            <div class="form-field">
+              <label>Button Text</label>
+              <input type="text" data-admin-landing="landing_about_btn" placeholder="Learn More About Me" />
+            </div>
+            <div class="form-field">
+              <label>Number of highlights to show</label>
+              <select data-admin-landing="landing_about_highlights">
+                <option value="3">All 3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="0">None</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Landing Services Preview Tab -->
+        <section class="tab-panel" id="tab-landing-services">
+          <div class="panel-card">
+            <h3>Services Preview — Landing Page</h3>
+            <p class="field-help">Controls how many service cards appear on the landing page. The full service list is managed under <strong>Inner Pages → Services Page</strong>.</p>
+            <div class="form-field">
+              <label>Number of services to show on landing page</label>
+              <select data-admin-landing="landing_services_count">
+                <option value="3" selected>3 services</option>
+                <option value="4">4 services</option>
+                <option value="6">6 services</option>
+                <option value="all">All services</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Button Text</label>
+              <input type="text" data-admin-landing="landing_services_btn" placeholder="View All Services" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Landing Results Preview Tab -->
+        <section class="tab-panel" id="tab-landing-results">
+          <div class="panel-card">
+            <h3>Results Preview — Landing Page</h3>
+            <p class="field-help">Controls how many before/after cases appear on the landing page. The full results are managed under <strong>Inner Pages → Results Page</strong>.</p>
+            <div class="form-field">
+              <label>Number of cases to show on landing page</label>
+              <select data-admin-landing="landing_results_count">
+                <option value="2" selected>2 cases</option>
+                <option value="3">3 cases</option>
+                <option value="4">4 cases</option>
+                <option value="all">All cases</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Button Text</label>
+              <input type="text" data-admin-landing="landing_results_btn" placeholder="See All Results" />
             </div>
           </div>
         </section>

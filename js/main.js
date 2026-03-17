@@ -289,6 +289,50 @@
     btn.addEventListener('click', () => setLang(btn.dataset.lang));
   });
 
+  // ---- Apply Landing Page Settings ----
+  function applyLandingSettings() {
+    if (!adminData || !adminData.landing) return;
+    const landing = adminData.landing;
+
+    // Limit services on landing page
+    const servicesGrid = document.getElementById('servicesGrid');
+    if (servicesGrid && document.querySelector('.hero')) {
+      const count = landing.landing_services_count || '3';
+      if (count !== 'all') {
+        const max = parseInt(count, 10);
+        const cards = servicesGrid.querySelectorAll('.service-card');
+        cards.forEach((card, i) => {
+          if (i >= max) card.style.display = 'none';
+        });
+      }
+    }
+
+    // Limit results on landing page
+    const resultsGrid = document.getElementById('resultsGrid');
+    if (resultsGrid && document.querySelector('.hero')) {
+      const count = landing.landing_results_count || '2';
+      if (count !== 'all') {
+        const max = parseInt(count, 10);
+        const cards = resultsGrid.querySelectorAll('.result-card');
+        cards.forEach((card, i) => {
+          if (i >= max) card.style.display = 'none';
+        });
+      }
+    }
+
+    // Limit about highlights on landing page
+    if (document.querySelector('.hero')) {
+      const highlightCount = landing.landing_about_highlights || '3';
+      if (highlightCount !== '3') {
+        const max = parseInt(highlightCount, 10);
+        const items = document.querySelectorAll('.about-highlights .highlight-item');
+        items.forEach((item, i) => {
+          if (i >= max) item.style.display = 'none';
+        });
+      }
+    }
+  }
+
   // ---- Init ----
   applyHeroPhoto();
   applyAboutPhoto();
@@ -296,5 +340,6 @@
   applyAdminStats();
   applyAdminSocial();
   applyAdminContact();
+  applyLandingSettings();
   setLang(currentLang);
 })();

@@ -172,6 +172,26 @@ body {
   overflow-y: auto;
 }
 
+.sidebar-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.3);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 4px;
+}
+
+.sidebar-group-label i {
+  font-size: 0.65rem;
+  width: 16px;
+  text-align: center;
+}
+
 .sidebar-nav .nav-item {
   display: flex;
   align-items: center;

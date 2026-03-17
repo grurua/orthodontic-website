@@ -72,6 +72,11 @@
   "contact.form.message": "შეტყობინება",
   "contact.form.submit": "შეტყობინების გაგზავნა",
 
+  "landing.aboutBtn": "მეტი ჩემ შესახებ",
+  "landing.servicesBtn": "ყველა სერვისის ნახვა",
+  "landing.resultsBtn": "ყველა შედეგის ნახვა",
+  "landing.contactBtn": "კონსულტაციის დაჯავშნა",
+
   "footer.tagline": "პროფესიონალური ორთოდონტიული მომსახურება მთელი ოჯახისთვის.",
   "footer.rights": "ყველა უფლება დაცულია."
 }

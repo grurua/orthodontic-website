@@ -72,6 +72,11 @@
   "contact.form.message": "Сообщение",
   "contact.form.submit": "Отправить сообщение",
 
+  "landing.aboutBtn": "Подробнее обо мне",
+  "landing.servicesBtn": "Все услуги",
+  "landing.resultsBtn": "Все результаты",
+  "landing.contactBtn": "Записаться на консультацию",
+
   "footer.tagline": "Профессиональная ортодонтическая помощь для всей семьи.",
   "footer.rights": "Все права защищены."
 }
