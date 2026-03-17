@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dr. Ana Vepkhvadze — Professional Orthodontist. Braces, Aligners, Pediatric Orthodontics. Book your consultation today." />
-  <title>Dr. Ana Vepkhvadze — Orthodontist</title>
+  <meta name="description" content="About Dr. Ana Vepkhvadze — Board Certified Orthodontist with international training and patient-centered care." />
+  <title>About — Dr. Ana Vepkhvadze</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -14,12 +14,12 @@
 <body>
 
   <!-- Navigation -->
-  <nav class="navbar" id="navbar">
+  <nav class="navbar navbar-light" id="navbar">
     <div class="container nav-inner">
       <a href="index.html" class="logo" data-i18n="logo">Dr. Ana Vepkhvadze</a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
-        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="about.html" class="active" data-i18n="nav.about">About</a></li>
         <li><a href="services.html" data-i18n="nav.services">Services</a></li>
         <li><a href="results.html" data-i18n="nav.results">Results</a></li>
         <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
@@ -37,50 +37,43 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero" id="hero">
-    <div class="hero-bg"></div>
-    <div class="container hero-content">
-      <div class="hero-text">
-        <span class="hero-label" data-i18n="hero.subtitle">Welcome to Our Practice</span>
-        <h1 class="hero-title" data-i18n="hero.title">Your Perfect <em>Smile</em> Starts Here</h1>
-        <p class="hero-desc" data-i18n="hero.description">Expert orthodontic care for the whole family. We combine modern technology with a personalized approach to give you the smile you've always wanted.</p>
-        <div class="hero-buttons">
-          <a href="contact.html" class="btn btn-gold" data-i18n="hero.cta">Book a Consultation</a>
-          <a href="services.html" class="btn btn-outline-light" data-i18n="hero.learnMore">Our Services</a>
-        </div>
-      </div>
-      <div class="hero-photo">
-        <div class="hero-photo-wrapper" id="heroPhotoWrapper">
-          <div class="hero-photo-placeholder" id="heroPlaceholder">
-            <i class="fas fa-user-doctor"></i>
-            <span data-i18n="hero.photoLabel">Doctor Photo</span>
-          </div>
-        </div>
-        <div class="hero-photo-badge">
-          <span class="badge-number" data-i18n="hero.stat1_number">15+</span>
-          <span class="badge-text" data-i18n="hero.stat1">Years Experience</span>
-        </div>
-      </div>
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <span class="section-label" data-i18n="about.subtitle">About Me</span>
+      <h1 class="section-heading" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h1>
     </div>
-    <div class="stats-bar">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat">
-            <span class="stat-number" data-i18n="hero.stat1_number">15+</span>
-            <span class="stat-text" data-i18n="hero.stat1">Years Experience</span>
+  </section>
+
+  <!-- About Content -->
+  <section class="about" id="about">
+    <div class="container about-grid">
+      <div class="about-photo reveal">
+        <div class="about-photo-wrapper" id="aboutPhotoWrapper">
+          <div class="about-photo-placeholder" id="aboutPlaceholder">
+            <i class="fas fa-stethoscope"></i>
+            <span data-i18n="about.photoLabel">About Photo</span>
           </div>
-          <div class="stat">
-            <span class="stat-number" data-i18n="hero.stat2_number">5000+</span>
-            <span class="stat-text" data-i18n="hero.stat2">Happy Patients</span>
+        </div>
+        <div class="about-photo-accent"></div>
+      </div>
+      <div class="about-text reveal">
+        <span class="section-label" data-i18n="about.subtitle">About Me</span>
+        <h2 class="section-heading" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h2>
+        <p class="about-desc" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
+        <p class="about-desc" data-i18n="about.description2">My philosophy is simple: every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span data-i18n="about.highlight1">Board Certified Orthodontist</span>
           </div>
-          <div class="stat">
-            <span class="stat-number" data-i18n="hero.stat3_number">98%</span>
-            <span class="stat-text" data-i18n="hero.stat3">Satisfaction Rate</span>
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-award"></i></div>
+            <span data-i18n="about.highlight2">International Training</span>
           </div>
-          <div class="stat">
-            <span class="stat-number" data-i18n="hero.stat4_number">10+</span>
-            <span class="stat-text" data-i18n="hero.stat4">Certifications</span>
+          <div class="highlight-item">
+            <div class="highlight-icon"><i class="fas fa-heart"></i></div>
+            <span data-i18n="about.highlight3">Patient-Centered Care</span>
           </div>
         </div>
       </div>
