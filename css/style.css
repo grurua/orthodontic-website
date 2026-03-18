@@ -15,8 +15,8 @@
   --cream-dark: #f0ece5;
   --white: #ffffff;
   --border: #e8e4de;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'DM Sans', -apple-system, sans-serif;
+  --font-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-logo: 'Noto Sans Hebrew', 'DM Sans', sans-serif;
   --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --shadow: 0 4px 24px rgba(0,0,0,0.06);
