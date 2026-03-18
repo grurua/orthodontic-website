@@ -89,7 +89,7 @@
         landing_about_desc: '',
         landing_about_btn: '',
         landing_about_highlights: '3',
-        landing_services_count: '3',
+        landing_services_count: '6',
         landing_services_btn: '',
         landing_results_count: '2',
         landing_results_btn: '',
@@ -400,24 +400,50 @@
     data.services.forEach((svc, idx) => {
       const div = document.createElement('div');
       div.className = 'service-item';
+      const imgKey = `service_${svc.id}_photo`;
       div.innerHTML = `
         <div class="service-item-header">
           <span class="service-num">${idx + 1}</span>
           <h4>${svc.key}</h4>
           <button class="btn-delete-item" data-id="${svc.id}" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
-        <div class="form-row">
-          <div class="form-field">
-            <label>Icon Class</label>
-            <input type="text" value="${svc.icon}" data-svc-id="${svc.id}" data-field="icon" />
+        <div class="service-item-body">
+          <div class="image-upload-small">
+            <div class="image-preview-small" data-key="${imgKey}">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Photo</span>
+            </div>
+            <input type="file" accept="image/*" class="file-input" data-key="${imgKey}" style="display:none;" />
+            <span class="upload-label">Service Photo (optional)</span>
           </div>
-          <div class="form-field">
-            <label>Key (read-only for defaults)</label>
-            <input type="text" value="${svc.key}" readonly />
+          <div class="service-item-fields">
+            <div class="form-field">
+              <label>Icon Class (fallback if no photo)</label>
+              <input type="text" value="${svc.icon}" data-svc-id="${svc.id}" data-field="icon" />
+            </div>
+            <div class="form-field">
+              <label>Key</label>
+              <input type="text" value="${svc.key}" readonly />
+            </div>
           </div>
         </div>
       `;
       container.appendChild(div);
+
+      // Wire up image upload
+      const preview = div.querySelector(`.image-preview-small[data-key="${imgKey}"]`);
+      const input = div.querySelector(`.file-input[data-key="${imgKey}"]`);
+      preview.addEventListener('click', () => input.click());
+      preview.addEventListener('dragover', (e) => e.preventDefault());
+      preview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleSmallImageFile(file, imgKey);
+      });
+      input.addEventListener('change', () => {
+        if (input.files[0]) handleSmallImageFile(input.files[0], imgKey);
+      });
+      updateSmallImagePreview(imgKey);
 
       // Icon edit
       div.querySelector(`[data-field="icon"]`).addEventListener('input', (e) => {
@@ -431,6 +457,7 @@
       // Delete
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this service?')) {
+          delete data.images[imgKey];
           data.services = data.services.filter(x => x.id !== svc.id);
           saveData(data);
           renderServices();

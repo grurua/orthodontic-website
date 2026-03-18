@@ -630,6 +630,20 @@ button { font-family: inherit; cursor: pointer; }
 
 .service-icon i { font-size: 1.5rem; color: var(--gold); }
 
+.service-photo {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.service-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .service-card h3 {
   font-family: var(--font-serif);
   font-size: 1.3rem;

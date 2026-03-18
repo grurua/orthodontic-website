@@ -676,6 +676,27 @@ body {
   font-size: 0.95rem;
 }
 
+.service-item-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.service-item-body .image-upload-small {
+  flex-shrink: 0;
+}
+
+.service-item-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service-item-fields .form-field {
+  margin-bottom: 0;
+}
+
 .btn-delete-item {
   background: none;
   border: none;

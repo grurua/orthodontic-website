@@ -302,19 +302,6 @@
     if (!adminData || !adminData.landing) return;
     const landing = adminData.landing;
 
-    // Limit services on landing page
-    const servicesGrid = document.getElementById('servicesGrid');
-    if (servicesGrid && document.querySelector('.hero')) {
-      const count = landing.landing_services_count || '3';
-      if (count !== 'all') {
-        const max = parseInt(count, 10);
-        const cards = servicesGrid.querySelectorAll('.service-card');
-        cards.forEach((card, i) => {
-          if (i >= max) card.style.display = 'none';
-        });
-      }
-    }
-
     // Limit results on landing page
     const resultsGrid = document.getElementById('resultsGrid');
     if (resultsGrid && document.querySelector('.hero')) {
@@ -339,6 +326,54 @@
         });
       }
     }
+  }
+
+  // ---- Dynamic Services Rendering ----
+  function applyDynamicServices() {
+    if (!adminData || !adminData.services) return;
+    const grid = document.getElementById('servicesGrid');
+    if (!grid) return;
+
+    const isLanding = !!document.querySelector('.hero');
+    const services = adminData.services;
+    const landing = adminData.landing || {};
+    const count = landing.landing_services_count || '6';
+
+    // Determine which services to show
+    let toShow = services;
+    if (isLanding && count !== 'all') {
+      const max = parseInt(count, 10);
+      toShow = services.slice(0, max);
+    }
+
+    // Rebuild the grid
+    grid.innerHTML = '';
+    toShow.forEach(svc => {
+      const card = document.createElement('div');
+      card.className = 'service-card reveal';
+
+      const imgKey = `service_${svc.id}_photo`;
+      const hasImage = adminData.images && adminData.images[imgKey];
+
+      if (hasImage) {
+        card.innerHTML = `
+          <div class="service-photo">
+            <img src="${adminData.images[imgKey]}" alt="" />
+          </div>
+          <h3 data-i18n="services.${svc.key}.title"></h3>
+          <p data-i18n="services.${svc.key}.desc"></p>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="service-icon"><i class="${svc.icon}"></i></div>
+          <h3 data-i18n="services.${svc.key}.title"></h3>
+          <p data-i18n="services.${svc.key}.desc"></p>
+        `;
+      }
+
+      grid.appendChild(card);
+      revealObserver.observe(card);
+    });
   }
 
   // ---- Case Detail Page ----
@@ -524,6 +559,7 @@
   // ---- Init ----
   applyHeroPhoto();
   applyAboutPhoto();
+  applyDynamicServices();
   applyDynamicResultsGrid();
   applyResultPhotos();
   applyAdminStats();
