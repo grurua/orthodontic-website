@@ -393,18 +393,27 @@
     });
   }
 
-  function renderServices() {
+  async function renderServices() {
     const container = document.getElementById('servicesList');
     container.innerHTML = '';
+
+    // Load base language file to get default titles/descriptions
+    const defaults = await loadLangFile('en');
+    const overrides = data.translations.en || {};
 
     data.services.forEach((svc, idx) => {
       const div = document.createElement('div');
       div.className = 'service-item';
       const imgKey = `service_${svc.id}_photo`;
+      const titleKey = `services.${svc.key}.title`;
+      const descKey = `services.${svc.key}.desc`;
+      const currentTitle = overrides[titleKey] !== undefined ? overrides[titleKey] : (defaults[titleKey] || '');
+      const currentDesc = overrides[descKey] !== undefined ? overrides[descKey] : (defaults[descKey] || '');
+
       div.innerHTML = `
         <div class="service-item-header">
           <span class="service-num">${idx + 1}</span>
-          <h4>${svc.key}</h4>
+          <h4>${escapeHtml(currentTitle || svc.key)}</h4>
           <button class="btn-delete-item" data-id="${svc.id}" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
         <div class="service-item-body">
@@ -419,11 +428,15 @@
           <div class="service-item-fields">
             <div class="form-field">
               <label>Icon Class (fallback if no photo)</label>
-              <input type="text" value="${svc.icon}" data-svc-id="${svc.id}" data-field="icon" />
+              <input type="text" value="${escapeAttr(svc.icon)}" data-svc-id="${svc.id}" data-field="icon" />
             </div>
             <div class="form-field">
-              <label>Key</label>
-              <input type="text" value="${svc.key}" readonly />
+              <label>Title</label>
+              <input type="text" value="${escapeAttr(currentTitle)}" data-svc-id="${svc.id}" data-field="title" placeholder="Service title" />
+            </div>
+            <div class="form-field">
+              <label>Description</label>
+              <textarea data-svc-id="${svc.id}" data-field="desc" rows="3" placeholder="Service description...">${escapeHtml(currentDesc)}</textarea>
             </div>
           </div>
         </div>
@@ -454,10 +467,42 @@
         }
       });
 
+      // Title edit — saves to all 3 language overrides (English directly, others if empty)
+      div.querySelector(`[data-field="title"]`).addEventListener('input', (e) => {
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          // Only auto-fill other languages if they don't already have a custom value
+          if (lang === 'en' || !data.translations[lang][titleKey]) {
+            data.translations[lang][titleKey] = e.target.value;
+          }
+        });
+        saveData(data);
+        // Update the header display
+        div.querySelector('.service-item-header h4').textContent = e.target.value || svc.key;
+      });
+
+      // Description edit
+      div.querySelector(`[data-field="desc"]`).addEventListener('input', (e) => {
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          if (lang === 'en' || !data.translations[lang][descKey]) {
+            data.translations[lang][descKey] = e.target.value;
+          }
+        });
+        saveData(data);
+      });
+
       // Delete
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this service?')) {
           delete data.images[imgKey];
+          // Clean up translation entries
+          ['en', 'ka', 'ru'].forEach(lang => {
+            if (data.translations[lang]) {
+              delete data.translations[lang][titleKey];
+              delete data.translations[lang][descKey];
+            }
+          });
           data.services = data.services.filter(x => x.id !== svc.id);
           saveData(data);
           renderServices();

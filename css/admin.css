@@ -697,6 +697,23 @@ body {
   margin-bottom: 0;
 }
 
+.service-item-fields textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color var(--admin-transition);
+}
+
+.service-item-fields textarea:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+}
+
 .btn-delete-item {
   background: none;
   border: none;

@@ -4,6 +4,19 @@
 (() => {
   'use strict';
 
+  // ---- Default Services (used when no admin data exists) ----
+  const DEFAULT_SERVICES = [
+    { id: 's1', icon: 'fas fa-child', key: 'pediatric' },
+    { id: 's2', icon: 'fas fa-teeth', key: 'braces' },
+    { id: 's3', icon: 'fas fa-gem', key: 'ceramic' },
+    { id: 's4', icon: 'fas fa-magic', key: 'aligners' },
+    { id: 's5', icon: 'fas fa-shield-alt', key: 'splints' },
+    { id: 's6', icon: 'fas fa-eye-slash', key: 'lingual' },
+    { id: 's7', icon: 'fas fa-sync-alt', key: 'retainers' },
+    { id: 's8', icon: 'fas fa-x-ray', key: 'digital' },
+    { id: 's9', icon: 'fas fa-bone', key: 'jaw' },
+  ];
+
   // ---- Admin Data ----
   let adminData = null;
   try {
@@ -330,13 +343,12 @@
 
   // ---- Dynamic Services Rendering ----
   function applyDynamicServices() {
-    if (!adminData || !adminData.services) return;
     const grid = document.getElementById('servicesGrid');
     if (!grid) return;
 
     const isLanding = !!document.querySelector('.hero');
-    const services = adminData.services;
-    const landing = adminData.landing || {};
+    const services = (adminData && adminData.services) ? adminData.services : DEFAULT_SERVICES;
+    const landing = (adminData && adminData.landing) ? adminData.landing : {};
     const count = landing.landing_services_count || '6';
 
     // Determine which services to show
@@ -353,7 +365,7 @@
       card.className = 'service-card reveal';
 
       const imgKey = `service_${svc.id}_photo`;
-      const hasImage = adminData.images && adminData.images[imgKey];
+      const hasImage = adminData && adminData.images && adminData.images[imgKey];
 
       if (hasImage) {
         card.innerHTML = `
