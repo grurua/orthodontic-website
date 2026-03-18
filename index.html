@@ -117,7 +117,7 @@
             <span data-i18n="about.highlight3">Patient-Centered Care</span>
           </div>
         </div>
-        <div style="margin-top: 32px;">
+        <div class="section-action">
           <a href="about.html" class="btn btn-outline-dark" data-i18n="landing.aboutBtn">Learn More About Me</a>
         </div>
       </div>
@@ -149,7 +149,7 @@
           <p data-i18n="services.ceramic.desc">Tooth-colored ceramic brackets offer a discreet alternative to metal braces. They blend naturally with your teeth while providing the same effective treatment results.</p>
         </div>
       </div>
-      <div class="text-center" style="margin-top: 48px;">
+      <div class="section-action text-center">
         <a href="services.html" class="btn btn-gold" data-i18n="landing.servicesBtn">View All Services</a>
       </div>
     </div>
@@ -164,30 +164,40 @@
         <p class="section-desc mx-auto" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
       </div>
       <div class="results-grid stagger" id="resultsGrid">
-        <div class="result-card reveal">
-          <div class="ba-slider" data-idx="0">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+        <div class="result-card reveal" data-case-idx="0">
+          <a href="case.html?id=r1" class="result-card-link">
+            <div class="ba-slider" data-idx="0">
+              <div class="ba-placeholder">
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+              </div>
+              <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+              <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
             </div>
-            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
-            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
-          </div>
-          <p class="result-caption" data-i18n="results.case1">Crowding correction — 14 months with ceramic braces</p>
+            <div class="result-card-bottom">
+              <p class="result-caption" data-i18n="results.case1">Crowding correction — 14 months with ceramic braces</p>
+              <span class="result-view-link" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </a>
         </div>
-        <div class="result-card reveal">
-          <div class="ba-slider" data-idx="1">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+        <div class="result-card reveal" data-case-idx="1">
+          <a href="case.html?id=r2" class="result-card-link">
+            <div class="ba-slider" data-idx="1">
+              <div class="ba-placeholder">
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+              </div>
+              <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+              <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
             </div>
-            <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
-            <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
-          </div>
-          <p class="result-caption" data-i18n="results.case2">Open bite treatment — 18 months with clear aligners</p>
+            <div class="result-card-bottom">
+              <p class="result-caption" data-i18n="results.case2">Open bite treatment — 18 months with clear aligners</p>
+              <span class="result-view-link" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></span>
+            </div>
+          </a>
         </div>
       </div>
-      <div class="text-center" style="margin-top: 48px;">
+      <div class="section-action text-center">
         <a href="results.html" class="btn btn-outline-dark" data-i18n="landing.resultsBtn">See All Results</a>
       </div>
     </div>
@@ -230,7 +240,7 @@
               <p data-i18n="contact.hours">Mon – Fri: 09:00 – 18:00<br/>Sat: 10:00 – 15:00</p>
             </div>
           </div>
-          <div style="margin-top: 24px;">
+          <div class="section-action">
             <a href="contact.html" class="btn btn-gold" data-i18n="landing.contactBtn">Book a Consultation</a>
           </div>
         </div>
