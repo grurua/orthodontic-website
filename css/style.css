@@ -689,67 +689,25 @@ button { font-family: inherit; cursor: pointer; }
 .ba-slider {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/10;
   overflow: hidden;
-  cursor: ew-resize;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
-.ba-slider img {
-  position: absolute;
-  inset: 0;
+.ba-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ba-stacked-item {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
-.ba-before { z-index: 1; }
-
-.ba-after-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  clip-path: inset(0 0 0 50%);
-}
-
-.ba-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: var(--white);
-  z-index: 3;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.ba-handle::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px;
-  height: 40px;
-  background: var(--white);
-  border-radius: 50%;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-}
-
-.ba-handle::after {
-  content: '\f0d9\00a0\00a0\f0da';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.65rem;
-  color: var(--dark);
-  z-index: 1;
-  white-space: nowrap;
+.ba-stacked-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .ba-label {
@@ -766,33 +724,27 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .ba-label-before { left: 12px; background: rgba(0,0,0,0.5); }
-.ba-label-after { right: 12px; background: var(--gold); }
+.ba-label-after { left: 12px; background: var(--gold); }
 
 .ba-placeholder {
-  position: absolute;
-  inset: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  gap: 0;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .ba-placeholder-half {
-  flex: 1;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding: 48px 0;
   font-size: 0.8rem;
   color: var(--text-muted);
 }
 
 .ba-placeholder-half:first-child {
   background: #f0ece5;
-  border-right: 1px solid var(--border);
 }
 
 .ba-placeholder-half:last-child { background: #e8f0e5; }

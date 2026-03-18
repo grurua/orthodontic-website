@@ -64,7 +64,7 @@
     }
   }
 
-  // ---- Apply Admin Before/After Photos ----
+  // ---- Apply Admin Before/After Photos (stacked layout) ----
   function applyResultPhotos() {
     if (!adminData || !adminData.results || !adminData.images) return;
     const sliders = document.querySelectorAll('.ba-slider');
@@ -81,51 +81,43 @@
       if (imgs[beforeKey] && imgs[afterKey]) {
         const placeholder = slider.querySelector('.ba-placeholder');
         if (placeholder) placeholder.style.display = 'none';
+        // Remove old labels
+        slider.querySelectorAll('.ba-label').forEach(l => l.remove());
 
+        const stacked = document.createElement('div');
+        stacked.className = 'ba-stacked';
+
+        // Before
+        const beforeItem = document.createElement('div');
+        beforeItem.className = 'ba-stacked-item';
         const beforeImg = document.createElement('img');
-        beforeImg.className = 'ba-before';
         beforeImg.alt = 'Before';
         beforeImg.src = imgs[beforeKey];
+        const labelBefore = document.createElement('span');
+        labelBefore.className = 'ba-label ba-label-before';
+        labelBefore.setAttribute('data-i18n', 'results.before');
+        labelBefore.textContent = 'Before';
+        beforeItem.appendChild(beforeImg);
+        beforeItem.appendChild(labelBefore);
 
-        const afterWrap = document.createElement('div');
-        afterWrap.className = 'ba-after-wrap';
+        // After
+        const afterItem = document.createElement('div');
+        afterItem.className = 'ba-stacked-item';
         const afterImg = document.createElement('img');
         afterImg.alt = 'After';
         afterImg.src = imgs[afterKey];
-        afterWrap.appendChild(afterImg);
+        const labelAfter = document.createElement('span');
+        labelAfter.className = 'ba-label ba-label-after';
+        labelAfter.setAttribute('data-i18n', 'results.after');
+        labelAfter.textContent = 'After';
+        afterItem.appendChild(afterImg);
+        afterItem.appendChild(labelAfter);
 
-        const handle = document.createElement('div');
-        handle.className = 'ba-handle';
-
-        slider.appendChild(beforeImg);
-        slider.appendChild(afterWrap);
-        slider.appendChild(handle);
-
-        initSlider(slider, afterWrap, handle);
+        stacked.appendChild(beforeItem);
+        stacked.appendChild(afterItem);
+        slider.appendChild(stacked);
       }
     });
-  }
-
-  // ---- Before/After Slider Logic ----
-  function initSlider(slider, afterWrap, handle) {
-    let dragging = false;
-
-    function update(x) {
-      const rect = slider.getBoundingClientRect();
-      let pct = ((x - rect.left) / rect.width) * 100;
-      pct = Math.max(2, Math.min(98, pct));
-      afterWrap.style.clipPath = `inset(0 0 0 ${pct}%)`;
-      handle.style.left = pct + '%';
-    }
-
-    slider.addEventListener('mousedown', (e) => { dragging = true; update(e.clientX); });
-    slider.addEventListener('touchstart', (e) => { dragging = true; update(e.touches[0].clientX); }, { passive: true });
-
-    document.addEventListener('mousemove', (e) => { if (dragging) update(e.clientX); });
-    document.addEventListener('touchmove', (e) => { if (dragging) update(e.touches[0].clientX); }, { passive: true });
-
-    document.addEventListener('mouseup', () => { dragging = false; });
-    document.addEventListener('touchend', () => { dragging = false; });
   }
 
   // ---- Apply Admin Stats ----
@@ -474,35 +466,39 @@
         const afterSrc = imgs[block.afterKey];
         if (beforeSrc && afterSrc) {
           el.classList.add('case-block-ba');
-          const slider = document.createElement('div');
-          slider.className = 'ba-slider';
+          const container = document.createElement('div');
+          container.className = 'ba-slider';
+          const stacked = document.createElement('div');
+          stacked.className = 'ba-stacked';
+
+          const beforeItem = document.createElement('div');
+          beforeItem.className = 'ba-stacked-item';
           const beforeImg = document.createElement('img');
-          beforeImg.className = 'ba-before';
           beforeImg.alt = 'Before';
           beforeImg.src = beforeSrc;
-          const afterWrap = document.createElement('div');
-          afterWrap.className = 'ba-after-wrap';
-          const afterImg = document.createElement('img');
-          afterImg.alt = 'After';
-          afterImg.src = afterSrc;
-          afterWrap.appendChild(afterImg);
-          const handle = document.createElement('div');
-          handle.className = 'ba-handle';
           const labelBefore = document.createElement('span');
           labelBefore.className = 'ba-label ba-label-before';
           labelBefore.setAttribute('data-i18n', 'results.before');
           labelBefore.textContent = 'Before';
+          beforeItem.appendChild(beforeImg);
+          beforeItem.appendChild(labelBefore);
+
+          const afterItem = document.createElement('div');
+          afterItem.className = 'ba-stacked-item';
+          const afterImg = document.createElement('img');
+          afterImg.alt = 'After';
+          afterImg.src = afterSrc;
           const labelAfter = document.createElement('span');
           labelAfter.className = 'ba-label ba-label-after';
           labelAfter.setAttribute('data-i18n', 'results.after');
           labelAfter.textContent = 'After';
-          slider.appendChild(beforeImg);
-          slider.appendChild(afterWrap);
-          slider.appendChild(handle);
-          slider.appendChild(labelBefore);
-          slider.appendChild(labelAfter);
-          el.appendChild(slider);
-          initSlider(slider, afterWrap, handle);
+          afterItem.appendChild(afterImg);
+          afterItem.appendChild(labelAfter);
+
+          stacked.appendChild(beforeItem);
+          stacked.appendChild(afterItem);
+          container.appendChild(stacked);
+          el.appendChild(container);
         } else if (beforeSrc || afterSrc) {
           // Show whichever image is available
           el.classList.add('case-block-image');
