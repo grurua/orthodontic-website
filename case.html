@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Treatment case details — Before & After orthodontic transformation by Dr. Ana Vepkhvadze." />
+  <title>Case Details — Dr. Ana Vepkhvadze</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-light" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo" data-i18n="logo">Dr. Ana Vepkhvadze</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="services.html" data-i18n="nav.services">Services</a></li>
+        <li><a href="results.html" class="active" data-i18n="nav.results">Results</a></li>
+        <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="lang-switch">
+          <button class="lang-btn" data-lang="ka">GE</button>
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ru">RU</button>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container">
+      <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
+      <h1 class="section-heading" id="caseTitle">Case Details</h1>
+      <p class="section-desc" id="caseCaption"></p>
+    </div>
+  </section>
+
+  <!-- Case Detail Content -->
+  <section class="case-detail">
+    <div class="container">
+      <div class="case-detail-blocks" id="caseDetailBlocks">
+        <p class="case-empty" data-i18n="case.empty">No detail content has been added for this case yet.</p>
+      </div>
+      <div class="section-action text-center" style="margin-top: 48px;">
+        <a href="results.html" class="btn btn-outline-dark" data-i18n="case.backToResults"><i class="fas fa-arrow-left"></i> Back to Results</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="logo" data-i18n="logo">Dr. Ana Vepkhvadze</a>
+        <p class="footer-tagline" data-i18n="footer.tagline">Professional orthodontic care for the whole family.</p>
+      </div>
+      <div class="footer-divider"></div>
+      <nav class="footer-nav">
+        <a href="index.html" data-i18n="nav.home">Home</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="services.html" data-i18n="nav.services">Services</a>
+        <a href="results.html" data-i18n="nav.results">Results</a>
+        <a href="contact.html" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram" data-social="instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook" data-social="facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Telegram" data-social="telegram"><i class="fab fa-telegram-plane"></i></a>
+        <a href="#" aria-label="WhatsApp" data-social="whatsapp"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" aria-label="Viber" data-social="viber"><i class="fab fa-viber"></i></a>
+      </div>
+      <p class="footer-copy">&copy; <span id="footerYear"></span> Dr. Ana Vepkhvadze. <span data-i18n="footer.rights">All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

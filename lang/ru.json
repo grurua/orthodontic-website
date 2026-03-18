@@ -72,10 +72,14 @@
   "contact.form.message": "Сообщение",
   "contact.form.submit": "Отправить сообщение",
 
+  "landing.viewCase": "Подробнее",
   "landing.aboutBtn": "Подробнее обо мне",
   "landing.servicesBtn": "Все услуги",
   "landing.resultsBtn": "Все результаты",
   "landing.contactBtn": "Записаться на консультацию",
+
+  "case.backToResults": "Назад к результатам",
+  "case.empty": "Подробное содержание для этого случая ещё не добавлено.",
 
   "footer.tagline": "Профессиональная ортодонтическая помощь для всей семьи.",
   "footer.rights": "Все права защищены."

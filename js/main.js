@@ -333,13 +333,136 @@
     }
   }
 
+  // ---- Case Detail Page ----
+  function applyCaseDetail() {
+    const container = document.getElementById('caseDetailBlocks');
+    if (!container) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get('id');
+    if (!caseId || !adminData || !adminData.results) return;
+
+    const caseData = adminData.results.find(r => r.id === caseId);
+    if (!caseData) return;
+
+    // Set caption in header
+    const captionEl = document.getElementById('caseCaption');
+    if (captionEl && caseData.captionKey) {
+      captionEl.setAttribute('data-i18n', caseData.captionKey);
+    }
+
+    // Render detail blocks
+    const blocks = caseData.detailBlocks;
+    if (!blocks || blocks.length === 0) return;
+
+    container.innerHTML = '';
+
+    blocks.forEach((block, idx) => {
+      const el = document.createElement('div');
+      el.className = 'case-block';
+      el.style.transitionDelay = (idx * 0.1) + 's';
+
+      if (block.type === 'image') {
+        const imgSrc = adminData.images && adminData.images[block.imageKey];
+        if (imgSrc) {
+          el.classList.add('case-block-image');
+          const img = document.createElement('img');
+          img.alt = 'Case photo';
+          img.src = imgSrc;
+          el.appendChild(img);
+        }
+      } else if (block.type === 'text') {
+        el.classList.add('case-block-text');
+        const p = document.createElement('p');
+        p.setAttribute('data-i18n', block.textKey);
+        const overrides = adminData.translations && adminData.translations[currentLang];
+        p.textContent = (overrides && overrides[block.textKey]) || '';
+        el.appendChild(p);
+      } else if (block.type === 'image_text') {
+        el.classList.add('case-block-image-text');
+        const imgSrc = adminData.images && adminData.images[block.imageKey];
+        if (imgSrc) {
+          const img = document.createElement('img');
+          img.alt = 'Case photo';
+          img.src = imgSrc;
+          el.appendChild(img);
+        }
+        const p = document.createElement('p');
+        p.setAttribute('data-i18n', block.textKey);
+        const overrides = adminData.translations && adminData.translations[currentLang];
+        p.textContent = (overrides && overrides[block.textKey]) || '';
+        el.appendChild(p);
+      }
+
+      container.appendChild(el);
+    });
+
+    // Observe for reveal animation
+    const blockObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          blockObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
+  }
+
+  // ---- Dynamic Results Grid (for results.html with dynamically added cases) ----
+  function applyDynamicResultsGrid() {
+    const grid = document.getElementById('resultsGrid');
+    if (!grid || !adminData || !adminData.results) return;
+    // Only on results.html (not landing page - landing has .hero)
+    if (document.querySelector('.hero')) return;
+
+    const existingCards = grid.querySelectorAll('.result-card');
+    const existingCount = existingCards.length;
+    const totalCases = adminData.results.length;
+
+    // Update existing card links
+    existingCards.forEach((card, idx) => {
+      if (idx < adminData.results.length) {
+        const link = card.querySelector('.btn-view-case');
+        if (link) link.href = `case.html?id=${adminData.results[idx].id}`;
+      }
+    });
+
+    // Add extra cards if admin has more cases than the static HTML
+    for (let i = existingCount; i < totalCases; i++) {
+      const res = adminData.results[i];
+      const card = document.createElement('div');
+      card.className = 'result-card reveal';
+      card.setAttribute('data-case-idx', i);
+      card.innerHTML = `
+        <div class="ba-slider" data-idx="${i}">
+          <div class="ba-placeholder">
+            <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+            <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+          </div>
+          <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+          <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
+        </div>
+        <div class="result-card-bottom">
+          <p class="result-caption" data-i18n="${res.captionKey}"></p>
+          <a href="case.html?id=${res.id}" class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></a>
+        </div>
+      `;
+      grid.appendChild(card);
+      revealObserver.observe(card);
+    }
+  }
+
   // ---- Init ----
   applyHeroPhoto();
   applyAboutPhoto();
+  applyDynamicResultsGrid();
   applyResultPhotos();
   applyAdminStats();
   applyAdminSocial();
   applyAdminContact();
   applyLandingSettings();
+  applyCaseDetail();
   setLang(currentLang);
 })();

@@ -739,6 +739,155 @@ body {
 }
 
 /* ========================================
+   Detail Blocks Editor
+   ======================================== */
+.detail-blocks-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.detail-blocks-section h5 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.detail-blocks-list {
+  margin-bottom: 12px;
+}
+
+.detail-empty {
+  font-size: 0.85rem;
+  color: var(--admin-text-muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.detail-block-item {
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 10px;
+  background: var(--admin-bg);
+  transition: border-color var(--admin-transition);
+}
+
+.detail-block-item:hover {
+  border-color: var(--admin-primary);
+}
+
+.detail-block-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.detail-block-num {
+  width: 28px;
+  height: 28px;
+  background: var(--admin-primary);
+  color: #fff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.detail-block-type {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--admin-text-light);
+}
+
+.detail-block-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.detail-block-controls button {
+  background: none;
+  border: 1px solid var(--admin-border);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--admin-text-muted);
+  font-size: 0.7rem;
+  transition: all var(--admin-transition);
+}
+
+.detail-block-controls button:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+.detail-block-controls .btn-block-delete:hover {
+  border-color: var(--admin-danger);
+  color: var(--admin-danger);
+}
+
+.detail-block-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-block-body .image-upload-small {
+  text-align: left;
+}
+
+.detail-block-body .image-preview-small {
+  width: 180px;
+  height: 120px;
+}
+
+.detail-block-text-field {
+  margin-bottom: 0 !important;
+}
+
+.detail-block-text-field code {
+  background: var(--admin-surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.detail-blocks-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-add-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  border: 1.5px solid var(--admin-border);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--admin-transition);
+  font-family: inherit;
+}
+
+.btn-add-block:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+/* ========================================
    Translation Editor
    ======================================== */
 .lang-tabs {

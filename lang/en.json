@@ -72,10 +72,14 @@
   "contact.form.message": "Message",
   "contact.form.submit": "Send Message",
 
+  "landing.viewCase": "View Details",
   "landing.aboutBtn": "Learn More About Me",
   "landing.servicesBtn": "View All Services",
   "landing.resultsBtn": "See All Results",
   "landing.contactBtn": "Book a Consultation",
+
+  "case.backToResults": "Back to Results",
+  "case.empty": "No detail content has been added for this case yet.",
 
   "footer.tagline": "Professional orthodontic care for the whole family.",
   "footer.rights": "All rights reserved."

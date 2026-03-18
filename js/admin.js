@@ -49,7 +49,8 @@
     ],
     'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
-    'Landing Page Buttons': ['landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
+    'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
+    'Case Detail': ['case.backToResults', 'case.empty'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
 
@@ -470,6 +471,9 @@
     container.innerHTML = '';
 
     data.results.forEach((res, idx) => {
+      // Ensure detailBlocks array exists
+      if (!res.detailBlocks) res.detailBlocks = [];
+
       const div = document.createElement('div');
       div.className = 'result-item';
       const beforeKey = `result_${res.id}_before`;
@@ -503,6 +507,16 @@
           <label>Caption Key</label>
           <input type="text" value="${res.captionKey}" readonly />
         </div>
+        <div class="detail-blocks-section">
+          <h5>Detail Page Content</h5>
+          <p class="field-help">Add content blocks for the case detail page. Blocks appear in order: image, text, or image with text.</p>
+          <div class="detail-blocks-list" data-case-id="${res.id}"></div>
+          <div class="detail-blocks-actions">
+            <button class="btn-add-block" data-case-id="${res.id}" data-type="image"><i class="fas fa-image"></i> Add Image</button>
+            <button class="btn-add-block" data-case-id="${res.id}" data-type="text"><i class="fas fa-font"></i> Add Text</button>
+            <button class="btn-add-block" data-case-id="${res.id}" data-type="image_text"><i class="fas fa-photo-video"></i> Add Image + Text</button>
+          </div>
+        </div>
       `;
       container.appendChild(div);
 
@@ -524,22 +538,173 @@
         updateSmallImagePreview(key);
       });
 
-      // Delete
+      // Delete case
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this case?')) {
-          // Clean up images
+          // Clean up images (before/after + detail block images)
           delete data.images[beforeKey];
           delete data.images[afterKey];
+          if (res.detailBlocks) {
+            res.detailBlocks.forEach(block => {
+              if (block.imageKey) delete data.images[block.imageKey];
+            });
+          }
           data.results = data.results.filter(x => x.id !== res.id);
           saveData(data);
           renderResults();
           toast('Case removed', 'success');
         }
       });
+
+      // Wire up add block buttons
+      div.querySelectorAll('.btn-add-block').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const caseId = btn.dataset.caseId;
+          const type = btn.dataset.type;
+          const caseObj = data.results.find(r => r.id === caseId);
+          if (!caseObj) return;
+          if (!caseObj.detailBlocks) caseObj.detailBlocks = [];
+
+          const blockIdx = caseObj.detailBlocks.length;
+          const block = { type };
+
+          if (type === 'image' || type === 'image_text') {
+            block.imageKey = `case_${caseId}_img_${blockIdx}_${Date.now()}`;
+          }
+          if (type === 'text' || type === 'image_text') {
+            block.textKey = `case_${caseId}_txt_${blockIdx}_${Date.now()}`;
+            ['en', 'ka', 'ru'].forEach(lang => {
+              if (!data.translations[lang]) data.translations[lang] = {};
+              data.translations[lang][block.textKey] = '';
+            });
+          }
+
+          caseObj.detailBlocks.push(block);
+          saveData(data);
+          renderDetailBlocks(caseObj, div.querySelector(`.detail-blocks-list[data-case-id="${caseId}"]`));
+          toast('Block added', 'success');
+        });
+      });
+
+      // Render existing detail blocks
+      renderDetailBlocks(res, div.querySelector(`.detail-blocks-list[data-case-id="${res.id}"]`));
     });
 
     const countEl = document.getElementById('dashResultCount');
     if (countEl) countEl.textContent = data.results.length + ' cases';
+  }
+
+  function renderDetailBlocks(caseObj, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!caseObj.detailBlocks || caseObj.detailBlocks.length === 0) {
+      container.innerHTML = '<p class="detail-empty">No content blocks yet. Add blocks below.</p>';
+      return;
+    }
+
+    caseObj.detailBlocks.forEach((block, blockIdx) => {
+      const blockEl = document.createElement('div');
+      blockEl.className = 'detail-block-item';
+
+      let typeLabel = '';
+      let typeIcon = '';
+      if (block.type === 'image') { typeLabel = 'Image'; typeIcon = 'fa-image'; }
+      else if (block.type === 'text') { typeLabel = 'Text'; typeIcon = 'fa-font'; }
+      else if (block.type === 'image_text') { typeLabel = 'Image + Text'; typeIcon = 'fa-photo-video'; }
+
+      blockEl.innerHTML = `
+        <div class="detail-block-header">
+          <span class="detail-block-num"><i class="fas ${typeIcon}"></i></span>
+          <span class="detail-block-type">${typeLabel}</span>
+          <div class="detail-block-controls">
+            <button class="btn-block-move" data-dir="up" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-block-move" data-dir="down" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-block-delete" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="detail-block-body"></div>
+      `;
+
+      const body = blockEl.querySelector('.detail-block-body');
+
+      // Image upload
+      if (block.type === 'image' || block.type === 'image_text') {
+        const imgUpload = document.createElement('div');
+        imgUpload.className = 'image-upload-small';
+        imgUpload.innerHTML = `
+          <div class="image-preview-small detail-block-img" data-key="${block.imageKey}">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Upload</span>
+          </div>
+          <input type="file" accept="image/*" class="file-input" style="display:none;" />
+        `;
+        body.appendChild(imgUpload);
+
+        const preview = imgUpload.querySelector('.image-preview-small');
+        const input = imgUpload.querySelector('.file-input');
+        preview.addEventListener('click', () => input.click());
+        preview.addEventListener('dragover', (e) => e.preventDefault());
+        preview.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) handleSmallImageFile(file, block.imageKey);
+        });
+        input.addEventListener('change', () => {
+          if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
+        });
+        updateSmallImagePreview(block.imageKey);
+      }
+
+      // Text input
+      if (block.type === 'text' || block.type === 'image_text') {
+        const textField = document.createElement('div');
+        textField.className = 'form-field detail-block-text-field';
+        const currentLangText = (data.translations.en && data.translations.en[block.textKey]) || '';
+        textField.innerHTML = `
+          <label>Text (English) — key: <code>${block.textKey}</code></label>
+          <textarea rows="3" data-tkey="${block.textKey}">${escapeHtml(currentLangText)}</textarea>
+          <span class="field-hint">Edit other languages in the Translations tab.</span>
+        `;
+        body.appendChild(textField);
+
+        textField.querySelector('textarea').addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[block.textKey] = e.target.value;
+        });
+      }
+
+      // Move up
+      blockEl.querySelector('.btn-block-move[data-dir="up"]').addEventListener('click', () => {
+        if (blockIdx === 0) return;
+        const arr = caseObj.detailBlocks;
+        [arr[blockIdx - 1], arr[blockIdx]] = [arr[blockIdx], arr[blockIdx - 1]];
+        saveData(data);
+        renderDetailBlocks(caseObj, container);
+      });
+
+      // Move down
+      blockEl.querySelector('.btn-block-move[data-dir="down"]').addEventListener('click', () => {
+        if (blockIdx === caseObj.detailBlocks.length - 1) return;
+        const arr = caseObj.detailBlocks;
+        [arr[blockIdx], arr[blockIdx + 1]] = [arr[blockIdx + 1], arr[blockIdx]];
+        saveData(data);
+        renderDetailBlocks(caseObj, container);
+      });
+
+      // Delete
+      blockEl.querySelector('.btn-block-delete').addEventListener('click', () => {
+        if (confirm('Delete this content block?')) {
+          if (block.imageKey) delete data.images[block.imageKey];
+          caseObj.detailBlocks.splice(blockIdx, 1);
+          saveData(data);
+          renderDetailBlocks(caseObj, container);
+          toast('Block removed', 'success');
+        }
+      });
+
+      container.appendChild(blockEl);
+    });
   }
 
   // ========================================

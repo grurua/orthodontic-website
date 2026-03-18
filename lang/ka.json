@@ -72,10 +72,14 @@
   "contact.form.message": "შეტყობინება",
   "contact.form.submit": "შეტყობინების გაგზავნა",
 
+  "landing.viewCase": "დეტალურად ნახვა",
   "landing.aboutBtn": "მეტი ჩემ შესახებ",
   "landing.servicesBtn": "ყველა სერვისის ნახვა",
   "landing.resultsBtn": "ყველა შედეგის ნახვა",
   "landing.contactBtn": "კონსულტაციის დაჯავშნა",
+
+  "case.backToResults": "შედეგებზე დაბრუნება",
+  "case.empty": "ამ შემთხვევისთვის დეტალური კონტენტი ჯერ არ დამატებულა.",
 
   "footer.tagline": "პროფესიონალური ორთოდონტიული მომსახურება მთელი ოჯახისთვის.",
   "footer.rights": "ყველა უფლება დაცულია."
