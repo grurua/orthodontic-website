@@ -556,8 +556,6 @@
             <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
             <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
           </div>
-          <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
-          <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
         </div>
         <div class="result-card-bottom">
           <p class="result-caption" data-i18n="${res.captionKey}"></p>
