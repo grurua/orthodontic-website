@@ -58,7 +58,14 @@
   function loadData() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : getDefaultData();
+      if (!raw) return getDefaultData();
+      const parsed = JSON.parse(raw);
+      // Ensure landing defaults exist for newer fields
+      if (!parsed.landing) parsed.landing = {};
+      if (!parsed.landing.landing_services_count || parsed.landing.landing_services_count === '3') {
+        parsed.landing.landing_services_count = '6';
+      }
+      return parsed;
     } catch {
       return getDefaultData();
     }

@@ -21,7 +21,14 @@
   let adminData = null;
   try {
     const raw = localStorage.getItem('admin_data');
-    if (raw) adminData = JSON.parse(raw);
+    if (raw) {
+      adminData = JSON.parse(raw);
+      // Migrate old default: ensure at least 6 services on landing
+      if (adminData && adminData.landing &&
+          (!adminData.landing.landing_services_count || adminData.landing.landing_services_count === '3')) {
+        adminData.landing.landing_services_count = '6';
+      }
+    }
   } catch { /* ignore */ }
 
   // ---- Footer Year ----
