@@ -899,6 +899,10 @@ button { font-family: inherit; cursor: pointer; }
   font-family: var(--font-serif);
 }
 
+.case-block-ba .ba-slider {
+  border: 1px solid var(--border);
+}
+
 /* ========================================
    Contact Section
    ======================================== */

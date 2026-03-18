@@ -513,6 +513,7 @@
           <div class="detail-blocks-list" data-case-id="${res.id}"></div>
           <div class="detail-blocks-actions">
             <button class="btn-add-block" data-case-id="${res.id}" data-type="image"><i class="fas fa-image"></i> Add Image</button>
+            <button class="btn-add-block" data-case-id="${res.id}" data-type="before_after"><i class="fas fa-columns"></i> Add Before / After</button>
             <button class="btn-add-block" data-case-id="${res.id}" data-type="text"><i class="fas fa-font"></i> Add Text</button>
             <button class="btn-add-block" data-case-id="${res.id}" data-type="image_text"><i class="fas fa-photo-video"></i> Add Image + Text</button>
           </div>
@@ -547,6 +548,8 @@
           if (res.detailBlocks) {
             res.detailBlocks.forEach(block => {
               if (block.imageKey) delete data.images[block.imageKey];
+              if (block.beforeKey) delete data.images[block.beforeKey];
+              if (block.afterKey) delete data.images[block.afterKey];
             });
           }
           data.results = data.results.filter(x => x.id !== res.id);
@@ -566,13 +569,18 @@
           if (!caseObj.detailBlocks) caseObj.detailBlocks = [];
 
           const blockIdx = caseObj.detailBlocks.length;
+          const ts = Date.now();
           const block = { type };
 
           if (type === 'image' || type === 'image_text') {
-            block.imageKey = `case_${caseId}_img_${blockIdx}_${Date.now()}`;
+            block.imageKey = `case_${caseId}_img_${blockIdx}_${ts}`;
+          }
+          if (type === 'before_after') {
+            block.beforeKey = `case_${caseId}_ba_before_${blockIdx}_${ts}`;
+            block.afterKey = `case_${caseId}_ba_after_${blockIdx}_${ts}`;
           }
           if (type === 'text' || type === 'image_text') {
-            block.textKey = `case_${caseId}_txt_${blockIdx}_${Date.now()}`;
+            block.textKey = `case_${caseId}_txt_${blockIdx}_${ts}`;
             ['en', 'ka', 'ru'].forEach(lang => {
               if (!data.translations[lang]) data.translations[lang] = {};
               data.translations[lang][block.textKey] = '';
@@ -610,6 +618,7 @@
       let typeLabel = '';
       let typeIcon = '';
       if (block.type === 'image') { typeLabel = 'Image'; typeIcon = 'fa-image'; }
+      else if (block.type === 'before_after') { typeLabel = 'Before / After'; typeIcon = 'fa-columns'; }
       else if (block.type === 'text') { typeLabel = 'Text'; typeIcon = 'fa-font'; }
       else if (block.type === 'image_text') { typeLabel = 'Image + Text'; typeIcon = 'fa-photo-video'; }
 
@@ -628,7 +637,7 @@
 
       const body = blockEl.querySelector('.detail-block-body');
 
-      // Image upload
+      // Image upload (single)
       if (block.type === 'image' || block.type === 'image_text') {
         const imgUpload = document.createElement('div');
         imgUpload.className = 'image-upload-small';
@@ -654,6 +663,47 @@
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
         updateSmallImagePreview(block.imageKey);
+      }
+
+      // Before/After image uploads (two side by side)
+      if (block.type === 'before_after') {
+        const baRow = document.createElement('div');
+        baRow.className = 'result-images-row';
+        baRow.innerHTML = `
+          <div class="image-upload-small">
+            <div class="image-preview-small" data-key="${block.beforeKey}">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Before</span>
+            </div>
+            <input type="file" accept="image/*" class="file-input" data-key="${block.beforeKey}" style="display:none;" />
+            <span class="upload-label">Before Photo</span>
+          </div>
+          <div class="image-upload-small">
+            <div class="image-preview-small" data-key="${block.afterKey}">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>After</span>
+            </div>
+            <input type="file" accept="image/*" class="file-input" data-key="${block.afterKey}" style="display:none;" />
+            <span class="upload-label">After Photo</span>
+          </div>
+        `;
+        body.appendChild(baRow);
+
+        [block.beforeKey, block.afterKey].forEach(key => {
+          const preview = baRow.querySelector(`.image-preview-small[data-key="${key}"]`);
+          const input = baRow.querySelector(`.file-input[data-key="${key}"]`);
+          preview.addEventListener('click', () => input.click());
+          preview.addEventListener('dragover', (e) => e.preventDefault());
+          preview.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) handleSmallImageFile(file, key);
+          });
+          input.addEventListener('change', () => {
+            if (input.files[0]) handleSmallImageFile(input.files[0], key);
+          });
+          updateSmallImagePreview(key);
+        });
       }
 
       // Text input
@@ -696,6 +746,8 @@
       blockEl.querySelector('.btn-block-delete').addEventListener('click', () => {
         if (confirm('Delete this content block?')) {
           if (block.imageKey) delete data.images[block.imageKey];
+          if (block.beforeKey) delete data.images[block.beforeKey];
+          if (block.afterKey) delete data.images[block.afterKey];
           caseObj.detailBlocks.splice(blockIdx, 1);
           saveData(data);
           renderDetailBlocks(caseObj, container);

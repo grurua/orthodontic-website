@@ -194,13 +194,21 @@
     localStorage.setItem('lang', lang);
     document.documentElement.lang = lang;
 
+    // Get English fallback translations for case detail text keys
+    const enFallback = lang !== 'en' ? await loadLang('en') : null;
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
-      if (!t[key]) return;
+      let val = t[key];
+      // Fallback to English for dynamic keys (case detail blocks)
+      if (!val && enFallback && key.startsWith('case_')) {
+        val = enFallback[key];
+      }
+      if (!val) return;
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = t[key];
+        el.placeholder = val;
       } else {
-        el.textContent = t[key];
+        el.textContent = val;
       }
     });
 
@@ -334,6 +342,18 @@
   }
 
   // ---- Case Detail Page ----
+  function getCaseText(textKey, lang) {
+    if (!adminData || !adminData.translations) return '';
+    const t = adminData.translations[lang];
+    if (t && t[textKey]) return t[textKey];
+    // Fallback to English if current lang is empty
+    if (lang !== 'en') {
+      const en = adminData.translations.en;
+      if (en && en[textKey]) return en[textKey];
+    }
+    return '';
+  }
+
   function applyCaseDetail() {
     const container = document.getElementById('caseDetailBlocks');
     if (!container) return;
@@ -372,12 +392,14 @@
           el.appendChild(img);
         }
       } else if (block.type === 'text') {
-        el.classList.add('case-block-text');
-        const p = document.createElement('p');
-        p.setAttribute('data-i18n', block.textKey);
-        const overrides = adminData.translations && adminData.translations[currentLang];
-        p.textContent = (overrides && overrides[block.textKey]) || '';
-        el.appendChild(p);
+        const text = getCaseText(block.textKey, currentLang);
+        if (text) {
+          el.classList.add('case-block-text');
+          const p = document.createElement('p');
+          p.setAttribute('data-i18n', block.textKey);
+          p.textContent = text;
+          el.appendChild(p);
+        }
       } else if (block.type === 'image_text') {
         el.classList.add('case-block-image-text');
         const imgSrc = adminData.images && adminData.images[block.imageKey];
@@ -387,11 +409,56 @@
           img.src = imgSrc;
           el.appendChild(img);
         }
-        const p = document.createElement('p');
-        p.setAttribute('data-i18n', block.textKey);
-        const overrides = adminData.translations && adminData.translations[currentLang];
-        p.textContent = (overrides && overrides[block.textKey]) || '';
-        el.appendChild(p);
+        const text = getCaseText(block.textKey, currentLang);
+        if (text) {
+          const p = document.createElement('p');
+          p.setAttribute('data-i18n', block.textKey);
+          p.textContent = text;
+          el.appendChild(p);
+        }
+      } else if (block.type === 'before_after') {
+        const imgs = adminData.images || {};
+        const beforeSrc = imgs[block.beforeKey];
+        const afterSrc = imgs[block.afterKey];
+        if (beforeSrc && afterSrc) {
+          el.classList.add('case-block-ba');
+          const slider = document.createElement('div');
+          slider.className = 'ba-slider';
+          const beforeImg = document.createElement('img');
+          beforeImg.className = 'ba-before';
+          beforeImg.alt = 'Before';
+          beforeImg.src = beforeSrc;
+          const afterWrap = document.createElement('div');
+          afterWrap.className = 'ba-after-wrap';
+          const afterImg = document.createElement('img');
+          afterImg.alt = 'After';
+          afterImg.src = afterSrc;
+          afterWrap.appendChild(afterImg);
+          const handle = document.createElement('div');
+          handle.className = 'ba-handle';
+          const labelBefore = document.createElement('span');
+          labelBefore.className = 'ba-label ba-label-before';
+          labelBefore.setAttribute('data-i18n', 'results.before');
+          labelBefore.textContent = 'Before';
+          const labelAfter = document.createElement('span');
+          labelAfter.className = 'ba-label ba-label-after';
+          labelAfter.setAttribute('data-i18n', 'results.after');
+          labelAfter.textContent = 'After';
+          slider.appendChild(beforeImg);
+          slider.appendChild(afterWrap);
+          slider.appendChild(handle);
+          slider.appendChild(labelBefore);
+          slider.appendChild(labelAfter);
+          el.appendChild(slider);
+          initSlider(slider, afterWrap, handle);
+        } else if (beforeSrc || afterSrc) {
+          // Show whichever image is available
+          el.classList.add('case-block-image');
+          const img = document.createElement('img');
+          img.alt = beforeSrc ? 'Before' : 'After';
+          img.src = beforeSrc || afterSrc;
+          el.appendChild(img);
+        }
       }
 
       container.appendChild(el);
