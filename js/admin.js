@@ -404,11 +404,12 @@
     data.services.forEach((svc, idx) => {
       const div = document.createElement('div');
       div.className = 'service-item';
-      const imgKey = `service_${svc.id}_photo`;
+      const svgKey = `service_${svc.id}_svg`;
       const titleKey = `services.${svc.key}.title`;
       const descKey = `services.${svc.key}.desc`;
       const currentTitle = overrides[titleKey] !== undefined ? overrides[titleKey] : (defaults[titleKey] || '');
       const currentDesc = overrides[descKey] !== undefined ? overrides[descKey] : (defaults[descKey] || '');
+      const hasSvg = data.images && data.images[svgKey];
 
       div.innerHTML = `
         <div class="service-item-header">
@@ -417,17 +418,23 @@
           <button class="btn-delete-item" data-id="${svc.id}" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
         <div class="service-item-body">
-          <div class="image-upload-small">
-            <div class="image-preview-small" data-key="${imgKey}">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <span>Photo</span>
+          <div class="svg-upload-area">
+            <div class="svg-preview" data-svg-key="${svgKey}">
+              ${hasSvg
+                ? `<img src="${data.images[svgKey]}" width="48" height="48" alt="icon" />`
+                : `<i class="${svc.icon}" style="font-size:24px;color:var(--admin-primary);"></i>`
+              }
             </div>
-            <input type="file" accept="image/*" class="file-input" data-key="${imgKey}" style="display:none;" />
-            <span class="upload-label">Service Photo (optional)</span>
+            <input type="file" accept=".svg,image/svg+xml" class="svg-file-input" data-svg-key="${svgKey}" style="display:none;" />
+            <div class="svg-upload-actions">
+              <button type="button" class="btn-upload-svg" data-svg-key="${svgKey}" title="Upload SVG"><i class="fas fa-upload"></i> Upload SVG</button>
+              ${hasSvg ? `<button type="button" class="btn-remove-svg" data-svg-key="${svgKey}" title="Remove SVG"><i class="fas fa-times"></i></button>` : ''}
+            </div>
+            <span class="upload-label">Icon (SVG, 48×48)</span>
           </div>
           <div class="service-item-fields">
             <div class="form-field">
-              <label>Icon Class (fallback if no photo)</label>
+              <label>Fallback Icon Class</label>
               <input type="text" value="${escapeAttr(svc.icon)}" data-svc-id="${svc.id}" data-field="icon" />
             </div>
             <div class="form-field">
@@ -443,20 +450,41 @@
       `;
       container.appendChild(div);
 
-      // Wire up image upload
-      const preview = div.querySelector(`.image-preview-small[data-key="${imgKey}"]`);
-      const input = div.querySelector(`.file-input[data-key="${imgKey}"]`);
-      preview.addEventListener('click', () => input.click());
-      preview.addEventListener('dragover', (e) => e.preventDefault());
-      preview.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) handleSmallImageFile(file, imgKey);
+      // Wire up SVG upload
+      const svgPreview = div.querySelector(`.svg-preview[data-svg-key="${svgKey}"]`);
+      const svgInput = div.querySelector(`.svg-file-input[data-svg-key="${svgKey}"]`);
+      const btnUpload = div.querySelector(`.btn-upload-svg[data-svg-key="${svgKey}"]`);
+      const btnRemove = div.querySelector(`.btn-remove-svg[data-svg-key="${svgKey}"]`);
+
+      btnUpload.addEventListener('click', () => svgInput.click());
+      svgPreview.addEventListener('click', () => svgInput.click());
+
+      svgInput.addEventListener('change', () => {
+        const file = svgInput.files[0];
+        if (!file) return;
+        if (file.type !== 'image/svg+xml' && !file.name.endsWith('.svg')) {
+          toast('Please upload an SVG file', 'error');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          if (!data.images) data.images = {};
+          data.images[svgKey] = ev.target.result;
+          saveData(data);
+          renderServices();
+          toast('SVG icon uploaded', 'success');
+        };
+        reader.readAsDataURL(file);
       });
-      input.addEventListener('change', () => {
-        if (input.files[0]) handleSmallImageFile(input.files[0], imgKey);
-      });
-      updateSmallImagePreview(imgKey);
+
+      if (btnRemove) {
+        btnRemove.addEventListener('click', () => {
+          delete data.images[svgKey];
+          saveData(data);
+          renderServices();
+          toast('SVG icon removed', 'success');
+        });
+      }
 
       // Icon edit
       div.querySelector(`[data-field="icon"]`).addEventListener('input', (e) => {
@@ -495,8 +523,7 @@
       // Delete
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this service?')) {
-          delete data.images[imgKey];
-          // Clean up translation entries
+          delete data.images[svgKey];
           ['en', 'ka', 'ru'].forEach(lang => {
             if (data.translations[lang]) {
               delete data.translations[lang][titleKey];

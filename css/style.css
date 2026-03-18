@@ -629,6 +629,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .service-icon i { font-size: 1.5rem; color: var(--gold); }
+.service-icon img { width: 48px; height: 48px; object-fit: contain; }
 
 .service-photo {
   width: 100%;

@@ -364,14 +364,12 @@
       const card = document.createElement('div');
       card.className = 'service-card reveal';
 
-      const imgKey = `service_${svc.id}_photo`;
-      const hasImage = adminData && adminData.images && adminData.images[imgKey];
+      const svgKey = `service_${svc.id}_svg`;
+      const hasSvg = adminData && adminData.images && adminData.images[svgKey];
 
-      if (hasImage) {
+      if (hasSvg) {
         card.innerHTML = `
-          <div class="service-photo">
-            <img src="${adminData.images[imgKey]}" alt="" />
-          </div>
+          <div class="service-icon"><img src="${adminData.images[svgKey]}" width="48" height="48" alt="" /></div>
           <h3 data-i18n="services.${svc.key}.title"></h3>
           <p data-i18n="services.${svc.key}.desc"></p>
         `;
