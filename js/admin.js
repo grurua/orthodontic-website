@@ -65,6 +65,7 @@
       if (!parsed.landing.landing_services_count || parsed.landing.landing_services_count === '3') {
         parsed.landing.landing_services_count = '6';
       }
+      if (!parsed.imagePositions) parsed.imagePositions = {};
       return parsed;
     } catch {
       return getDefaultData();
@@ -86,6 +87,7 @@
   function getDefaultData() {
     return {
       images: {},           // key -> base64 data URL
+      imagePositions: {},   // key -> object-position value (e.g. "center", "left center", "right top")
       stats: { stat1_number: '15+', stat2_number: '5000+', stat3_number: '98%', stat4_number: '10+' },
       contact: { contact_phone: '+995 555 123 456', contact_email: 'info@drsmile.ge', contact_map: '' },
       social: {
@@ -321,10 +323,60 @@
     if (data.images[key]) {
       preview.style.backgroundImage = `url(${data.images[key]})`;
       preview.classList.add('has-image');
+      const pos = data.imagePositions[key] || 'center center';
+      preview.style.backgroundPosition = pos;
     } else {
       preview.style.backgroundImage = '';
       preview.classList.remove('has-image');
     }
+  }
+
+  // Create position control UI for an image
+  function createPositionControl(key, parentEl) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'img-position-control';
+
+    const current = data.imagePositions[key] || 'center center';
+    const [currentX, currentY] = parsePosition(current);
+
+    wrapper.innerHTML = `
+      <div class="pos-grid">
+        <button class="pos-btn" data-pos="left top" title="Top Left"><i class="fas fa-arrow-up" style="transform:rotate(-45deg)"></i></button>
+        <button class="pos-btn" data-pos="center top" title="Top Center"><i class="fas fa-arrow-up"></i></button>
+        <button class="pos-btn" data-pos="right top" title="Top Right"><i class="fas fa-arrow-up" style="transform:rotate(45deg)"></i></button>
+        <button class="pos-btn" data-pos="left center" title="Center Left"><i class="fas fa-arrow-left"></i></button>
+        <button class="pos-btn" data-pos="center center" title="Center"><i class="fas fa-circle" style="font-size:0.5em"></i></button>
+        <button class="pos-btn" data-pos="right center" title="Center Right"><i class="fas fa-arrow-right"></i></button>
+        <button class="pos-btn" data-pos="left bottom" title="Bottom Left"><i class="fas fa-arrow-down" style="transform:rotate(45deg)"></i></button>
+        <button class="pos-btn" data-pos="center bottom" title="Bottom Center"><i class="fas fa-arrow-down"></i></button>
+        <button class="pos-btn" data-pos="right bottom" title="Bottom Right"><i class="fas fa-arrow-down" style="transform:rotate(-45deg)"></i></button>
+      </div>
+    `;
+
+    // Highlight active button
+    wrapper.querySelectorAll('.pos-btn').forEach(btn => {
+      const [bx, by] = parsePosition(btn.dataset.pos);
+      if (bx === currentX && by === currentY) btn.classList.add('active');
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        data.imagePositions[key] = btn.dataset.pos;
+        saveData(data);
+        // Update preview
+        const preview = parentEl.querySelector(`.image-preview-small[data-key="${key}"]`);
+        if (preview) preview.style.backgroundPosition = btn.dataset.pos;
+        // Update active state
+        wrapper.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    return wrapper;
+  }
+
+  function parsePosition(pos) {
+    const parts = (pos || 'center center').split(' ');
+    return [parts[0] || 'center', parts[1] || 'center'];
   }
 
   // ========================================
@@ -629,6 +681,7 @@
 
       // Wire up small image uploads
       [beforeKey, afterKey].forEach(key => {
+        const uploadSmall = div.querySelector(`.image-preview-small[data-key="${key}"]`).closest('.image-upload-small');
         const preview = div.querySelector(`.image-preview-small[data-key="${key}"]`);
         const input = div.querySelector(`.file-input[data-key="${key}"]`);
         preview.addEventListener('click', () => input.click());
@@ -643,19 +696,23 @@
         });
         // Restore existing image
         updateSmallImagePreview(key);
+        // Add position control
+        uploadSmall.appendChild(createPositionControl(key, uploadSmall));
       });
 
       // Delete case
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this case?')) {
-          // Clean up images (before/after + detail block images)
+          // Clean up images and positions (before/after + detail block images)
           delete data.images[beforeKey];
           delete data.images[afterKey];
+          delete data.imagePositions[beforeKey];
+          delete data.imagePositions[afterKey];
           if (res.detailBlocks) {
             res.detailBlocks.forEach(block => {
-              if (block.imageKey) delete data.images[block.imageKey];
-              if (block.beforeKey) delete data.images[block.beforeKey];
-              if (block.afterKey) delete data.images[block.afterKey];
+              if (block.imageKey) { delete data.images[block.imageKey]; delete data.imagePositions[block.imageKey]; }
+              if (block.beforeKey) { delete data.images[block.beforeKey]; delete data.imagePositions[block.beforeKey]; }
+              if (block.afterKey) { delete data.images[block.afterKey]; delete data.imagePositions[block.afterKey]; }
             });
           }
           data.results = data.results.filter(x => x.id !== res.id);
@@ -796,6 +853,7 @@
         body.appendChild(baRow);
 
         [block.beforeKey, block.afterKey].forEach(key => {
+          const uploadSmall = baRow.querySelector(`.image-preview-small[data-key="${key}"]`).closest('.image-upload-small');
           const preview = baRow.querySelector(`.image-preview-small[data-key="${key}"]`);
           const input = baRow.querySelector(`.file-input[data-key="${key}"]`);
           preview.addEventListener('click', () => input.click());
@@ -809,6 +867,7 @@
             if (input.files[0]) handleSmallImageFile(input.files[0], key);
           });
           updateSmallImagePreview(key);
+          uploadSmall.appendChild(createPositionControl(key, uploadSmall));
         });
       }
 

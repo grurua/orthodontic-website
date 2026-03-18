@@ -77,6 +77,7 @@
       const beforeKey = `result_${res.id}_before`;
       const afterKey = `result_${res.id}_after`;
       const imgs = adminData.images;
+      const positions = adminData.imagePositions || {};
 
       if (imgs[beforeKey] && imgs[afterKey]) {
         const placeholder = slider.querySelector('.ba-placeholder');
@@ -93,6 +94,7 @@
         const beforeImg = document.createElement('img');
         beforeImg.alt = 'Before';
         beforeImg.src = imgs[beforeKey];
+        if (positions[beforeKey]) beforeImg.style.objectPosition = positions[beforeKey];
         const labelBefore = document.createElement('span');
         labelBefore.className = 'ba-label ba-label-before';
         labelBefore.setAttribute('data-i18n', 'results.before');
@@ -106,6 +108,7 @@
         const afterImg = document.createElement('img');
         afterImg.alt = 'After';
         afterImg.src = imgs[afterKey];
+        if (positions[afterKey]) afterImg.style.objectPosition = positions[afterKey];
         const labelAfter = document.createElement('span');
         labelAfter.className = 'ba-label ba-label-after';
         labelAfter.setAttribute('data-i18n', 'results.after');
@@ -462,6 +465,7 @@
         }
       } else if (block.type === 'before_after') {
         const imgs = adminData.images || {};
+        const pos = adminData.imagePositions || {};
         const beforeSrc = imgs[block.beforeKey];
         const afterSrc = imgs[block.afterKey];
         if (beforeSrc && afterSrc) {
@@ -476,6 +480,7 @@
           const beforeImg = document.createElement('img');
           beforeImg.alt = 'Before';
           beforeImg.src = beforeSrc;
+          if (pos[block.beforeKey]) beforeImg.style.objectPosition = pos[block.beforeKey];
           const labelBefore = document.createElement('span');
           labelBefore.className = 'ba-label ba-label-before';
           labelBefore.setAttribute('data-i18n', 'results.before');
@@ -488,6 +493,7 @@
           const afterImg = document.createElement('img');
           afterImg.alt = 'After';
           afterImg.src = afterSrc;
+          if (pos[block.afterKey]) afterImg.style.objectPosition = pos[block.afterKey];
           const labelAfter = document.createElement('span');
           labelAfter.className = 'ba-label ba-label-after';
           labelAfter.setAttribute('data-i18n', 'results.after');

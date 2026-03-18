@@ -636,6 +636,45 @@ body {
 .image-preview-small.has-image i,
 .image-preview-small.has-image span { display: none; }
 
+/* Image position control */
+.img-position-control {
+  margin-top: 6px;
+}
+
+.pos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  width: 84px;
+}
+
+.pos-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 4px;
+  background: var(--admin-bg);
+  color: var(--admin-text-muted);
+  font-size: 0.6rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pos-btn:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+.pos-btn.active {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #fff;
+}
+
 /* ========================================
    Services Editor
    ======================================== */
