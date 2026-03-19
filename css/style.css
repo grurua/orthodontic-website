@@ -2,10 +2,10 @@
    Variables & Reset
    ======================================== */
 :root {
-  --gold: #7F77DD;
-  --gold-light: #9a94e4;
-  --gold-dark: #6960c4;
-  --gold-bg: rgba(127,119,221,0.08);
+  --gold: #534AB7;
+  --gold-light: #6e65cc;
+  --gold-dark: #43399a;
+  --gold-bg: rgba(83,74,183,0.08);
   --dark: #F9FAFA;
   --dark-soft: #EFF1F1;
   --text: #333333;
@@ -103,7 +103,7 @@ button { font-family: inherit; cursor: pointer; }
 .btn-gold:hover {
   background: var(--gold-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(127,119,221,0.35);
+  box-shadow: 0 6px 20px rgba(83,74,183,0.35);
 }
 
 .btn-outline-light {
@@ -285,7 +285,7 @@ button { font-family: inherit; cursor: pointer; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 80%, rgba(127,119,221,0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 80%, rgba(83,74,183,0.06) 0%, transparent 60%);
 }
 
 .page-header .container { position: relative; z-index: 1; }
@@ -328,7 +328,7 @@ button { font-family: inherit; cursor: pointer; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 70% 50%, rgba(127,119,221,0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 70% 50%, rgba(83,74,183,0.06) 0%, transparent 60%);
 }
 
 .hero-content {
@@ -787,7 +787,7 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--gold);
   color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(127,119,221,0.3);
+  box-shadow: 0 4px 16px rgba(83,74,183,0.3);
 }
 
 .result-view-link {

@@ -2,8 +2,8 @@
    Admin Panel Styles
    ======================================== */
 :root {
-  --admin-primary: #7F77DD;
-  --admin-primary-dark: #6960c4;
+  --admin-primary: #534AB7;
+  --admin-primary-dark: #43399a;
   --admin-accent: #00c9a7;
   --admin-bg: #f0f2f5;
   --admin-surface: #ffffff;
