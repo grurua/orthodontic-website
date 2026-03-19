@@ -378,12 +378,14 @@
           <div class="service-icon"><img src="${adminData.images[svgKey]}" width="48" height="48" alt="" /></div>
           <h3 data-i18n="services.${svc.key}.title"></h3>
           <p data-i18n="services.${svc.key}.desc"></p>
+          <a href="services.html" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
         `;
       } else {
         card.innerHTML = `
           <div class="service-icon"><i class="${svc.icon}"></i></div>
           <h3 data-i18n="services.${svc.key}.title"></h3>
           <p data-i18n="services.${svc.key}.desc"></p>
+          <a href="services.html" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
         `;
       }
 
