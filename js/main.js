@@ -320,7 +320,7 @@
     // Limit results on landing page
     const resultsGrid = document.getElementById('resultsGrid');
     if (resultsGrid && document.querySelector('.hero')) {
-      const count = landing.landing_results_count || '2';
+      const count = landing.landing_results_count || '6';
       if (count !== 'all') {
         const max = parseInt(count, 10);
         const cards = resultsGrid.querySelectorAll('.result-card');

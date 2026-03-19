@@ -102,7 +102,7 @@
         landing_about_highlights: '3',
         landing_services_count: '6',
         landing_services_btn: '',
-        landing_results_count: '2',
+        landing_results_count: '6',
         landing_results_btn: '',
       },
       services: DEFAULT_SERVICES.map(s => ({ ...s })),
