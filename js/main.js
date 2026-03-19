@@ -28,6 +28,10 @@
           (!adminData.landing.landing_services_count || adminData.landing.landing_services_count === '3')) {
         adminData.landing.landing_services_count = '6';
       }
+      if (adminData && adminData.landing &&
+          (!adminData.landing.landing_results_count || adminData.landing.landing_results_count === '2')) {
+        adminData.landing.landing_results_count = '6';
+      }
     }
   } catch { /* ignore */ }
 

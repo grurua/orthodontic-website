@@ -67,6 +67,9 @@
       if (!parsed.landing.landing_services_count || parsed.landing.landing_services_count === '3') {
         parsed.landing.landing_services_count = '6';
       }
+      if (!parsed.landing.landing_results_count || parsed.landing.landing_results_count === '2') {
+        parsed.landing.landing_results_count = '6';
+      }
       if (!parsed.imagePositions) parsed.imagePositions = {};
       return parsed;
     } catch {
