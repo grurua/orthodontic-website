@@ -2,10 +2,10 @@
    Variables & Reset
    ======================================== */
 :root {
-  --gold: #C9A96E;
-  --gold-light: #d4bc8e;
-  --gold-dark: #b08f52;
-  --gold-bg: rgba(201,169,110,0.08);
+  --gold: #7F77DD;
+  --gold-light: #9a94e4;
+  --gold-dark: #6960c4;
+  --gold-bg: rgba(127,119,221,0.08);
   --dark: #1a1a1a;
   --dark-soft: #2a2a2a;
   --text: #333333;
