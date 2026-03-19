@@ -669,8 +669,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(3, 350px);
-  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
   margin-top: 56px;
 }

@@ -29,6 +29,8 @@
     { id: 'r2', captionKey: 'results.case2' },
     { id: 'r3', captionKey: 'results.case3' },
     { id: 'r4', captionKey: 'results.case4' },
+    { id: 'r5', captionKey: 'results.case5' },
+    { id: 'r6', captionKey: 'results.case6' },
   ];
 
   // Translation keys grouped by section for the editor
@@ -47,7 +49,7 @@
       'services.digital.title', 'services.digital.desc',
       'services.jaw.title', 'services.jaw.desc',
     ],
-    'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4'],
+    'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
     'Case Detail': ['case.backToResults', 'case.empty'],
