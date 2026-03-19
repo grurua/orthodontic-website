@@ -394,12 +394,74 @@
     });
   }
 
+  // ---- Before/After Drag Slider ----
+  function createCompareSlider(beforeSrc, afterSrc, beforePos, afterPos, height) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ba-compare';
+    if (height) wrap.style.height = height;
+
+    // Before image (full, underneath)
+    const beforeImg = document.createElement('img');
+    beforeImg.alt = 'Before';
+    beforeImg.src = beforeSrc;
+    if (beforePos) beforeImg.style.objectPosition = beforePos;
+    wrap.appendChild(beforeImg);
+
+    // After overlay (clipped)
+    const afterDiv = document.createElement('div');
+    afterDiv.className = 'ba-compare-after';
+    afterDiv.style.clipPath = 'inset(0 0 0 50%)';
+    const afterImg = document.createElement('img');
+    afterImg.alt = 'After';
+    afterImg.src = afterSrc;
+    if (afterPos) afterImg.style.objectPosition = afterPos;
+    afterDiv.appendChild(afterImg);
+    wrap.appendChild(afterDiv);
+
+    // Handle
+    const handle = document.createElement('div');
+    handle.className = 'ba-compare-handle';
+    handle.style.left = '50%';
+    wrap.appendChild(handle);
+
+    // Labels
+    const labelBefore = document.createElement('span');
+    labelBefore.className = 'ba-compare-label ba-compare-label-before';
+    labelBefore.setAttribute('data-i18n', 'results.before');
+    labelBefore.textContent = 'Before';
+    wrap.appendChild(labelBefore);
+
+    const labelAfter = document.createElement('span');
+    labelAfter.className = 'ba-compare-label ba-compare-label-after';
+    labelAfter.setAttribute('data-i18n', 'results.after');
+    labelAfter.textContent = 'After';
+    wrap.appendChild(labelAfter);
+
+    // Drag logic
+    let dragging = false;
+    function updateSlider(x) {
+      const rect = wrap.getBoundingClientRect();
+      let pct = ((x - rect.left) / rect.width) * 100;
+      pct = Math.max(0, Math.min(100, pct));
+      afterDiv.style.clipPath = `inset(0 0 0 ${pct}%)`;
+      handle.style.left = pct + '%';
+    }
+
+    wrap.addEventListener('mousedown', (e) => { dragging = true; updateSlider(e.clientX); });
+    wrap.addEventListener('touchstart', (e) => { dragging = true; updateSlider(e.touches[0].clientX); }, { passive: true });
+    document.addEventListener('mousemove', (e) => { if (dragging) updateSlider(e.clientX); });
+    document.addEventListener('touchmove', (e) => { if (dragging) updateSlider(e.touches[0].clientX); }, { passive: true });
+    document.addEventListener('mouseup', () => { dragging = false; });
+    document.addEventListener('touchend', () => { dragging = false; });
+
+    return wrap;
+  }
+
   // ---- Case Detail Page ----
   function getCaseText(textKey, lang) {
     if (!adminData || !adminData.translations) return '';
     const t = adminData.translations[lang];
     if (t && t[textKey]) return t[textKey];
-    // Fallback to English if current lang is empty
     if (lang !== 'en') {
       const en = adminData.translations.en;
       if (en && en[textKey]) return en[textKey];
@@ -408,8 +470,9 @@
   }
 
   function applyCaseDetail() {
+    const heroSlider = document.getElementById('caseHeroSlider');
     const container = document.getElementById('caseDetailBlocks');
-    if (!container) return;
+    if (!heroSlider && !container) return;
 
     const params = new URLSearchParams(window.location.search);
     const caseId = params.get('id');
@@ -418,123 +481,206 @@
     const caseData = adminData.results.find(r => r.id === caseId);
     if (!caseData) return;
 
-    // Set caption in header
-    const captionEl = document.getElementById('caseCaption');
-    if (captionEl && caseData.captionKey) {
-      captionEl.setAttribute('data-i18n', caseData.captionKey);
+    const imgs = adminData.images || {};
+    const pos = adminData.imagePositions || {};
+
+    // Set title
+    const titleEl = document.getElementById('caseTitle');
+    const breadcrumbTitle = document.getElementById('caseBreadcrumbTitle');
+    if (caseData.captionKey) {
+      if (titleEl) titleEl.setAttribute('data-i18n', caseData.captionKey);
+      if (breadcrumbTitle) breadcrumbTitle.setAttribute('data-i18n', caseData.captionKey);
+    }
+
+    // Set description
+    const descEl = document.getElementById('caseDescription');
+    if (descEl && caseData.descriptionKey) {
+      const descText = getCaseText(caseData.descriptionKey, currentLang);
+      if (descText) {
+        descEl.setAttribute('data-i18n', caseData.descriptionKey);
+        descEl.textContent = descText;
+      }
+    }
+
+    // Hero before/after slider
+    if (heroSlider) {
+      const beforeKey = `result_${caseId}_before`;
+      const afterKey = `result_${caseId}_after`;
+      const beforeSrc = imgs[beforeKey];
+      const afterSrc = imgs[afterKey];
+
+      if (beforeSrc && afterSrc) {
+        heroSlider.innerHTML = '';
+        const slider = createCompareSlider(
+          beforeSrc, afterSrc,
+          pos[beforeKey], pos[afterKey],
+          '480px'
+        );
+        heroSlider.appendChild(slider);
+      }
+    }
+
+    // Treatment info grid
+    const infoGrid = document.getElementById('caseInfoGrid');
+    if (infoGrid && caseData.treatmentInfo) {
+      const info = caseData.treatmentInfo;
+      const fields = [
+        { labelKey: 'case.infoProcedure', label: 'Procedure', value: info.procedure },
+        { labelKey: 'case.infoDuration', label: 'Duration', value: info.duration },
+        { labelKey: 'case.infoAppliance', label: 'Appliance', value: info.appliance },
+        { labelKey: 'case.infoDoctor', label: 'Doctor', value: info.doctor },
+      ];
+
+      const activeFields = fields.filter(f => f.value && f.value.trim());
+      if (activeFields.length > 0) {
+        infoGrid.innerHTML = '';
+        activeFields.forEach(f => {
+          const item = document.createElement('div');
+          item.className = 'case-info-item';
+          item.innerHTML = `
+            <div class="case-info-label" data-i18n="${f.labelKey}">${f.label}</div>
+            <div class="case-info-value">${f.value}</div>
+          `;
+          infoGrid.appendChild(item);
+        });
+      }
     }
 
     // Render detail blocks
-    const blocks = caseData.detailBlocks;
-    if (!blocks || blocks.length === 0) return;
+    if (container) {
+      const blocks = caseData.detailBlocks;
+      if (blocks && blocks.length > 0) {
+        container.innerHTML = '';
 
-    container.innerHTML = '';
+        blocks.forEach((block, idx) => {
+          const el = document.createElement('div');
+          el.className = 'case-block';
+          el.style.transitionDelay = (idx * 0.1) + 's';
 
-    blocks.forEach((block, idx) => {
-      const el = document.createElement('div');
-      el.className = 'case-block';
-      el.style.transitionDelay = (idx * 0.1) + 's';
+          if (block.type === 'image') {
+            const imgSrc = imgs[block.imageKey];
+            if (imgSrc) {
+              el.classList.add('case-block-image');
+              const img = document.createElement('img');
+              img.alt = 'Case photo';
+              img.src = imgSrc;
+              el.appendChild(img);
+            }
+          } else if (block.type === 'text') {
+            const text = getCaseText(block.textKey, currentLang);
+            if (text) {
+              el.classList.add('case-block-text');
+              const p = document.createElement('p');
+              p.setAttribute('data-i18n', block.textKey);
+              p.textContent = text;
+              el.appendChild(p);
+            }
+          } else if (block.type === 'image_text') {
+            el.classList.add('case-block-image-text');
+            const imgSrc = imgs[block.imageKey];
+            if (imgSrc) {
+              const img = document.createElement('img');
+              img.alt = 'Case photo';
+              img.src = imgSrc;
+              el.appendChild(img);
+            }
+            const text = getCaseText(block.textKey, currentLang);
+            if (text) {
+              const p = document.createElement('p');
+              p.setAttribute('data-i18n', block.textKey);
+              p.textContent = text;
+              el.appendChild(p);
+            }
+          } else if (block.type === 'before_after') {
+            const beforeSrc = imgs[block.beforeKey];
+            const afterSrc = imgs[block.afterKey];
+            if (beforeSrc && afterSrc) {
+              el.classList.add('case-block-ba');
+              const slider = createCompareSlider(
+                beforeSrc, afterSrc,
+                pos[block.beforeKey], pos[block.afterKey],
+                '400px'
+              );
+              el.appendChild(slider);
+            } else if (beforeSrc || afterSrc) {
+              el.classList.add('case-block-image');
+              const img = document.createElement('img');
+              img.alt = beforeSrc ? 'Before' : 'After';
+              img.src = beforeSrc || afterSrc;
+              el.appendChild(img);
+            }
+          }
 
-      if (block.type === 'image') {
-        const imgSrc = adminData.images && adminData.images[block.imageKey];
-        if (imgSrc) {
-          el.classList.add('case-block-image');
-          const img = document.createElement('img');
-          img.alt = 'Case photo';
-          img.src = imgSrc;
-          el.appendChild(img);
-        }
-      } else if (block.type === 'text') {
-        const text = getCaseText(block.textKey, currentLang);
-        if (text) {
-          el.classList.add('case-block-text');
-          const p = document.createElement('p');
-          p.setAttribute('data-i18n', block.textKey);
-          p.textContent = text;
-          el.appendChild(p);
-        }
-      } else if (block.type === 'image_text') {
-        el.classList.add('case-block-image-text');
-        const imgSrc = adminData.images && adminData.images[block.imageKey];
-        if (imgSrc) {
-          const img = document.createElement('img');
-          img.alt = 'Case photo';
-          img.src = imgSrc;
-          el.appendChild(img);
-        }
-        const text = getCaseText(block.textKey, currentLang);
-        if (text) {
-          const p = document.createElement('p');
-          p.setAttribute('data-i18n', block.textKey);
-          p.textContent = text;
-          el.appendChild(p);
-        }
-      } else if (block.type === 'before_after') {
-        const imgs = adminData.images || {};
-        const pos = adminData.imagePositions || {};
-        const beforeSrc = imgs[block.beforeKey];
-        const afterSrc = imgs[block.afterKey];
-        if (beforeSrc && afterSrc) {
-          el.classList.add('case-block-ba');
-          const container = document.createElement('div');
-          container.className = 'ba-slider';
-          const stacked = document.createElement('div');
-          stacked.className = 'ba-stacked';
+          container.appendChild(el);
+        });
 
-          const beforeItem = document.createElement('div');
-          beforeItem.className = 'ba-stacked-item';
-          const beforeImg = document.createElement('img');
-          beforeImg.alt = 'Before';
-          beforeImg.src = beforeSrc;
-          if (pos[block.beforeKey]) beforeImg.style.objectPosition = pos[block.beforeKey];
-          const labelBefore = document.createElement('span');
-          labelBefore.className = 'ba-label ba-label-before';
-          labelBefore.setAttribute('data-i18n', 'results.before');
-          labelBefore.textContent = 'Before';
-          beforeItem.appendChild(beforeImg);
-          beforeItem.appendChild(labelBefore);
+        // Observe for reveal animation
+        const blockObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              blockObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
 
-          const afterItem = document.createElement('div');
-          afterItem.className = 'ba-stacked-item';
-          const afterImg = document.createElement('img');
-          afterImg.alt = 'After';
-          afterImg.src = afterSrc;
-          if (pos[block.afterKey]) afterImg.style.objectPosition = pos[block.afterKey];
-          const labelAfter = document.createElement('span');
-          labelAfter.className = 'ba-label ba-label-after';
-          labelAfter.setAttribute('data-i18n', 'results.after');
-          labelAfter.textContent = 'After';
-          afterItem.appendChild(afterImg);
-          afterItem.appendChild(labelAfter);
-
-          stacked.appendChild(beforeItem);
-          stacked.appendChild(afterItem);
-          container.appendChild(stacked);
-          el.appendChild(container);
-        } else if (beforeSrc || afterSrc) {
-          // Show whichever image is available
-          el.classList.add('case-block-image');
-          const img = document.createElement('img');
-          img.alt = beforeSrc ? 'Before' : 'After';
-          img.src = beforeSrc || afterSrc;
-          el.appendChild(img);
-        }
+        container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
       }
+    }
 
-      container.appendChild(el);
-    });
+    // Related cases
+    const relatedSection = document.getElementById('caseRelated');
+    const relatedGrid = document.getElementById('caseRelatedGrid');
+    if (relatedSection && relatedGrid) {
+      const otherCases = adminData.results.filter(r => r.id !== caseId);
+      // Show up to 3 other cases
+      const toShow = otherCases.slice(0, 3);
+      if (toShow.length > 0) {
+        relatedSection.style.display = '';
+        relatedGrid.innerHTML = '';
+        toShow.forEach(rc => {
+          const beforeKey = `result_${rc.id}_before`;
+          const afterKey = `result_${rc.id}_after`;
+          const beforeSrc = imgs[beforeKey];
+          const afterSrc = imgs[afterKey];
 
-    // Observe for reveal animation
-    const blockObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          blockObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
+          const card = document.createElement('a');
+          card.className = 'case-related-card';
+          card.href = `case.html?id=${rc.id}`;
 
-    container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
+          let thumbHtml = '';
+          if (beforeSrc && afterSrc) {
+            thumbHtml = `
+              <div class="ba-stacked">
+                <div class="ba-stacked-item">
+                  <img src="${beforeSrc}" alt="Before" style="${pos[beforeKey] ? 'object-position:' + pos[beforeKey] : ''}" />
+                  <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+                </div>
+                <div class="ba-stacked-item">
+                  <img src="${afterSrc}" alt="After" style="${pos[afterKey] ? 'object-position:' + pos[afterKey] : ''}" />
+                  <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
+                </div>
+              </div>
+            `;
+          } else {
+            thumbHtml = `
+              <div class="ba-placeholder">
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
+                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            ${thumbHtml}
+            <div class="case-related-card-body">
+              <p data-i18n="${rc.captionKey}"></p>
+            </div>
+          `;
+          relatedGrid.appendChild(card);
+        });
+      }
+    }
   }
 
   // ---- Dynamic Results Grid (for results.html with dynamically added cases) ----

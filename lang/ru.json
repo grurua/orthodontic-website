@@ -82,6 +82,11 @@
 
   "case.backToResults": "Назад к результатам",
   "case.empty": "Подробное содержание для этого случая ещё не добавлено.",
+  "case.relatedCases": "Другие случаи",
+  "case.infoProcedure": "Процедура",
+  "case.infoDuration": "Длительность",
+  "case.infoAppliance": "Аппарат",
+  "case.infoDoctor": "Врач",
 
   "footer.tagline": "Профессиональная ортодонтическая помощь для всей семьи.",
   "footer.rights": "Все права защищены."

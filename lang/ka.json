@@ -82,6 +82,11 @@
 
   "case.backToResults": "შედეგებზე დაბრუნება",
   "case.empty": "ამ შემთხვევისთვის დეტალური კონტენტი ჯერ არ დამატებულა.",
+  "case.relatedCases": "სხვა შემთხვევები",
+  "case.infoProcedure": "პროცედურა",
+  "case.infoDuration": "ხანგრძლივობა",
+  "case.infoAppliance": "აპარატი",
+  "case.infoDoctor": "ექიმი",
 
   "footer.tagline": "პროფესიონალური ორთოდონტიული მომსახურება მთელი ოჯახისთვის.",
   "footer.rights": "ყველა უფლება დაცულია."

@@ -82,6 +82,11 @@
 
   "case.backToResults": "Back to Results",
   "case.empty": "No detail content has been added for this case yet.",
+  "case.relatedCases": "Other Cases",
+  "case.infoProcedure": "Procedure",
+  "case.infoDuration": "Duration",
+  "case.infoAppliance": "Appliance",
+  "case.infoDoctor": "Doctor",
 
   "footer.tagline": "Professional orthodontic care for the whole family.",
   "footer.rights": "All rights reserved."

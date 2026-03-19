@@ -52,7 +52,7 @@
     'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
-    'Case Detail': ['case.backToResults', 'case.empty'],
+    'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
 
@@ -614,18 +614,26 @@
     document.getElementById('btnAddResult').addEventListener('click', () => {
       const id = 'r' + Date.now();
       const num = data.results.length + 1;
-      const captionKey = `results.case${num}_${Date.now()}`;
+      const ts = Date.now();
+      const captionKey = `results.case${num}_${ts}`;
+      const descriptionKey = `case_${id}_description`;
 
-      data.results.push({ id, captionKey });
+      data.results.push({
+        id,
+        captionKey,
+        descriptionKey,
+        treatmentInfo: { procedure: '', duration: '', appliance: '', doctor: '' }
+      });
 
       ['en', 'ka', 'ru'].forEach(lang => {
         if (!data.translations[lang]) data.translations[lang] = {};
         data.translations[lang][captionKey] = 'New case description';
+        data.translations[lang][descriptionKey] = '';
       });
 
       saveData(data);
       renderResults();
-      toast('Case added. Upload photos and edit caption in Translations.', 'success');
+      toast('Case added. Upload photos and edit details.', 'success');
     });
   }
 
@@ -641,6 +649,18 @@
       div.className = 'result-item';
       const beforeKey = `result_${res.id}_before`;
       const afterKey = `result_${res.id}_after`;
+
+      // Ensure treatmentInfo and descriptionKey exist (migration for old cases)
+      if (!res.treatmentInfo) res.treatmentInfo = { procedure: '', duration: '', appliance: '', doctor: '' };
+      if (!res.descriptionKey) {
+        res.descriptionKey = `case_${res.id}_description`;
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          if (!data.translations[lang][res.descriptionKey]) data.translations[lang][res.descriptionKey] = '';
+        });
+      }
+
+      const descText = (data.translations.en && data.translations.en[res.descriptionKey]) || '';
 
       div.innerHTML = `
         <div class="result-item-header">
@@ -669,6 +689,35 @@
         <div class="form-field">
           <label>Caption Key</label>
           <input type="text" value="${res.captionKey}" readonly />
+        </div>
+        <div class="form-field">
+          <label>Case Description (English)</label>
+          <textarea rows="3" class="case-desc-input" data-desc-key="${res.descriptionKey}" placeholder="Describe the patient's case, concerns, and treatment approach...">${escapeHtml(descText)}</textarea>
+          <span class="field-hint">This appears on the case detail page. Edit other languages in Translations tab — key: <code>${res.descriptionKey}</code></span>
+        </div>
+        <div class="treatment-info-section">
+          <h5><i class="fas fa-clipboard-list"></i> Treatment Information</h5>
+          <p class="field-help">These fields appear in the info panel on the case detail page. Leave blank to hide.</p>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Procedure</label>
+              <input type="text" class="treatment-field" data-case-id="${res.id}" data-field="procedure" value="${escapeHtml(res.treatmentInfo.procedure || '')}" placeholder="e.g. Crowding Correction" />
+            </div>
+            <div class="form-field">
+              <label>Duration</label>
+              <input type="text" class="treatment-field" data-case-id="${res.id}" data-field="duration" value="${escapeHtml(res.treatmentInfo.duration || '')}" placeholder="e.g. 14 Months" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Appliance</label>
+              <input type="text" class="treatment-field" data-case-id="${res.id}" data-field="appliance" value="${escapeHtml(res.treatmentInfo.appliance || '')}" placeholder="e.g. Ceramic Braces" />
+            </div>
+            <div class="form-field">
+              <label>Doctor</label>
+              <input type="text" class="treatment-field" data-case-id="${res.id}" data-field="doctor" value="${escapeHtml(res.treatmentInfo.doctor || '')}" placeholder="e.g. Dr. Ana Vepkhvadze" />
+            </div>
+          </div>
         </div>
         <div class="detail-blocks-section">
           <h5>Detail Page Content</h5>
@@ -703,6 +752,26 @@
         updateSmallImagePreview(key);
         // Add position control
         uploadSmall.appendChild(createPositionControl(key, uploadSmall));
+      });
+
+      // Wire up case description textarea
+      const descTextarea = div.querySelector('.case-desc-input');
+      if (descTextarea) {
+        descTextarea.addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[res.descriptionKey] = e.target.value;
+        });
+      }
+
+      // Wire up treatment info fields
+      div.querySelectorAll('.treatment-field').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const field = e.target.dataset.field;
+          const caseObj = data.results.find(r => r.id === e.target.dataset.caseId);
+          if (caseObj && caseObj.treatmentInfo) {
+            caseObj.treatmentInfo[field] = e.target.value;
+          }
+        });
       });
 
       // Delete case
