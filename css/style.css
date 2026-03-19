@@ -670,6 +670,33 @@ button { font-family: inherit; cursor: pointer; }
   line-height: 1.7;
 }
 
+.service-card-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--transition);
+}
+
+.service-card:hover .service-card-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card-btn:hover {
+  background: var(--gold);
+  color: var(--white);
+  box-shadow: 0 4px 16px rgba(83,74,183,0.3);
+}
+
 /* ========================================
    Before / After Results
    ======================================== */
