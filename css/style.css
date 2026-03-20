@@ -427,31 +427,6 @@ button { font-family: inherit; cursor: pointer; }
 .hero-photo-placeholder i { font-size: 2.5rem; }
 .hero-photo-placeholder span { font-size: 0.8rem; letter-spacing: 1px; }
 
-.hero-photo-badge {
-  position: absolute;
-  bottom: 24px;
-  left: -20px;
-  background: var(--gold);
-  color: var(--white);
-  padding: 16px 24px;
-  border-radius: 12px;
-  z-index: 3;
-}
-
-.hero-photo-badge .badge-number {
-  font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 600;
-  line-height: 1;
-  display: block;
-}
-
-.hero-photo-badge .badge-text {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  opacity: 0.9;
-}
 
 /* Stats Banner */
 .stats-bar {
@@ -1547,7 +1522,6 @@ button { font-family: inherit; cursor: pointer; }
   .hero-buttons { justify-content: center; }
   .hero-photo { justify-content: center; }
   .hero-photo-wrapper { max-width: 300px; }
-  .hero-photo-badge { left: 0; bottom: 16px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
