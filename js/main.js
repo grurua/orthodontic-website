@@ -127,24 +127,6 @@
     });
   }
 
-  // ---- Apply Admin Stats ----
-  function applyAdminStats() {
-    if (!adminData || !adminData.stats) return;
-    const map = {
-      stat1_number: 'hero.stat1_number',
-      stat2_number: 'hero.stat2_number',
-      stat3_number: 'hero.stat3_number',
-      stat4_number: 'hero.stat4_number',
-    };
-    Object.entries(map).forEach(([key, attr]) => {
-      if (adminData.stats[key]) {
-        document.querySelectorAll(`[data-i18n="${attr}"]`).forEach(el => {
-          el.textContent = adminData.stats[key];
-        });
-      }
-    });
-  }
-
   // ---- Apply Admin Social Links ----
   function applyAdminSocial() {
     if (!adminData || !adminData.social) return;
@@ -731,7 +713,6 @@
   applyDynamicServices();
   applyDynamicResultsGrid();
   applyResultPhotos();
-  applyAdminStats();
   applyAdminSocial();
   applyAdminContact();
   applyLandingSettings();
