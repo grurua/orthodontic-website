@@ -37,46 +37,110 @@
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <section class="page-header">
+  <!-- About Hero -->
+  <section class="about-hero">
     <div class="container">
-      <span class="section-label" data-i18n="about.subtitle">About Me</span>
-      <h1 class="section-heading" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h1>
+      <div class="about-hero-inner">
+        <div class="about-hero-photo reveal">
+          <div class="about-photo-wrapper" id="aboutPhotoWrapper">
+            <div class="about-photo-placeholder" id="aboutPlaceholder">
+              <i class="fas fa-stethoscope"></i>
+              <span data-i18n="about.photoLabel">About Photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-hero-content reveal">
+          <span class="section-label" data-i18n="about.subtitle">About Me</span>
+          <h1 class="about-hero-title" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h1>
+          <p class="about-hero-lead" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- About Content -->
-  <section class="about" id="about">
-    <div class="container about-grid">
-      <div class="about-photo reveal">
-        <div class="about-photo-wrapper" id="aboutPhotoWrapper">
-          <div class="about-photo-placeholder" id="aboutPlaceholder">
-            <i class="fas fa-stethoscope"></i>
-            <span data-i18n="about.photoLabel">About Photo</span>
+  <!-- Philosophy / Story -->
+  <section class="about-story">
+    <div class="container">
+      <div class="about-story-inner reveal">
+        <span class="section-label" data-i18n="about.philosophyLabel">My Philosophy</span>
+        <blockquote class="about-story-quote" data-i18n="about.philosophy">Every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline / Journey -->
+  <section class="about-timeline">
+    <div class="container">
+      <h2 class="section-heading text-center reveal" data-i18n="about.journeyTitle">My Journey</h2>
+      <div class="about-timeline-track" id="aboutTimeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-year" data-i18n="about.timeline1Year">2005</div>
+          <div class="timeline-content">
+            <h3 data-i18n="about.timeline1Title">Medical Education</h3>
+            <p data-i18n="about.timeline1Desc">Graduated from a leading dental university with honors in orthodontics.</p>
           </div>
         </div>
-        <div class="about-photo-accent"></div>
-      </div>
-      <div class="about-text reveal">
-        <span class="section-label" data-i18n="about.subtitle">About Me</span>
-        <h2 class="section-heading" data-i18n="about.title">Dedicated to Creating Beautiful Smiles</h2>
-        <p class="about-desc" data-i18n="about.description">With over 15 years of experience in orthodontics, I am passionate about transforming smiles and boosting confidence. I graduated from a leading dental university and have completed advanced training in modern orthodontic techniques across Europe and the USA.</p>
-        <p class="about-desc" data-i18n="about.description2">My philosophy is simple: every patient deserves individualized care with the most advanced treatment options available. I stay current with the latest innovations in orthodontics to deliver the best possible results.</p>
-        <div class="about-highlights">
-          <div class="highlight-item">
-            <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
-            <span data-i18n="about.highlight1">Board Certified Orthodontist</span>
+        <div class="timeline-item reveal">
+          <div class="timeline-year" data-i18n="about.timeline2Year">2010</div>
+          <div class="timeline-content">
+            <h3 data-i18n="about.timeline2Title">International Training</h3>
+            <p data-i18n="about.timeline2Desc">Completed advanced orthodontic training programs across Europe and the USA.</p>
           </div>
-          <div class="highlight-item">
-            <div class="highlight-icon"><i class="fas fa-award"></i></div>
-            <span data-i18n="about.highlight2">International Training</span>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year" data-i18n="about.timeline3Year">2015</div>
+          <div class="timeline-content">
+            <h3 data-i18n="about.timeline3Title">Private Practice</h3>
+            <p data-i18n="about.timeline3Desc">Opened a private orthodontic practice dedicated to personalized patient care.</p>
           </div>
-          <div class="highlight-item">
-            <div class="highlight-icon"><i class="fas fa-heart"></i></div>
-            <span data-i18n="about.highlight3">Patient-Centered Care</span>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-year" data-i18n="about.timeline4Year">2020</div>
+          <div class="timeline-content">
+            <h3 data-i18n="about.timeline4Title">Digital Orthodontics</h3>
+            <p data-i18n="about.timeline4Desc">Integrated cutting-edge digital technologies and clear aligner systems into practice.</p>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Core Values / Pillars -->
+  <section class="about-pillars">
+    <div class="container">
+      <h2 class="section-heading text-center reveal" data-i18n="about.pillarsTitle">What I Stand For</h2>
+      <p class="section-desc text-center reveal" data-i18n="about.pillarsDesc">My practice is built on four core principles that guide every treatment and interaction.</p>
+      <div class="about-pillars-grid">
+        <div class="pillar-card reveal">
+          <div class="pillar-icon"><i class="fas fa-graduation-cap"></i></div>
+          <h3 data-i18n="about.pillar1Title">Expertise</h3>
+          <p data-i18n="about.pillar1Desc">Board-certified with continuous education in the latest orthodontic advances and techniques.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-icon"><i class="fas fa-heart"></i></div>
+          <h3 data-i18n="about.pillar2Title">Patient Care</h3>
+          <p data-i18n="about.pillar2Desc">Every treatment plan is personalized to achieve the best results for each individual patient.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-icon"><i class="fas fa-microscope"></i></div>
+          <h3 data-i18n="about.pillar3Title">Innovation</h3>
+          <p data-i18n="about.pillar3Desc">Utilizing cutting-edge digital tools and modern techniques for precise, efficient treatment.</p>
+        </div>
+        <div class="pillar-card reveal">
+          <div class="pillar-icon"><i class="fas fa-handshake"></i></div>
+          <h3 data-i18n="about.pillar4Title">Trust</h3>
+          <p data-i18n="about.pillar4Desc">Building lasting relationships through transparency, honesty, and genuine care for every patient.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="about-cta">
+    <div class="container text-center reveal">
+      <h2 class="about-cta-title" data-i18n="about.ctaTitle">Ready to Start Your Smile Journey?</h2>
+      <p class="about-cta-desc" data-i18n="about.ctaDesc">Book a consultation and let's discuss your path to a confident, beautiful smile.</p>
+      <a href="contact.html" class="btn btn-primary" data-i18n="about.ctaBtn">Book a Consultation</a>
     </div>
   </section>
 

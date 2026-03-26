@@ -707,9 +707,25 @@
     }
   }
 
+  // ---- Apply About Pillar Icons ----
+  function applyAboutPillars() {
+    if (!adminData || !adminData.about) return;
+    const pillars = document.querySelectorAll('.pillar-icon i');
+    const icons = [
+      adminData.about.about_pillar1_icon,
+      adminData.about.about_pillar2_icon,
+      adminData.about.about_pillar3_icon,
+      adminData.about.about_pillar4_icon,
+    ];
+    pillars.forEach((el, idx) => {
+      if (icons[idx]) el.className = icons[idx];
+    });
+  }
+
   // ---- Init ----
   applyHeroPhoto();
   applyAboutPhoto();
+  applyAboutPillars();
   applyDynamicServices();
   applyDynamicResultsGrid();
   applyResultPhotos();

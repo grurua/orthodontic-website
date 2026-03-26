@@ -429,27 +429,31 @@ button { font-family: inherit; cursor: pointer; }
 
 
 /* ========================================
-   About Section
+   About Page — Storytelling Layout
    ======================================== */
-.about {
-  padding: 120px 0;
+
+/* About Hero */
+.about-hero {
+  padding: 140px 0 80px;
   background: var(--white);
 }
 
-.about-grid {
+.about-hero-inner {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 64px;
   align-items: center;
 }
 
-.about-photo { position: relative; }
+.about-hero-photo {
+  position: relative;
+}
 
 .about-photo-wrapper {
   position: relative;
   width: 100%;
   aspect-ratio: 4/5;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
 }
 
@@ -470,10 +474,262 @@ button { font-family: inherit; cursor: pointer; }
   justify-content: center;
   gap: 12px;
   color: var(--text-muted);
+  border-radius: 16px;
 }
 
 .about-photo-placeholder i { font-size: 2.5rem; }
 .about-photo-placeholder span { font-size: 0.8rem; }
+
+.about-hero-content {
+  padding: 16px 0;
+}
+
+.about-hero-title {
+  font-family: var(--font-serif);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+  margin: 16px 0 24px;
+}
+
+.about-hero-lead {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  line-height: 1.85;
+  font-family: var(--font-serif);
+}
+
+/* Story / Philosophy */
+.about-story {
+  padding: 80px 0;
+  background: var(--cream);
+}
+
+.about-story-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-story-quote {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.6;
+  margin-top: 20px;
+  font-style: italic;
+  position: relative;
+}
+
+.about-story-quote::before {
+  content: '\201C';
+  font-size: 4rem;
+  color: var(--gold);
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+  font-style: normal;
+}
+
+/* Timeline */
+.about-timeline {
+  padding: 100px 0;
+  background: var(--white);
+}
+
+.about-timeline .section-heading {
+  margin-bottom: 64px;
+}
+
+.about-timeline-track {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  padding-left: 48px;
+}
+
+.about-timeline-track::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 48px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -40px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  background: var(--gold);
+  border-radius: 50%;
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 2px var(--gold);
+  z-index: 2;
+}
+
+.timeline-year {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.timeline-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.timeline-content p {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* Pillars / Values */
+.about-pillars {
+  padding: 100px 0;
+  background: var(--cream);
+}
+
+.about-pillars .section-heading {
+  margin-bottom: 12px;
+}
+
+.about-pillars .section-desc {
+  max-width: 560px;
+  margin: 0 auto 56px;
+}
+
+.about-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.pillar-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 28px;
+  text-align: center;
+  transition: all var(--transition);
+}
+
+.pillar-card:hover {
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.pillar-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--gold-bg);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.pillar-icon i {
+  color: var(--gold);
+  font-size: 1.4rem;
+}
+
+.pillar-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.pillar-card p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* CTA Section */
+.about-cta {
+  padding: 100px 0;
+  background: var(--gold);
+}
+
+.about-cta-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.about-cta-desc {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 32px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-cta .btn-primary {
+  background: var(--white);
+  color: var(--gold);
+  border: none;
+  padding: 16px 36px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-radius: 12px;
+  transition: all var(--transition);
+  display: inline-block;
+}
+
+.about-cta .btn-primary:hover {
+  background: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+/* Landing page about section (reused on index.html) */
+.about {
+  padding: 120px 0;
+  background: var(--white);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-photo { position: relative; }
 
 .about-photo-accent {
   position: absolute;
@@ -1453,6 +1709,10 @@ button { font-family: inherit; cursor: pointer; }
   .case-hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .case-hero-placeholder { height: 360px; }
   .case-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .about-hero-photo { max-width: 400px; margin: 0 auto; }
+  .about-hero-title { font-size: 2.2rem; }
+  .about-pillars-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
@@ -1492,6 +1752,11 @@ button { font-family: inherit; cursor: pointer; }
 
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .about-photo-wrapper { max-width: 360px; margin: 0 auto; }
+  .about-hero-inner { text-align: center; }
+  .about-hero-title { font-size: 1.8rem; }
+  .about-story-quote { font-size: 1.25rem; }
+  .about-pillars-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .about-cta-title { font-size: 1.6rem; }
 
   .services-grid { grid-template-columns: 1fr 1fr; }
   .results-grid { grid-template-columns: repeat(2, 1fr); }

@@ -37,7 +37,16 @@
   const TRANSLATION_SECTIONS = {
     'Navigation': ['logo', 'nav.home', 'nav.about', 'nav.services', 'nav.results', 'nav.contact'],
     'Hero': ['hero.subtitle', 'hero.title', 'hero.description', 'hero.cta', 'hero.learnMore', 'hero.photoLabel', 'hero.stat1', 'hero.stat2', 'hero.stat3', 'hero.stat4'],
-    'About': ['about.subtitle', 'about.title', 'about.description', 'about.description2', 'about.photoLabel', 'about.highlight1', 'about.highlight2', 'about.highlight3'],
+    'About': ['about.subtitle', 'about.title', 'about.description', 'about.description2', 'about.photoLabel', 'about.highlight1', 'about.highlight2', 'about.highlight3',
+      'about.philosophyLabel', 'about.philosophy', 'about.journeyTitle',
+      'about.timeline1Year', 'about.timeline1Title', 'about.timeline1Desc',
+      'about.timeline2Year', 'about.timeline2Title', 'about.timeline2Desc',
+      'about.timeline3Year', 'about.timeline3Title', 'about.timeline3Desc',
+      'about.timeline4Year', 'about.timeline4Title', 'about.timeline4Desc',
+      'about.pillarsTitle', 'about.pillarsDesc',
+      'about.pillar1Title', 'about.pillar1Desc', 'about.pillar2Title', 'about.pillar2Desc',
+      'about.pillar3Title', 'about.pillar3Desc', 'about.pillar4Title', 'about.pillar4Desc',
+      'about.ctaTitle', 'about.ctaDesc', 'about.ctaBtn'],
     'Services': ['services.subtitle', 'services.title',
       'services.pediatric.title', 'services.pediatric.desc',
       'services.braces.title', 'services.braces.desc',
@@ -99,6 +108,12 @@
         social_instagram: '', social_facebook: '', social_telegram: '',
         social_whatsapp: '', social_viber: '', social_tiktok: '', social_youtube: '',
       },
+      about: {
+        about_pillar1_icon: 'fas fa-graduation-cap',
+        about_pillar2_icon: 'fas fa-heart',
+        about_pillar3_icon: 'fas fa-microscope',
+        about_pillar4_icon: 'fas fa-handshake',
+      },
       landing: {
         landing_about_desc: '',
         landing_about_btn: '',
@@ -146,6 +161,7 @@
     setupSocial();
     setupContact();
     setupStats();
+    setupAbout();
     setupTranslations();
     setupSettings();
     populateAll();
@@ -396,6 +412,18 @@
       });
       input.addEventListener('change', () => {
         data.landing[input.dataset.adminLanding] = input.value;
+      });
+    });
+  }
+
+  // ========================================
+  // About Page
+  // ========================================
+  function setupAbout() {
+    if (!data.about) data.about = {};
+    document.querySelectorAll('[data-admin^="about_"]').forEach(input => {
+      input.addEventListener('input', () => {
+        data.about[input.dataset.admin] = input.value;
       });
     });
   }
@@ -1198,6 +1226,13 @@
         if (input) input.value = val || '';
       });
     }
+
+    // About
+    if (!data.about) data.about = {};
+    Object.entries(data.about).forEach(([key, val]) => {
+      const input = document.querySelector(`[data-admin="${key}"]`);
+      if (input) input.value = val || '';
+    });
 
     // Images
     ['hero_photo', 'about_photo'].forEach(key => updateImagePreview(key));
