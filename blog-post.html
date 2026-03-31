@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Treatment case details — Before & After orthodontic transformation by Dr. Ana Vepkhvadze." />
-  <title>Case Details — Dr. Ana Vepkhvadze</title>
+  <meta name="description" content="Blog article — Dr. Ana Vepkhvadze Orthodontics." />
+  <title>Blog Post — Dr. Ana Vepkhvadze</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -21,8 +21,8 @@
         <li><a href="index.html" data-i18n="nav.home">Home</a></li>
         <li><a href="about.html" data-i18n="nav.about">About</a></li>
         <li><a href="services.html" data-i18n="nav.services">Services</a></li>
-        <li><a href="results.html" class="active" data-i18n="nav.results">Results</a></li>
-        <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+        <li><a href="results.html" data-i18n="nav.results">Results</a></li>
+        <li><a href="blog.html" class="active" data-i18n="nav.blog">Blog</a></li>
         <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
       </ul>
       <div class="nav-right">
@@ -41,66 +41,31 @@
   <!-- Breadcrumb -->
   <div class="case-breadcrumb">
     <div class="container">
-      <a href="results.html" data-i18n="nav.results">Results</a>
+      <a href="blog.html" data-i18n="nav.blog">Blog</a>
       <i class="fas fa-chevron-right"></i>
-      <span id="caseBreadcrumbTitle">Case Details</span>
+      <span id="blogBreadcrumbTitle">Article</span>
     </div>
   </div>
 
-  <!-- Case Hero: Main Before/After Slider -->
-  <section class="case-hero">
+  <!-- Blog Post Content -->
+  <article class="blog-post-detail">
     <div class="container">
-      <div class="case-hero-inner">
-        <div class="case-hero-slider-wrap" id="caseHeroSlider">
-          <!-- Populated by JS: main before/after drag slider -->
-          <div class="case-hero-placeholder">
-            <div class="case-hero-placeholder-side">
-              <i class="fas fa-image"></i>
-              <span>Before</span>
-            </div>
-            <div class="case-hero-placeholder-side">
-              <i class="fas fa-image"></i>
-              <span>After</span>
-            </div>
-          </div>
-        </div>
-        <div class="case-hero-info">
-          <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
-          <h1 class="case-hero-title" id="caseTitle">Case Details</h1>
-          <p class="case-hero-desc" id="caseDescription"></p>
-          <div class="case-info-grid" id="caseInfoGrid">
-            <!-- Populated by JS: treatment info items -->
-          </div>
-        </div>
+      <div class="blog-post-header" id="blogPostHeader">
+        <div class="blog-post-date" id="blogPostDate"></div>
+        <h1 class="blog-post-title" id="blogPostTitle"></h1>
+        <p class="blog-post-excerpt" id="blogPostExcerpt"></p>
+      </div>
+      <div class="blog-post-featured" id="blogPostFeatured">
+        <!-- Featured image populated by JS -->
+      </div>
+      <div class="blog-post-blocks" id="blogPostBlocks">
+        <p class="case-empty" data-i18n="blog.emptyPost">No content has been added for this article yet.</p>
+      </div>
+      <div class="section-action text-center" style="margin-top: 48px;">
+        <a href="blog.html" class="btn btn-outline-dark" data-i18n="blog.backToBlog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
       </div>
     </div>
-  </section>
-
-  <!-- Case Detail Content Blocks -->
-  <section class="case-detail">
-    <div class="container">
-      <div class="case-detail-blocks" id="caseDetailBlocks">
-        <p class="case-empty" data-i18n="case.empty">No detail content has been added for this case yet.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Related Cases -->
-  <section class="case-related" id="caseRelated" style="display:none;">
-    <div class="container">
-      <h2 class="section-heading" data-i18n="case.relatedCases">Other Cases</h2>
-      <div class="case-related-grid" id="caseRelatedGrid">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Back Button -->
-  <section class="case-back-section">
-    <div class="container text-center">
-      <a href="results.html" class="btn btn-outline-dark" data-i18n="case.backToResults"><i class="fas fa-arrow-left"></i> Back to Results</a>
-    </div>
-  </section>
+  </article>
 
   <!-- Footer -->
   <footer class="footer">

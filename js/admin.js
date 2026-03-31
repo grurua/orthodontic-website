@@ -35,7 +35,7 @@
 
   // Translation keys grouped by section for the editor
   const TRANSLATION_SECTIONS = {
-    'Navigation': ['logo', 'nav.home', 'nav.about', 'nav.services', 'nav.results', 'nav.contact'],
+    'Navigation': ['logo', 'nav.home', 'nav.about', 'nav.services', 'nav.results', 'nav.blog', 'nav.contact'],
     'Hero': ['hero.subtitle', 'hero.title', 'hero.description', 'hero.cta', 'hero.learnMore', 'hero.photoLabel', 'hero.stat1', 'hero.stat2', 'hero.stat3', 'hero.stat4'],
     'About': ['about.subtitle', 'about.title', 'about.description', 'about.description2', 'about.photoLabel', 'about.highlight1', 'about.highlight2', 'about.highlight3',
       'about.philosophyLabel', 'about.philosophy', 'about.journeyTitle',
@@ -61,6 +61,7 @@
     'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
+    'Blog': ['blog.subtitle', 'blog.title', 'blog.description', 'blog.viewAll', 'blog.readMore', 'blog.empty', 'blog.emptyPost', 'blog.backToBlog'],
     'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
@@ -125,6 +126,7 @@
       },
       services: DEFAULT_SERVICES.map(s => ({ ...s })),
       results: DEFAULT_RESULTS.map(r => ({ ...r })),
+      blog: [],
       translations: { en: {}, ka: {}, ru: {} },  // overrides only
     };
   }
@@ -162,6 +164,7 @@
     setupContact();
     setupStats();
     setupAbout();
+    setupBlog();
     setupTranslations();
     setupSettings();
     populateAll();
@@ -1027,6 +1030,294 @@
   }
 
   // ========================================
+  // Blog
+  // ========================================
+  function setupBlog() {
+    if (!data.blog) data.blog = [];
+
+    document.getElementById('btnAddBlog').addEventListener('click', () => {
+      const id = 'b' + Date.now();
+      const ts = Date.now();
+      const titleKey = `blog_${id}_title`;
+      const excerptKey = `blog_${id}_excerpt`;
+
+      data.blog.push({
+        id,
+        titleKey,
+        excerptKey,
+        date: '',
+        contentBlocks: []
+      });
+
+      ['en', 'ka', 'ru'].forEach(lang => {
+        if (!data.translations[lang]) data.translations[lang] = {};
+        data.translations[lang][titleKey] = 'New Blog Post';
+        data.translations[lang][excerptKey] = '';
+      });
+
+      saveData(data);
+      renderBlogPosts();
+      toast('Blog post added.', 'success');
+    });
+  }
+
+  function renderBlogPosts() {
+    const container = document.getElementById('blogList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!data.blog) data.blog = [];
+
+    data.blog.forEach((post, idx) => {
+      if (!post.contentBlocks) post.contentBlocks = [];
+
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      const featuredKey = `blog_${post.id}_featured`;
+      const titleText = (data.translations.en && data.translations.en[post.titleKey]) || 'Untitled';
+      const excerptText = (data.translations.en && data.translations.en[post.excerptKey]) || '';
+
+      div.innerHTML = `
+        <div class="result-item-header">
+          <span class="result-num">${idx + 1}</span>
+          <h4>${escapeHtml(titleText)}</h4>
+          <button class="btn-delete-item" data-id="${post.id}" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="result-images-row">
+          <div class="image-upload-small">
+            <div class="image-preview-small" data-key="${featuredKey}">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Featured Image</span>
+            </div>
+            <input type="file" accept="image/*" class="file-input" data-key="${featuredKey}" style="display:none;" />
+            <span class="upload-label">Featured Image</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Title (English)</label>
+          <input type="text" class="blog-title-input" data-tkey="${post.titleKey}" value="${escapeHtml(titleText)}" />
+          <span class="field-hint">Key: <code>${post.titleKey}</code> — Edit other languages in Translations tab.</span>
+        </div>
+        <div class="form-field">
+          <label>Excerpt / Short Description (English)</label>
+          <textarea rows="2" class="blog-excerpt-input" data-tkey="${post.excerptKey}">${escapeHtml(excerptText)}</textarea>
+          <span class="field-hint">Key: <code>${post.excerptKey}</code></span>
+        </div>
+        <div class="form-field">
+          <label>Date (optional)</label>
+          <input type="text" class="blog-date-input" data-post-id="${post.id}" value="${escapeHtml(post.date || '')}" placeholder="e.g. March 15, 2025" />
+        </div>
+        <div class="detail-blocks-section">
+          <h5>Article Content</h5>
+          <p class="field-help">Add content blocks for the blog post detail page. Reorder freely with arrows.</p>
+          <div class="detail-blocks-list" data-blog-id="${post.id}"></div>
+          <div class="detail-blocks-actions">
+            <button class="btn-add-block blog-add-block" data-blog-id="${post.id}" data-type="image"><i class="fas fa-image"></i> Add Image</button>
+            <button class="btn-add-block blog-add-block" data-blog-id="${post.id}" data-type="text"><i class="fas fa-font"></i> Add Text</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+
+      // Wire featured image upload
+      const uploadSmall = div.querySelector(`.image-preview-small[data-key="${featuredKey}"]`).closest('.image-upload-small');
+      const preview = div.querySelector(`.image-preview-small[data-key="${featuredKey}"]`);
+      const input = div.querySelector(`.file-input[data-key="${featuredKey}"]`);
+      preview.addEventListener('click', () => input.click());
+      preview.addEventListener('dragover', (e) => e.preventDefault());
+      preview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleSmallImageFile(file, featuredKey);
+      });
+      input.addEventListener('change', () => {
+        if (input.files[0]) handleSmallImageFile(input.files[0], featuredKey);
+      });
+      updateSmallImagePreview(featuredKey);
+
+      // Wire title input
+      div.querySelector('.blog-title-input').addEventListener('input', (e) => {
+        if (!data.translations.en) data.translations.en = {};
+        data.translations.en[post.titleKey] = e.target.value;
+      });
+
+      // Wire excerpt input
+      div.querySelector('.blog-excerpt-input').addEventListener('input', (e) => {
+        if (!data.translations.en) data.translations.en = {};
+        data.translations.en[post.excerptKey] = e.target.value;
+      });
+
+      // Wire date input
+      div.querySelector('.blog-date-input').addEventListener('input', (e) => {
+        const p = data.blog.find(b => b.id === e.target.dataset.postId);
+        if (p) p.date = e.target.value;
+      });
+
+      // Wire delete
+      div.querySelector('.btn-delete-item').addEventListener('click', () => {
+        if (confirm('Delete this blog post?')) {
+          delete data.images[featuredKey];
+          if (post.contentBlocks) {
+            post.contentBlocks.forEach(block => {
+              if (block.imageKey) delete data.images[block.imageKey];
+            });
+          }
+          data.blog = data.blog.filter(b => b.id !== post.id);
+          saveData(data);
+          renderBlogPosts();
+          toast('Blog post removed', 'success');
+        }
+      });
+
+      // Wire add content block buttons
+      div.querySelectorAll('.blog-add-block').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const blogId = btn.dataset.blogId;
+          const type = btn.dataset.type;
+          const blogPost = data.blog.find(b => b.id === blogId);
+          if (!blogPost) return;
+          if (!blogPost.contentBlocks) blogPost.contentBlocks = [];
+
+          const blockIdx = blogPost.contentBlocks.length;
+          const ts = Date.now();
+          const block = { type };
+
+          if (type === 'image') {
+            block.imageKey = `blog_${blogId}_img_${blockIdx}_${ts}`;
+          }
+          if (type === 'text') {
+            block.textKey = `blog_${blogId}_txt_${blockIdx}_${ts}`;
+            ['en', 'ka', 'ru'].forEach(lang => {
+              if (!data.translations[lang]) data.translations[lang] = {};
+              data.translations[lang][block.textKey] = '';
+            });
+          }
+
+          blogPost.contentBlocks.push(block);
+          saveData(data);
+          renderBlogContentBlocks(blogPost, div.querySelector(`.detail-blocks-list[data-blog-id="${blogId}"]`));
+          toast('Block added', 'success');
+        });
+      });
+
+      // Render existing content blocks
+      renderBlogContentBlocks(post, div.querySelector(`.detail-blocks-list[data-blog-id="${post.id}"]`));
+    });
+
+    // Update dashboard count
+    const countEl = document.getElementById('dashBlogCount');
+    if (countEl) countEl.textContent = data.blog.length + ' posts';
+  }
+
+  function renderBlogContentBlocks(post, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!post.contentBlocks || post.contentBlocks.length === 0) {
+      container.innerHTML = '<p class="detail-empty">No content blocks yet. Add blocks below.</p>';
+      return;
+    }
+
+    post.contentBlocks.forEach((block, blockIdx) => {
+      const blockEl = document.createElement('div');
+      blockEl.className = 'detail-block-item';
+
+      let typeLabel = block.type === 'image' ? 'Image' : 'Text';
+      let typeIcon = block.type === 'image' ? 'fa-image' : 'fa-font';
+
+      blockEl.innerHTML = `
+        <div class="detail-block-header">
+          <span class="detail-block-num"><i class="fas ${typeIcon}"></i></span>
+          <span class="detail-block-type">${typeLabel}</span>
+          <div class="detail-block-controls">
+            <button class="btn-block-move" data-dir="up" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-block-move" data-dir="down" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-block-delete" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="detail-block-body"></div>
+      `;
+
+      const body = blockEl.querySelector('.detail-block-body');
+
+      if (block.type === 'image') {
+        const imgUpload = document.createElement('div');
+        imgUpload.className = 'image-upload-small';
+        imgUpload.innerHTML = `
+          <div class="image-preview-small detail-block-img" data-key="${block.imageKey}">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Upload</span>
+          </div>
+          <input type="file" accept="image/*" class="file-input" style="display:none;" />
+        `;
+        body.appendChild(imgUpload);
+
+        const preview = imgUpload.querySelector('.image-preview-small');
+        const input = imgUpload.querySelector('.file-input');
+        preview.addEventListener('click', () => input.click());
+        preview.addEventListener('dragover', (e) => e.preventDefault());
+        preview.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) handleSmallImageFile(file, block.imageKey);
+        });
+        input.addEventListener('change', () => {
+          if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
+        });
+        updateSmallImagePreview(block.imageKey);
+      }
+
+      if (block.type === 'text') {
+        const textField = document.createElement('div');
+        textField.className = 'form-field detail-block-text-field';
+        const currentText = (data.translations.en && data.translations.en[block.textKey]) || '';
+        textField.innerHTML = `
+          <label>Text (English) — key: <code>${block.textKey}</code></label>
+          <textarea rows="3" data-tkey="${block.textKey}">${escapeHtml(currentText)}</textarea>
+          <span class="field-hint">Edit other languages in the Translations tab.</span>
+        `;
+        body.appendChild(textField);
+
+        textField.querySelector('textarea').addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[block.textKey] = e.target.value;
+        });
+      }
+
+      // Move up
+      blockEl.querySelector('.btn-block-move[data-dir="up"]').addEventListener('click', () => {
+        if (blockIdx === 0) return;
+        const arr = post.contentBlocks;
+        [arr[blockIdx - 1], arr[blockIdx]] = [arr[blockIdx], arr[blockIdx - 1]];
+        saveData(data);
+        renderBlogContentBlocks(post, container);
+      });
+
+      // Move down
+      blockEl.querySelector('.btn-block-move[data-dir="down"]').addEventListener('click', () => {
+        if (blockIdx === post.contentBlocks.length - 1) return;
+        const arr = post.contentBlocks;
+        [arr[blockIdx], arr[blockIdx + 1]] = [arr[blockIdx + 1], arr[blockIdx]];
+        saveData(data);
+        renderBlogContentBlocks(post, container);
+      });
+
+      // Delete
+      blockEl.querySelector('.btn-block-delete').addEventListener('click', () => {
+        if (confirm('Delete this content block?')) {
+          if (block.imageKey) delete data.images[block.imageKey];
+          post.contentBlocks.splice(blockIdx, 1);
+          saveData(data);
+          renderBlogContentBlocks(post, container);
+          toast('Block removed', 'success');
+        }
+      });
+
+      container.appendChild(blockEl);
+    });
+  }
+
+  // ========================================
   // Translations
   // ========================================
   function setupTranslations() {
@@ -1242,6 +1533,9 @@
 
     // Results
     renderResults();
+
+    // Blog
+    renderBlogPosts();
 
     // Translations
     renderTranslations();

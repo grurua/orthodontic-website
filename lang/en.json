@@ -116,6 +116,16 @@
   "case.infoAppliance": "Appliance",
   "case.infoDoctor": "Doctor",
 
+  "nav.blog": "Blog",
+  "blog.subtitle": "Our Blog",
+  "blog.title": "Latest Articles",
+  "blog.description": "Stay informed with the latest insights, tips, and news from the world of orthodontics.",
+  "blog.viewAll": "View All Articles",
+  "blog.readMore": "Read More",
+  "blog.empty": "No blog posts have been published yet. Check back soon!",
+  "blog.emptyPost": "No content has been added for this article yet.",
+  "blog.backToBlog": "Back to Blog",
+
   "footer.tagline": "Professional orthodontic care for the whole family.",
   "footer.rights": "All rights reserved."
 }
