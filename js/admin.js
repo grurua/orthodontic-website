@@ -1139,18 +1139,21 @@
       div.querySelector('.blog-title-input').addEventListener('input', (e) => {
         if (!data.translations.en) data.translations.en = {};
         data.translations.en[post.titleKey] = e.target.value;
+        saveData(data);
       });
 
       // Wire excerpt input
       div.querySelector('.blog-excerpt-input').addEventListener('input', (e) => {
         if (!data.translations.en) data.translations.en = {};
         data.translations.en[post.excerptKey] = e.target.value;
+        saveData(data);
       });
 
       // Wire date input
       div.querySelector('.blog-date-input').addEventListener('input', (e) => {
         const p = data.blog.find(b => b.id === e.target.dataset.postId);
         if (p) p.date = e.target.value;
+        saveData(data);
       });
 
       // Wire delete
@@ -1241,14 +1244,16 @@
       const body = blockEl.querySelector('.detail-block-body');
 
       if (block.type === 'image') {
+        const hasImage = !!(data.images && data.images[block.imageKey]);
         const imgUpload = document.createElement('div');
         imgUpload.className = 'image-upload-small';
         imgUpload.innerHTML = `
           <div class="image-preview-small detail-block-img" data-key="${block.imageKey}">
             <i class="fas fa-cloud-upload-alt"></i>
-            <span>Upload</span>
+            <span>${hasImage ? 'Click to Replace' : 'Upload Image'}</span>
           </div>
           <input type="file" accept="image/*" class="file-input" style="display:none;" />
+          ${hasImage ? '<button class="btn-remove-img" title="Remove image"><i class="fas fa-times"></i> Remove</button>' : ''}
         `;
         body.appendChild(imgUpload);
 
@@ -1265,6 +1270,16 @@
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
         updateSmallImagePreview(block.imageKey);
+
+        const removeBtn = imgUpload.querySelector('.btn-remove-img');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => {
+            delete data.images[block.imageKey];
+            saveData(data);
+            renderBlogContentBlocks(post, container);
+            toast('Image removed', 'success');
+          });
+        }
       }
 
       if (block.type === 'text') {
@@ -1273,7 +1288,7 @@
         const currentText = (data.translations.en && data.translations.en[block.textKey]) || '';
         textField.innerHTML = `
           <label>Text (English) — key: <code>${block.textKey}</code></label>
-          <textarea rows="3" data-tkey="${block.textKey}">${escapeHtml(currentText)}</textarea>
+          <textarea rows="5" data-tkey="${block.textKey}">${escapeHtml(currentText)}</textarea>
           <span class="field-hint">Edit other languages in the Translations tab.</span>
         `;
         body.appendChild(textField);
@@ -1281,6 +1296,7 @@
         textField.querySelector('textarea').addEventListener('input', (e) => {
           if (!data.translations.en) data.translations.en = {};
           data.translations.en[block.textKey] = e.target.value;
+          saveData(data);
         });
       }
 

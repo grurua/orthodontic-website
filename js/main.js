@@ -811,9 +811,15 @@
       breadcrumb.setAttribute('data-i18n', post.titleKey);
     }
 
-    // Date
+    // Date — hide if empty
     const dateEl = document.getElementById('blogPostDate');
-    if (dateEl && post.date) dateEl.textContent = post.date;
+    if (dateEl) {
+      if (post.date) {
+        dateEl.textContent = post.date;
+      } else {
+        dateEl.style.display = 'none';
+      }
+    }
 
     // Excerpt
     const excerptEl = document.getElementById('blogPostExcerpt');
@@ -822,17 +828,23 @@
       if (excerptText) {
         excerptEl.textContent = excerptText;
         excerptEl.setAttribute('data-i18n', post.excerptKey);
+      } else {
+        excerptEl.style.display = 'none';
       }
     }
 
-    // Featured image
+    // Featured image — hide container if no image
     const featuredEl = document.getElementById('blogPostFeatured');
     const featuredKey = `blog_${post.id}_featured`;
-    if (featuredEl && imgs[featuredKey]) {
-      const img = document.createElement('img');
-      img.alt = titleText;
-      img.src = imgs[featuredKey];
-      featuredEl.appendChild(img);
+    if (featuredEl) {
+      if (imgs[featuredKey]) {
+        const img = document.createElement('img');
+        img.alt = titleText;
+        img.src = imgs[featuredKey];
+        featuredEl.appendChild(img);
+      } else {
+        featuredEl.style.display = 'none';
+      }
     }
 
     // Content blocks
