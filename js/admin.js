@@ -757,7 +757,7 @@
         input.addEventListener('change', () => {
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
-        updateSmallImagePreview(block.imageKey);
+        // Note: updateSmallImagePreview called after blockEl is in the DOM (below)
 
         const removeBtn = imgUpload.querySelector('.btn-remove-img');
         if (removeBtn) {
@@ -819,6 +819,11 @@
       });
 
       container.appendChild(blockEl);
+
+      // Update image preview now that the element is in the DOM
+      if (block.imageKey) {
+        updateSmallImagePreview(block.imageKey);
+      }
     });
   }
 
@@ -1114,7 +1119,7 @@
         input.addEventListener('change', () => {
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
-        updateSmallImagePreview(block.imageKey);
+        // Note: updateSmallImagePreview called after blockEl is in the DOM (below)
       }
 
       // Before/After image uploads (two side by side)
@@ -1210,6 +1215,13 @@
       });
 
       container.appendChild(blockEl);
+
+      // Update image preview now that the element is in the DOM
+      if (block.imageKey) {
+        updateSmallImagePreview(block.imageKey);
+      }
+      if (block.beforeKey) updateSmallImagePreview(block.beforeKey);
+      if (block.afterKey) updateSmallImagePreview(block.afterKey);
     });
   }
 
@@ -1453,7 +1465,7 @@
         input.addEventListener('change', () => {
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
-        updateSmallImagePreview(block.imageKey);
+        // Note: updateSmallImagePreview called after blockEl is in the DOM (below)
 
         const removeBtn = imgUpload.querySelector('.btn-remove-img');
         if (removeBtn) {
@@ -1514,6 +1526,11 @@
       });
 
       container.appendChild(blockEl);
+
+      // Update image preview now that the element is in the DOM
+      if (block.imageKey) {
+        updateSmallImagePreview(block.imageKey);
+      }
     });
   }
 
