@@ -201,8 +201,8 @@
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       let val = t[key];
-      // Fallback to English for dynamic keys (case detail blocks)
-      if (!val && enFallback && key.startsWith('case_')) {
+      // Fallback to English for dynamic keys (case detail, service, blog blocks)
+      if (!val && enFallback && (key.startsWith('case_') || key.startsWith('svc_') || key.startsWith('blog_'))) {
         val = enFallback[key];
       }
       if (!val) return;
@@ -355,21 +355,29 @@
       const svgKey = `service_${svc.id}_svg`;
       const hasSvg = adminData && adminData.images && adminData.images[svgKey];
 
+      const detailUrl = `service.html?id=${svc.id}`;
       if (hasSvg) {
         card.innerHTML = `
           <div class="service-icon"><img src="${adminData.images[svgKey]}" width="48" height="48" alt="" /></div>
           <h3 data-i18n="services.${svc.key}.title"></h3>
           <p data-i18n="services.${svc.key}.desc"></p>
-          <a href="services.html" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
+          <a href="${detailUrl}" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
         `;
       } else {
         card.innerHTML = `
           <div class="service-icon"><i class="${svc.icon}"></i></div>
           <h3 data-i18n="services.${svc.key}.title"></h3>
           <p data-i18n="services.${svc.key}.desc"></p>
-          <a href="services.html" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
+          <a href="${detailUrl}" class="service-card-btn" data-i18n="landing.learnMore">Learn More</a>
         `;
       }
+
+      // Make the whole card clickable
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.service-card-btn')) return;
+        window.location.href = detailUrl;
+      });
 
       grid.appendChild(card);
       revealObserver.observe(card);
@@ -894,6 +902,178 @@
     }
   }
 
+  // ---- Service Detail Page ----
+  function getServiceText(key, lang) {
+    if (!adminData || !adminData.translations) return '';
+    const t = adminData.translations[lang];
+    if (t && t[key]) return t[key];
+    if (lang !== 'en') {
+      const en = adminData.translations.en;
+      if (en && en[key]) return en[key];
+    }
+    return '';
+  }
+
+  function applyServiceDetail() {
+    const titleEl = document.getElementById('serviceDetailTitle');
+    if (!titleEl) return; // not on service detail page
+
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = params.get('id');
+    if (!serviceId) return;
+
+    const services = (adminData && adminData.services) ? adminData.services : DEFAULT_SERVICES;
+    const svc = services.find(s => s.id === serviceId);
+    if (!svc) return;
+
+    const imgs = (adminData && adminData.images) ? adminData.images : {};
+    const titleKey = `services.${svc.key}.title`;
+    const descKey = `services.${svc.key}.desc`;
+
+    // Title
+    const titleText = getServiceText(titleKey, currentLang) || svc.key;
+    titleEl.textContent = titleText;
+    titleEl.setAttribute('data-i18n', titleKey);
+
+    // Breadcrumb
+    const breadcrumb = document.getElementById('serviceBreadcrumbTitle');
+    if (breadcrumb) {
+      breadcrumb.textContent = titleText;
+      breadcrumb.setAttribute('data-i18n', titleKey);
+    }
+
+    // Description
+    const descEl = document.getElementById('serviceDetailDesc');
+    if (descEl) {
+      const descText = getServiceText(descKey, currentLang);
+      if (descText) {
+        descEl.textContent = descText;
+        descEl.setAttribute('data-i18n', descKey);
+      } else {
+        descEl.style.display = 'none';
+      }
+    }
+
+    // Icon
+    const iconEl = document.getElementById('serviceDetailIcon');
+    if (iconEl) {
+      const svgKey = `service_${svc.id}_svg`;
+      if (imgs[svgKey]) {
+        iconEl.innerHTML = `<img src="${imgs[svgKey]}" width="56" height="56" alt="" />`;
+      } else {
+        iconEl.innerHTML = `<i class="${svc.icon}"></i>`;
+      }
+    }
+
+    // Content blocks
+    const blocksContainer = document.getElementById('serviceDetailBlocks');
+    const serviceBlocks = (adminData && adminData.serviceBlocks && adminData.serviceBlocks[serviceId])
+      ? adminData.serviceBlocks[serviceId]
+      : [];
+
+    if (blocksContainer && serviceBlocks.length > 0) {
+      blocksContainer.innerHTML = '';
+
+      serviceBlocks.forEach((block, idx) => {
+        const el = document.createElement('div');
+        el.className = 'svc-block reveal';
+        el.style.transitionDelay = (idx * 0.08) + 's';
+
+        if (block.type === 'image') {
+          const imgSrc = imgs[block.imageKey];
+          if (imgSrc) {
+            el.classList.add('svc-block-image');
+            el.innerHTML = `<img src="${imgSrc}" alt="" />`;
+          }
+        } else if (block.type === 'text') {
+          const text = getServiceText(block.textKey, currentLang);
+          if (text) {
+            el.classList.add('svc-block-text');
+            const p = document.createElement('p');
+            p.setAttribute('data-i18n', block.textKey);
+            p.textContent = text;
+            el.appendChild(p);
+          }
+        } else if (block.type === 'image-text') {
+          const imgSrc = block.imageKey ? imgs[block.imageKey] : null;
+          const text = block.textKey ? getServiceText(block.textKey, currentLang) : '';
+          if (imgSrc || text) {
+            el.classList.add('svc-block-image-text');
+            let html = '';
+            if (imgSrc) {
+              html += `<div class="svc-block-it-img"><img src="${imgSrc}" alt="" /></div>`;
+            }
+            if (text) {
+              html += `<div class="svc-block-it-text"><p data-i18n="${block.textKey}">${text}</p></div>`;
+            }
+            el.innerHTML = html;
+          }
+        }
+
+        if (el.innerHTML) {
+          blocksContainer.appendChild(el);
+          revealObserver.observe(el);
+        }
+      });
+    }
+
+    // Results widgets at the bottom
+    const resultsSection = document.getElementById('serviceResultsSection');
+    const resultsGrid = document.getElementById('serviceResultsGrid');
+    if (resultsSection && resultsGrid && adminData && adminData.results && adminData.results.length > 0) {
+      const positions = adminData.imagePositions || {};
+      const toShow = adminData.results.slice(0, 4);
+      let hasAny = false;
+
+      toShow.forEach(res => {
+        const beforeKey = `result_${res.id}_before`;
+        const afterKey = `result_${res.id}_after`;
+        const beforeSrc = imgs[beforeKey];
+        const afterSrc = imgs[afterKey];
+
+        if (beforeSrc || afterSrc) {
+          hasAny = true;
+          const card = document.createElement('a');
+          card.className = 'result-card reveal';
+          card.href = `case.html?id=${res.id}`;
+
+          let thumbHtml = '';
+          if (beforeSrc && afterSrc) {
+            thumbHtml = `
+              <div class="ba-stacked">
+                <div class="ba-stacked-item">
+                  <img src="${beforeSrc}" alt="Before" style="${positions[beforeKey] ? 'object-position:' + positions[beforeKey] : ''}" />
+                  <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+                </div>
+                <div class="ba-stacked-item">
+                  <img src="${afterSrc}" alt="After" style="${positions[afterKey] ? 'object-position:' + positions[afterKey] : ''}" />
+                  <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
+                </div>
+              </div>`;
+          } else {
+            const src = beforeSrc || afterSrc;
+            thumbHtml = `<div class="ba-stacked"><div class="ba-stacked-item"><img src="${src}" alt="" /></div></div>`;
+          }
+
+          const captionText = getServiceText(res.captionKey, currentLang);
+          card.innerHTML = `
+            <div class="ba-slider">${thumbHtml}</div>
+            <div class="result-card-bottom">
+              <p class="result-caption" data-i18n="${res.captionKey}">${captionText || ''}</p>
+              <span class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></span>
+            </div>
+          `;
+          resultsGrid.appendChild(card);
+          revealObserver.observe(card);
+        }
+      });
+
+      if (hasAny) {
+        resultsSection.style.display = '';
+      }
+    }
+  }
+
   // ---- Init ----
   applyHeroPhoto();
   applyAboutPhoto();
@@ -907,5 +1087,6 @@
   applyCaseDetail();
   applyBlogGrid();
   applyBlogPost();
+  applyServiceDetail();
   setLang(currentLang);
 })();

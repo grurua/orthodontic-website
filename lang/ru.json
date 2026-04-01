@@ -108,6 +108,9 @@
   "landing.resultsBtn": "Все результаты",
   "landing.contactBtn": "Записаться на консультацию",
 
+  "service.emptyDetail": "Дополнительное содержание для этой услуги ещё не добавлено.",
+  "service.backToServices": "Назад к услугам",
+
   "case.backToResults": "Назад к результатам",
   "case.empty": "Подробное содержание для этого случая ещё не добавлено.",
   "case.relatedCases": "Другие случаи",

@@ -896,6 +896,137 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ========================================
+   Service Detail Page
+   ======================================== */
+.service-detail {
+  padding: 48px 0 60px;
+  background: var(--white);
+}
+
+.service-detail-header {
+  max-width: 700px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.service-detail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  font-size: 32px;
+  color: var(--gold);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--cream);
+}
+
+.service-detail-icon img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.service-detail-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.service-detail-desc {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  line-height: 1.75;
+  font-family: var(--font-serif);
+}
+
+.service-detail-blocks {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.svc-block {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.svc-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.svc-block-image img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.svc-block-text {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  line-height: 1.85;
+  font-family: var(--font-serif);
+}
+
+.svc-block-image-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.svc-block-image-text:nth-child(even) {
+  direction: rtl;
+}
+
+.svc-block-image-text:nth-child(even) > * {
+  direction: ltr;
+}
+
+.svc-block-it-img img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.svc-block-it-text {
+  font-size: 1.02rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  font-family: var(--font-serif);
+}
+
+/* Service Results Section (bottom of service page) */
+.service-results-section {
+  padding: 80px 0;
+  background: var(--cream);
+}
+
+.service-results-section .section-label {
+  text-align: center;
+  display: block;
+}
+
+.service-results-section .section-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.service-results-section .results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* ========================================
    Before / After Results
    ======================================== */
 .results {
@@ -1974,6 +2105,10 @@ button { font-family: inherit; cursor: pointer; }
   .results-grid { grid-template-columns: 1fr; }
   .blog-grid { grid-template-columns: 1fr; }
   .blog-post-title { font-size: 1.6rem; }
+  .service-detail-title { font-size: 1.6rem; }
+  .svc-block-image-text { grid-template-columns: 1fr; }
+  .svc-block-image-text:nth-child(even) { direction: ltr; }
+  .service-results-section .results-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
 
   .page-header { padding: 120px 0 48px; }

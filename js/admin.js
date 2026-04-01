@@ -127,6 +127,7 @@
       services: DEFAULT_SERVICES.map(s => ({ ...s })),
       results: DEFAULT_RESULTS.map(r => ({ ...r })),
       blog: [],
+      serviceBlocks: {},    // serviceId -> [{type, imageKey?, textKey?}]
       translations: { en: {}, ka: {}, ru: {} },  // overrides only
     };
   }
@@ -619,6 +620,13 @@
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this service?')) {
           delete data.images[svgKey];
+          // Clean up content blocks
+          if (data.serviceBlocks && data.serviceBlocks[svc.id]) {
+            data.serviceBlocks[svc.id].forEach(block => {
+              if (block.imageKey) delete data.images[block.imageKey];
+            });
+            delete data.serviceBlocks[svc.id];
+          }
           ['en', 'ka', 'ru'].forEach(lang => {
             if (data.translations[lang]) {
               delete data.translations[lang][titleKey];
@@ -631,11 +639,187 @@
           toast('Service removed', 'success');
         }
       });
+
+      // ---- Service Inner Content Blocks ----
+      if (!data.serviceBlocks) data.serviceBlocks = {};
+      if (!data.serviceBlocks[svc.id]) data.serviceBlocks[svc.id] = [];
+
+      const blocksSection = document.createElement('div');
+      blocksSection.className = 'detail-blocks-section';
+      blocksSection.innerHTML = `
+        <h5>Service Page Content</h5>
+        <p class="field-help">Build the inner service page content. Add blocks and reorder freely.</p>
+        <div class="detail-blocks-list" data-svc-id="${svc.id}"></div>
+        <div class="detail-blocks-actions">
+          <button class="btn-add-block svc-add-block" data-svc-id="${svc.id}" data-type="image"><i class="fas fa-image"></i> Add Image</button>
+          <button class="btn-add-block svc-add-block" data-svc-id="${svc.id}" data-type="text"><i class="fas fa-font"></i> Add Text</button>
+          <button class="btn-add-block svc-add-block" data-svc-id="${svc.id}" data-type="image-text"><i class="fas fa-columns"></i> Add Image + Text</button>
+        </div>
+      `;
+      div.appendChild(blocksSection);
+
+      // Wire add content block buttons
+      blocksSection.querySelectorAll('.svc-add-block').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const svcId = btn.dataset.svcId;
+          const type = btn.dataset.type;
+          if (!data.serviceBlocks[svcId]) data.serviceBlocks[svcId] = [];
+
+          const ts = Date.now();
+          const blockIdx = data.serviceBlocks[svcId].length;
+          const block = { type };
+
+          if (type === 'image' || type === 'image-text') {
+            block.imageKey = `svc_${svcId}_img_${blockIdx}_${ts}`;
+          }
+          if (type === 'text' || type === 'image-text') {
+            block.textKey = `svc_${svcId}_txt_${blockIdx}_${ts}`;
+            ['en', 'ka', 'ru'].forEach(lang => {
+              if (!data.translations[lang]) data.translations[lang] = {};
+              data.translations[lang][block.textKey] = '';
+            });
+          }
+
+          data.serviceBlocks[svcId].push(block);
+          saveData(data);
+          renderServiceContentBlocks(svcId, blocksSection.querySelector(`.detail-blocks-list[data-svc-id="${svcId}"]`));
+          toast('Block added', 'success');
+        });
+      });
+
+      // Render existing content blocks
+      renderServiceContentBlocks(svc.id, blocksSection.querySelector(`.detail-blocks-list[data-svc-id="${svc.id}"]`));
     });
 
     // Update dashboard count
     const countEl = document.getElementById('dashServiceCount');
     if (countEl) countEl.textContent = data.services.length + ' active';
+  }
+
+  function renderServiceContentBlocks(svcId, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!data.serviceBlocks) data.serviceBlocks = {};
+    const blocks = data.serviceBlocks[svcId] || [];
+
+    if (blocks.length === 0) {
+      container.innerHTML = '<p class="detail-empty">No content blocks yet. Add blocks below.</p>';
+      return;
+    }
+
+    blocks.forEach((block, blockIdx) => {
+      const blockEl = document.createElement('div');
+      blockEl.className = 'detail-block-item';
+
+      const typeLabels = { image: 'Image', text: 'Text', 'image-text': 'Image + Text' };
+      const typeIcons = { image: 'fa-image', text: 'fa-font', 'image-text': 'fa-columns' };
+
+      blockEl.innerHTML = `
+        <div class="detail-block-header">
+          <span class="detail-block-num"><i class="fas ${typeIcons[block.type] || 'fa-cube'}"></i></span>
+          <span class="detail-block-type">${typeLabels[block.type] || block.type}</span>
+          <div class="detail-block-controls">
+            <button class="btn-block-move" data-dir="up" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-block-move" data-dir="down" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-block-delete" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="detail-block-body"></div>
+      `;
+
+      const body = blockEl.querySelector('.detail-block-body');
+
+      // Image field (for 'image' and 'image-text' types)
+      if (block.imageKey) {
+        const hasImage = !!(data.images && data.images[block.imageKey]);
+        const imgUpload = document.createElement('div');
+        imgUpload.className = 'image-upload-small';
+        imgUpload.innerHTML = `
+          <div class="image-preview-small detail-block-img" data-key="${block.imageKey}">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>${hasImage ? 'Click to Replace' : 'Upload Image'}</span>
+          </div>
+          <input type="file" accept="image/*" class="file-input" style="display:none;" />
+          ${hasImage ? '<button class="btn-remove-img" title="Remove image"><i class="fas fa-times"></i> Remove</button>' : ''}
+        `;
+        body.appendChild(imgUpload);
+
+        const preview = imgUpload.querySelector('.image-preview-small');
+        const input = imgUpload.querySelector('.file-input');
+        preview.addEventListener('click', () => input.click());
+        preview.addEventListener('dragover', (e) => e.preventDefault());
+        preview.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) handleSmallImageFile(file, block.imageKey);
+        });
+        input.addEventListener('change', () => {
+          if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
+        });
+        updateSmallImagePreview(block.imageKey);
+
+        const removeBtn = imgUpload.querySelector('.btn-remove-img');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => {
+            delete data.images[block.imageKey];
+            saveData(data);
+            renderServiceContentBlocks(svcId, container);
+            toast('Image removed', 'success');
+          });
+        }
+      }
+
+      // Text field (for 'text' and 'image-text' types)
+      if (block.textKey) {
+        const textField = document.createElement('div');
+        textField.className = 'form-field detail-block-text-field';
+        const currentText = (data.translations.en && data.translations.en[block.textKey]) || '';
+        textField.innerHTML = `
+          <label>Text (English) — key: <code>${block.textKey}</code></label>
+          <textarea rows="5" data-tkey="${block.textKey}">${escapeHtml(currentText)}</textarea>
+          <span class="field-hint">Edit other languages in the Translations tab.</span>
+        `;
+        body.appendChild(textField);
+
+        textField.querySelector('textarea').addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[block.textKey] = e.target.value;
+          saveData(data);
+        });
+      }
+
+      // Move up
+      blockEl.querySelector('.btn-block-move[data-dir="up"]').addEventListener('click', () => {
+        if (blockIdx === 0) return;
+        const arr = blocks;
+        [arr[blockIdx - 1], arr[blockIdx]] = [arr[blockIdx], arr[blockIdx - 1]];
+        saveData(data);
+        renderServiceContentBlocks(svcId, container);
+      });
+
+      // Move down
+      blockEl.querySelector('.btn-block-move[data-dir="down"]').addEventListener('click', () => {
+        if (blockIdx === blocks.length - 1) return;
+        const arr = blocks;
+        [arr[blockIdx], arr[blockIdx + 1]] = [arr[blockIdx + 1], arr[blockIdx]];
+        saveData(data);
+        renderServiceContentBlocks(svcId, container);
+      });
+
+      // Delete
+      blockEl.querySelector('.btn-block-delete').addEventListener('click', () => {
+        if (confirm('Delete this content block?')) {
+          if (block.imageKey) delete data.images[block.imageKey];
+          blocks.splice(blockIdx, 1);
+          saveData(data);
+          renderServiceContentBlocks(svcId, container);
+          toast('Block removed', 'success');
+        }
+      });
+
+      container.appendChild(blockEl);
+    });
   }
 
   // ========================================

@@ -108,6 +108,9 @@
   "landing.resultsBtn": "ყველა შედეგის ნახვა",
   "landing.contactBtn": "კონსულტაციის დაჯავშნა",
 
+  "service.emptyDetail": "ამ სერვისისთვის დამატებითი კონტენტი ჯერ არ დამატებულა.",
+  "service.backToServices": "სერვისებზე დაბრუნება",
+
   "case.backToResults": "შედეგებზე დაბრუნება",
   "case.empty": "ამ შემთხვევისთვის დეტალური კონტენტი ჯერ არ დამატებულა.",
   "case.relatedCases": "სხვა შემთხვევები",
