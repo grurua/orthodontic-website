@@ -1249,6 +1249,19 @@ body {
 /* ========================================
    Responsive
    ======================================== */
+
+/* Sidebar overlay (created by JS, styled here) */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+  cursor: pointer;
+}
+
+.sidebar-overlay.active { display: block; }
+
 @media (max-width: 1024px) {
   .dashboard-cards { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1277,23 +1290,42 @@ body {
 
   .dashboard-cards { grid-template-columns: 1fr 1fr; }
 
-  .result-images-row { flex-direction: column; }
+  .result-images-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
   /* Service item body: stack on mobile */
-  .service-item-body { flex-direction: column; }
+  .service-item-body {
+    flex-direction: column;
+    gap: 12px;
+  }
   .service-item-body .image-upload-small { flex-shrink: 0; }
   .service-item-body .svg-upload-area { align-self: flex-start; }
 
   /* Service item header: wrap actions */
   .service-item-header { flex-wrap: wrap; gap: 8px; }
 
-  /* Detail blocks: stack better */
-  .detail-block-header { flex-wrap: wrap; }
-  .detail-block-controls { margin-left: auto; }
-  .detail-block-body .image-preview-small { width: 100%; height: 140px; }
+  /* Detail blocks: improve mobile layout */
+  .detail-block-header { flex-wrap: wrap; gap: 8px; }
+  .detail-block-controls {
+    margin-left: auto;
+    gap: 6px;
+  }
+  /* Ensure touch-friendly control buttons */
+  .detail-block-controls button {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+  .detail-block-body .image-preview-small { width: 100%; height: 160px; }
 
   /* Timeline admin items: stack */
-  .timeline-admin-item { flex-direction: column; }
+  .timeline-admin-item {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+  }
   .timeline-admin-fields .form-row { grid-template-columns: 1fr; }
 
   /* Login card */
@@ -1304,18 +1336,24 @@ body {
   .field-help { font-size: 0.8rem; }
 
   /* Lang tabs */
-  .lang-tabs { flex-wrap: wrap; }
-  .lang-tab { padding: 6px 14px; font-size: 0.8rem; }
+  .lang-tabs { flex-wrap: wrap; gap: 2px; }
+  .lang-tab { padding: 8px 14px; font-size: 0.8rem; }
 
   /* Translation fields */
   .translation-group h4 { font-size: 0.85rem; }
 
-  /* Detail blocks actions */
+  /* Detail blocks actions: full-width buttons */
   .detail-blocks-actions { flex-direction: column; }
   .detail-blocks-actions .btn-add-block { width: 100%; justify-content: center; }
 
   /* Result item header */
-  .result-item-header { flex-wrap: wrap; }
+  .result-item-header { flex-wrap: wrap; gap: 8px; }
+
+  /* Delete buttons: bigger tap target */
+  .btn-delete-item {
+    padding: 8px 12px;
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1328,31 +1366,41 @@ body {
   .settings-actions .btn-danger { width: 100%; justify-content: center; }
 
   /* Service items tighter */
-  .service-item { padding: 14px; }
+  .service-item { padding: 12px; }
   .service-item-header .service-num { width: 28px; height: 28px; font-size: 0.75rem; }
   .service-item-header h4 { font-size: 0.88rem; }
 
   /* Result items tighter */
-  .result-item { padding: 14px; }
+  .result-item { padding: 12px; }
   .result-item-header .result-num { width: 28px; height: 28px; font-size: 0.75rem; }
 
   /* Detail block items tighter */
   .detail-block-item { padding: 10px; }
   .detail-block-num { width: 24px; height: 24px; font-size: 0.7rem; }
-  .detail-block-controls button { width: 26px; height: 26px; }
+  /* Keep touch-friendly controls */
+  .detail-block-controls button { width: 34px; height: 34px; }
 
   /* Image upload */
-  .image-preview { max-width: 100%; }
-  .image-preview-small { width: 100%; height: 120px; }
+  .image-preview { max-width: 100%; aspect-ratio: 4/3; }
+  .image-preview-small { width: 100%; height: 140px; }
 
-  /* Buttons */
+  /* Buttons full-width */
   .btn-save { width: 100%; justify-content: center; }
   .btn-add { width: 100%; justify-content: center; }
 
   /* Toast on mobile */
-  .toast { left: 16px; right: 16px; bottom: 16px; text-align: center; }
+  .toast { left: 12px; right: 12px; bottom: 12px; text-align: center; font-size: 0.85rem; }
 
   /* Topbar */
-  .topbar h2 { font-size: 1rem; }
-  .topbar .btn-save { padding: 8px 16px; font-size: 0.8rem; }
+  .topbar { padding: 10px 12px; }
+  .topbar h2 { font-size: 0.95rem; }
+  .topbar .btn-save { padding: 8px 14px; font-size: 0.78rem; width: auto; }
+
+  /* Login card on very small screens */
+  .login-card { margin: 16px; padding: 28px 20px; }
+  .login-logo h1 { font-size: 1.3rem; }
+  .login-logo i { font-size: 2rem; }
+
+  /* Sidebar footer buttons */
+  .btn-view-site, .btn-logout { font-size: 0.8rem; padding: 8px; }
 }
