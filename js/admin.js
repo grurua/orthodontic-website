@@ -109,12 +109,19 @@
         social_instagram: '', social_facebook: '', social_messenger: '', social_telegram: '',
         social_whatsapp: '', social_viber: '', social_tiktok: '', social_youtube: '',
       },
-      about: {
-        about_pillar1_icon: 'fas fa-graduation-cap',
-        about_pillar2_icon: 'fas fa-heart',
-        about_pillar3_icon: 'fas fa-microscope',
-        about_pillar4_icon: 'fas fa-handshake',
-      },
+      about: {},
+      timeline: [
+        { id: 't1', yearKey: 'about.timeline1Year', titleKey: 'about.timeline1Title', descKey: 'about.timeline1Desc' },
+        { id: 't2', yearKey: 'about.timeline2Year', titleKey: 'about.timeline2Title', descKey: 'about.timeline2Desc' },
+        { id: 't3', yearKey: 'about.timeline3Year', titleKey: 'about.timeline3Title', descKey: 'about.timeline3Desc' },
+        { id: 't4', yearKey: 'about.timeline4Year', titleKey: 'about.timeline4Title', descKey: 'about.timeline4Desc' },
+      ],
+      pillars: [
+        { id: 'p1', icon: 'fas fa-graduation-cap', titleKey: 'about.pillar1Title', descKey: 'about.pillar1Desc' },
+        { id: 'p2', icon: 'fas fa-heart', titleKey: 'about.pillar2Title', descKey: 'about.pillar2Desc' },
+        { id: 'p3', icon: 'fas fa-microscope', titleKey: 'about.pillar3Title', descKey: 'about.pillar3Desc' },
+        { id: 'p4', icon: 'fas fa-handshake', titleKey: 'about.pillar4Title', descKey: 'about.pillar4Desc' },
+      ],
       landing: {
         landing_about_desc: '',
         landing_about_btn: '',

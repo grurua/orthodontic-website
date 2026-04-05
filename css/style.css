@@ -2064,22 +2064,41 @@ button { font-family: inherit; cursor: pointer; }
 /* ========================================
    Responsive
    ======================================== */
+
+/* --- Tablet / Laptop (max-width: 1024px) --- */
 @media (max-width: 1024px) {
   .hero-title { font-size: 2.75rem; }
   .section-heading { font-size: 2.25rem; }
+
+  /* Grids: 3-col → 2-col */
   .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .results-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .case-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-pillars-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Case detail */
   .case-hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .case-hero-placeholder { height: 360px; }
-  .case-related-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* About page */
   .about-hero-inner { grid-template-columns: 1fr; gap: 40px; }
   .about-hero-photo { max-width: 400px; margin: 0 auto; }
   .about-hero-title { font-size: 2.2rem; }
-  .about-pillars-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Service detail images */
   .svc-block-image img { height: 340px; }
   .svc-block-it-img img { height: 240px; }
+
+  /* Section padding reduction */
+  .about, .services, .results, .contact, .blog-section { padding: 100px 0; }
+  .about-timeline, .about-pillars { padding: 80px 0; }
+  .about-cta { padding: 80px 0; }
 }
 
+/* --- Mobile / Tablet (max-width: 768px) --- */
 @media (max-width: 768px) {
+  /* Navigation — hamburger menu */
   .nav-toggle { display: flex; }
 
   .nav-links {
@@ -2092,84 +2111,306 @@ button { font-family: inherit; cursor: pointer; }
     backdrop-filter: blur(12px);
     flex-direction: column;
     padding: 24px;
-    gap: 16px;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .nav-links li a {
+    display: block;
+    padding: 10px 0;
+    color: rgba(255,255,255,0.85) !important;
+    font-size: 0.95rem;
+  }
+
+  .nav-links li a:hover,
+  .nav-links li a.active {
+    color: #fff !important;
   }
 
   .navbar.scrolled .nav-links,
   .navbar.navbar-light .nav-links {
     background: rgba(255,255,255,0.98);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .navbar.scrolled .nav-links li a,
+  .navbar.navbar-light .nav-links li a {
+    color: var(--text-light) !important;
+  }
+
+  .navbar.scrolled .nav-links li a:hover,
+  .navbar.scrolled .nav-links li a.active,
+  .navbar.navbar-light .nav-links li a:hover,
+  .navbar.navbar-light .nav-links li a.active {
+    color: var(--gold) !important;
   }
 
   .nav-links.open { display: flex; }
 
+  /* Typography scaling */
+  .section-heading { font-size: 2rem; }
+  .section-desc { font-size: 0.95rem; }
+
+  /* Page header */
+  .page-header { padding: 110px 0 48px; }
+
+  /* Hero section */
   .hero-content {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 40px;
     padding: 100px 0 40px;
     text-align: center;
   }
 
-  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-text { max-width: 100%; }
+  .hero-desc { margin-left: auto; margin-right: auto; max-width: 100%; }
   .hero-buttons { justify-content: center; }
   .hero-photo { justify-content: center; }
-  .hero-photo-wrapper { max-width: 300px; }
+  .hero-photo-wrapper { max-width: 280px; }
 
-  .about-grid { grid-template-columns: 1fr; gap: 48px; }
-  .about-photo-wrapper { max-width: 360px; margin: 0 auto; }
+  /* Landing about section */
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-photo { order: -1; }
+  .about-photo-wrapper { max-width: 320px; margin: 0 auto; }
+  .about-text .section-heading { max-width: 100%; }
+
+  /* About page */
+  .about-hero { padding: 110px 0 60px; }
   .about-hero-inner { text-align: center; }
   .about-hero-title { font-size: 1.8rem; }
-  .about-story-quote { font-size: 1.25rem; }
+  .about-hero-lead { font-size: 1rem; }
+  .about-story { padding: 60px 0; }
+  .about-story-quote { font-size: 1.15rem; padding-top: 16px; }
+  .about-story-quote::before { font-size: 3rem; top: -12px; }
+
+  /* Timeline responsive */
+  .about-timeline { padding: 60px 0; }
+  .about-timeline .section-heading { margin-bottom: 40px; }
+  .about-timeline-track { padding-left: 40px; }
+  .about-timeline-track::before { left: 11px; }
+  .timeline-item::before { left: -36px; width: 12px; height: 12px; }
+  .timeline-item { padding-bottom: 36px; }
+  .timeline-content h3 { font-size: 1.1rem; }
+  .timeline-content p { font-size: 0.9rem; }
+
+  /* Pillars responsive */
+  .about-pillars { padding: 60px 0; }
   .about-pillars-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .pillar-card { padding: 32px 24px; }
+
+  /* About CTA */
+  .about-cta { padding: 60px 0; }
   .about-cta-title { font-size: 1.6rem; }
+  .about-cta-desc { font-size: 0.95rem; }
 
-  .services-grid { grid-template-columns: 1fr 1fr; }
-  .results-grid { grid-template-columns: repeat(2, 1fr); }
-  .blog-grid { grid-template-columns: repeat(2, 1fr); }
-}
+  /* Services */
+  .services-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .service-card { padding: 28px 20px; }
+  /* Show service card button always on touch devices */
+  .service-card-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-@media (max-width: 768px) {
-  .results-grid { grid-template-columns: 1fr; }
-  .blog-grid { grid-template-columns: 1fr; }
+  /* Results */
+  .results-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .service-results-section .results-grid { grid-template-columns: 1fr; }
+
+  /* Blog */
+  .blog-grid { grid-template-columns: 1fr; max-width: 480px; margin-left: auto; margin-right: auto; }
   .blog-post-title { font-size: 1.6rem; }
+  .blog-post-excerpt { font-size: 1rem; }
+  .blog-post-blocks { max-width: 100%; }
+
+  /* Service detail */
   .service-detail-title { font-size: 1.6rem; }
+  .service-detail-desc { font-size: 0.95rem; }
   .svc-block-image img { height: 280px; }
   .svc-block-it-img img { height: 220px; }
   .svc-block-image-text { grid-template-columns: 1fr; }
   .svc-block-image-text:nth-child(even) { direction: ltr; }
-  .service-results-section .results-grid { grid-template-columns: 1fr; }
+
+  /* Contact social page */
+  .social-contact { padding: 110px 0 80px; min-height: auto; }
   .social-contact-title { font-size: 2rem; }
+  .social-contact-desc { font-size: 1rem; margin-bottom: 40px; }
   .social-channels { grid-template-columns: 1fr; max-width: 400px; }
-  .ortho-deco-1 { width: 140px; top: 100px; right: -30px; }
+  .social-channel-card { padding: 20px 24px; }
+  .ortho-deco-1 { width: 120px; top: 100px; right: -30px; opacity: 0.5; }
   .ortho-deco-2 { display: none; }
   .ortho-deco-3 { display: none; }
-  .ortho-bracket-line { width: 280px; }
+  .ortho-bracket-line { width: 260px; margin-top: 40px; }
 
-  .page-header { padding: 120px 0 48px; }
+  /* Social link cards (homepage) */
+  .social-links-grid { gap: 16px; }
+  .social-link-card { width: 120px; height: 120px; }
+  .social-link-card i { font-size: 1.6rem; }
+  .social-link-card span { font-size: 0.75rem; }
 
+  /* Case detail */
+  .case-hero { padding: 32px 0 0; }
   .case-hero-placeholder { height: 280px; }
   .case-hero-title { font-size: 1.75rem; }
+  .case-hero-desc { font-size: 0.95rem; margin-bottom: 24px; }
   .case-info-grid { grid-template-columns: 1fr; }
   .case-info-item { border-right: none !important; }
   .case-info-item:last-child { border-bottom: none; }
-  .case-related-grid { grid-template-columns: 1fr; }
+  .case-related-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .case-detail { padding: 48px 0 60px; }
+
+  /* Breadcrumb */
+  .case-breadcrumb { padding: 80px 0 0; }
+  .case-breadcrumb .container { font-size: 0.78rem; }
+
+  /* Section padding reductions */
+  .about, .services, .results, .contact, .blog-section { padding: 80px 0; }
+  .blog-listing-page { padding-top: 0; }
+  .case-related { padding: 60px 0; }
+  .service-results-section { padding: 60px 0; }
+
+  /* Footer */
+  .footer { padding: 40px 0 20px; }
+  .footer-nav { gap: 16px; }
+  .footer-nav a { font-size: 0.8rem; }
+  .footer-social { gap: 20px; }
+  .footer-social a { font-size: 1.1rem; padding: 4px; }
+
+  /* Show arrow always on mobile for social channel cards */
+  .social-channel-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
+/* --- Small Mobile (max-width: 480px) --- */
 @media (max-width: 480px) {
-  .hero-title { font-size: 2rem; }
-  .section-heading { font-size: 1.85rem; }
+  .container { padding: 0 16px; }
 
+  .hero-title { font-size: 1.85rem; }
+  .section-heading { font-size: 1.65rem; }
+  .section-label { font-size: 0.7rem; letter-spacing: 2px; }
+
+  .hero-content { padding: 90px 0 32px; gap: 32px; }
+  .hero-label { font-size: 0.65rem; letter-spacing: 3px; margin-bottom: 16px; }
+  .hero-desc { font-size: 0.92rem; margin-bottom: 28px; }
+  .hero-photo-wrapper { max-width: 240px; }
   .hero-buttons { flex-direction: column; align-items: stretch; }
-  .hero-buttons .btn { text-align: center; }
+  .hero-buttons .btn { text-align: center; padding: 12px 24px; font-size: 0.8rem; }
 
-  .services-grid { grid-template-columns: 1fr; }
-  .about, .services, .results, .contact, .case-detail { padding: 80px 0; }
-  .contact-form { padding: 32px 24px; }
-  .service-card { padding: 32px 24px; }
-  .nav-right { gap: 12px; }
-  .lang-switch { margin-right: 44px; }
-  .page-header { padding: 100px 0 40px; }
+  .page-header { padding: 90px 0 32px; }
+  .page-header .section-desc { font-size: 0.9rem; }
 
-  .service-detail-blocks { padding: 0 16px; }
+  /* Service cards single column */
+  .services-grid { grid-template-columns: 1fr; gap: 12px; }
+  .service-card { padding: 28px 20px; }
+  .service-card h3 { font-size: 1.15rem; }
+
+  /* Section paddings */
+  .about, .services, .results, .contact, .blog-section { padding: 60px 0; }
+  .blog-listing-page { padding-top: 0; }
+  .about-hero { padding: 90px 0 48px; }
+  .about-story { padding: 48px 0; }
+  .about-timeline, .about-pillars { padding: 48px 0; }
+  .about-cta { padding: 48px 0; }
+  .case-detail { padding: 36px 0 48px; }
+  .case-related { padding: 48px 0; }
+  .service-results-section { padding: 48px 0; }
+  .service-detail { padding: 32px 0 48px; }
+
+  /* About */
+  .about-photo-accent { display: none; }
+  .about-grid { gap: 32px; }
+  .about-photo-wrapper { max-width: 280px; }
+  .about-hero-title { font-size: 1.5rem; }
+  .about-hero-lead { font-size: 0.92rem; line-height: 1.75; }
+  .about-story-quote { font-size: 1.05rem; }
+  .about-story-quote::before { font-size: 2.5rem; top: -8px; }
+  .about-timeline .section-heading { margin-bottom: 32px; }
+  .about-timeline-track { padding-left: 32px; }
+  .about-timeline-track::before { left: 8px; }
+  .timeline-item::before { left: -30px; width: 10px; height: 10px; }
+  .timeline-year { font-size: 0.75rem; }
+  .timeline-content h3 { font-size: 1rem; }
+  .timeline-content p { font-size: 0.85rem; }
+  .pillar-card { padding: 28px 20px; }
+  .pillar-icon { width: 52px; height: 52px; }
+  .pillar-card h3 { font-size: 1rem; }
+  .pillar-card p { font-size: 0.85rem; }
+  .about-cta-title { font-size: 1.4rem; }
+  .about-cta-desc { font-size: 0.9rem; }
+  .about-cta .btn-primary { padding: 14px 28px; font-size: 0.8rem; }
+
+  /* Nav */
+  .nav-right { gap: 8px; }
+  .lang-switch { margin-right: 40px; }
+  .lang-btn { padding: 4px 8px; font-size: 0.65rem; }
+  .logo { font-size: 1.1rem; }
+
+  /* Blog */
+  .blog-card-body { padding: 16px; }
+  .blog-card-title { font-size: 1rem; }
+  .blog-card-image { height: 180px; }
+  .blog-post-title { font-size: 1.4rem; }
+  .blog-post-excerpt { font-size: 0.95rem; }
+  .blog-post-header { margin-bottom: 28px; }
+  .blog-post-featured { margin-bottom: 32px; }
+  .blog-block-text { font-size: 0.95rem; }
+
+  /* Service detail */
+  .service-detail-header { margin-bottom: 32px; }
+  .service-detail-title { font-size: 1.35rem; }
+  .service-detail-desc { font-size: 0.9rem; }
+  .service-detail-blocks { padding: 0; }
   .svc-block-image img { height: auto; aspect-ratio: 2 / 1; }
   .svc-block-it-img img { height: auto; aspect-ratio: 16 / 9; }
+  .svc-block-text { font-size: 0.95rem; }
+  .svc-block-it-text { font-size: 0.92rem; }
+
+  /* Results */
+  .result-caption { font-size: 0.9rem; padding: 12px 16px; }
+  .btn-view-case { padding: 8px 20px; font-size: 0.75rem; }
+  .ba-stacked-item img { height: 120px; }
+
+  /* Case detail */
+  .case-breadcrumb { padding: 72px 0 0; }
+  .case-hero { padding: 24px 0 0; }
+  .case-hero-title { font-size: 1.45rem; }
+  .case-hero-desc { font-size: 0.9rem; }
+  .case-hero-placeholder { height: 220px; }
+  .case-info-item { padding: 14px 16px; }
+  .case-info-label { font-size: 0.65rem; }
+  .case-info-value { font-size: 0.88rem; }
+  .case-block-text { font-size: 0.95rem; }
+  .case-related .section-heading { margin-bottom: 32px; }
+
+  /* Contact social page */
+  .social-contact { padding: 90px 0 60px; }
+  .social-contact-title { font-size: 1.6rem; }
+  .social-contact-desc { font-size: 0.9rem; margin-bottom: 32px; }
+  .social-channel-card { padding: 16px 20px; gap: 12px; }
+  .social-channel-icon { width: 44px; height: 44px; font-size: 1.1rem; border-radius: 12px; }
+  .social-channel-info h3 { font-size: 0.9rem; }
+  .social-channel-info p { font-size: 0.78rem; }
+  .ortho-bracket-line { width: 200px; }
+  .smile-curve { width: 60px; margin-bottom: 16px; }
+  .ortho-deco-1 { width: 100px; right: -40px; opacity: 0.3; }
+
+  /* Homepage social link cards */
+  .social-links-grid { gap: 12px; margin-top: 40px; }
+  .social-link-card { width: 100px; height: 100px; border-radius: 10px; }
+  .social-link-card i { font-size: 1.4rem; }
+  .social-link-card span { font-size: 0.7rem; }
+
+  /* Footer */
+  .footer { padding: 32px 0 16px; }
+  .footer-inner { gap: 16px; }
+  .footer-tagline { font-size: 0.82rem; }
+  .footer-nav { gap: 12px; }
+  .footer-nav a { font-size: 0.78rem; }
+  .footer-copy { font-size: 0.7rem; }
+
+  /* Buttons */
+  .btn { padding: 12px 28px; font-size: 0.8rem; }
+  .btn-outline-dark, .btn-outline-light { padding: 12px 24px; }
+  .section-action { margin-top: 24px; }
 }
