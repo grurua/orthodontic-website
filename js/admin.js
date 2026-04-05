@@ -59,7 +59,7 @@
       'services.jaw.title', 'services.jaw.desc',
     ],
     'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
-    'Contact': ['contact.subtitle', 'contact.title', 'contact.addressLabel', 'contact.address', 'contact.phoneLabel', 'contact.emailLabel', 'contact.hoursLabel', 'contact.hours', 'contact.followUs', 'contact.form.name', 'contact.form.phone', 'contact.form.email', 'contact.form.message', 'contact.form.submit'],
+    'Contact': ['contact.subtitle', 'contact.title', 'contact.description', 'contact.facebookDesc', 'contact.messengerDesc', 'contact.telegramDesc', 'contact.whatsappDesc'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
     'Blog': ['blog.subtitle', 'blog.title', 'blog.description', 'blog.viewAll', 'blog.readMore', 'blog.empty', 'blog.emptyPost', 'blog.backToBlog'],
     'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
@@ -106,7 +106,7 @@
       stats: { stat1_number: '15+', stat2_number: '5000+', stat3_number: '98%', stat4_number: '10+' },
       contact: { contact_phone: '+995 555 123 456', contact_email: 'info@drsmile.ge', contact_map: '' },
       social: {
-        social_instagram: '', social_facebook: '', social_telegram: '',
+        social_instagram: '', social_facebook: '', social_messenger: '', social_telegram: '',
         social_whatsapp: '', social_viber: '', social_tiktok: '', social_youtube: '',
       },
       about: {
@@ -425,9 +425,36 @@
   // ========================================
   function setupAbout() {
     if (!data.about) data.about = {};
+    // Pillar icon inputs
     document.querySelectorAll('[data-admin^="about_"]').forEach(input => {
       input.addEventListener('input', () => {
         data.about[input.dataset.admin] = input.value;
+        saveData(data);
+      });
+    });
+    // Direct text inputs for all about page content
+    document.querySelectorAll('[data-about-key]').forEach(el => {
+      const key = el.dataset.aboutKey;
+      el.addEventListener('input', () => {
+        if (!data.translations.en) data.translations.en = {};
+        data.translations.en[key] = el.value;
+        saveData(data);
+      });
+    });
+  }
+
+  function populateAboutFields() {
+    // Load base lang file to get defaults, then overlay overrides
+    loadLangFile('en').then(defaults => {
+      const overrides = data.translations.en || {};
+      document.querySelectorAll('[data-about-key]').forEach(el => {
+        const key = el.dataset.aboutKey;
+        const val = overrides[key] !== undefined ? overrides[key] : (defaults[key] || '');
+        if (el.tagName === 'TEXTAREA') {
+          el.value = val;
+        } else {
+          el.value = val;
+        }
       });
     });
   }
@@ -1741,6 +1768,7 @@
       const input = document.querySelector(`[data-admin="${key}"]`);
       if (input) input.value = val || '';
     });
+    populateAboutFields();
 
     // Images
     ['hero_photo', 'about_photo'].forEach(key => updateImagePreview(key));

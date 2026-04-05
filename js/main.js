@@ -133,6 +133,7 @@
     const map = {
       social_instagram: 'instagram',
       social_facebook: 'facebook',
+      social_messenger: 'messenger',
       social_telegram: 'telegram',
       social_whatsapp: 'whatsapp',
       social_viber: 'viber',

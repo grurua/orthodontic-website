@@ -1747,18 +1747,11 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ========================================
-   Contact Section
+   Contact Section (Homepage Preview)
    ======================================== */
 .contact {
   padding: 120px 0;
   background: var(--cream);
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  margin-top: 56px;
 }
 
 .social-links-grid {
@@ -1808,158 +1801,178 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--white);
 }
 
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.contact-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.contact-item-icon {
-  width: 44px;
-  height: 44px;
-  background: var(--gold-bg);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.contact-item-icon i { color: var(--gold); font-size: 0.95rem; }
-
-.contact-item h4 {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-
-.contact-item p { font-size: 0.95rem; color: var(--text); }
-.contact-item a { color: var(--gold); }
-.contact-item a:hover { color: var(--gold-dark); }
-
-.social-section { margin-top: 16px; }
-
-.social-section h4 {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-}
-
-.social-icons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.social-icon {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text-light);
-  font-size: 1rem;
-  transition: all var(--transition);
-}
-
-.social-icon:hover {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--white);
-  transform: translateY(-2px);
-}
-
-/* Contact Form */
-.contact-form {
-  background: var(--white);
-  padding: 48px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.form-group {
+/* ========================================
+   Social Contact Page
+   ======================================== */
+.social-contact {
   position: relative;
-  margin-bottom: 24px;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  background: linear-gradient(160deg, var(--white) 0%, var(--cream) 50%, var(--white) 100%);
+  padding: 140px 0 100px;
+  overflow: hidden;
 }
 
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 14px 0;
-  font-size: 0.95rem;
-  font-family: var(--font-sans);
-  border: none;
-  border-bottom: 1px solid var(--border);
-  background: transparent;
+.social-contact-inner {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.social-contact-title {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 700;
   color: var(--text);
-  outline: none;
-  transition: border-color var(--transition);
+  line-height: 1.15;
+  margin: 16px 0 20px;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  border-bottom-color: var(--gold);
+.social-contact-desc {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  line-height: 1.75;
+  max-width: 520px;
+  margin: 0 auto 56px;
+  font-family: var(--font-serif);
 }
 
-.form-group label {
-  position: absolute;
-  top: 14px;
-  left: 0;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  pointer-events: none;
-  transition: all var(--transition);
-}
-
-.form-group input:focus ~ label,
-.form-group input:not(:placeholder-shown) ~ label,
-.form-group textarea:focus ~ label,
-.form-group textarea:not(:placeholder-shown) ~ label {
-  top: -10px;
-  font-size: 0.7rem;
+/* Smile curve decoration */
+.smile-curve {
+  width: 80px;
+  margin: 0 auto 24px;
   color: var(--gold);
-  letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder { color: transparent; }
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 80px;
+/* Orthodontic decorative SVGs */
+.ortho-deco {
+  position: absolute;
+  pointer-events: none;
+  color: var(--gold);
+  z-index: 1;
 }
 
-.btn-submit {
-  width: 100%;
-  padding: 16px;
-  background: var(--gold);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
+.ortho-deco-1 {
+  width: 200px;
+  top: 80px;
+  right: -20px;
+}
+
+.ortho-deco-2 {
+  width: 300px;
+  bottom: 60px;
+  left: -40px;
+}
+
+.ortho-deco-3 {
+  width: 120px;
+  top: 50%;
+  left: 40px;
+  transform: translateY(-50%);
+}
+
+.ortho-bracket-line {
+  width: 400px;
+  margin: 56px auto 0;
+  color: var(--gold);
+}
+
+/* Social Channel Cards */
+.social-channels {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.social-channel-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-decoration: none;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.social-channel-card:hover {
+  border-color: transparent;
+  box-shadow: 0 8px 32px rgba(83, 74, 183, 0.12);
+  transform: translateY(-3px);
+}
+
+.social-channel-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
   transition: all var(--transition);
 }
 
-.btn-submit:hover { background: var(--gold-dark); }
+.social-channel-facebook {
+  background: #EBF0FF;
+  color: #1877F2;
+}
+
+.social-channel-messenger {
+  background: #F0E6FF;
+  color: #A033FF;
+}
+
+.social-channel-telegram {
+  background: #E8F4FD;
+  color: #0088CC;
+}
+
+.social-channel-whatsapp {
+  background: #E8F8E8;
+  color: #25D366;
+}
+
+.social-channel-card:hover .social-channel-facebook { background: #1877F2; color: #fff; }
+.social-channel-card:hover .social-channel-messenger { background: #A033FF; color: #fff; }
+.social-channel-card:hover .social-channel-telegram { background: #0088CC; color: #fff; }
+.social-channel-card:hover .social-channel-whatsapp { background: #25D366; color: #fff; }
+
+.social-channel-info {
+  flex: 1;
+  text-align: left;
+}
+
+.social-channel-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.social-channel-info p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.social-channel-arrow {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: all var(--transition);
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.social-channel-card:hover .social-channel-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--gold);
+}
 
 /* ========================================
    Footer
@@ -2124,7 +2137,12 @@ button { font-family: inherit; cursor: pointer; }
   .svc-block-image-text { grid-template-columns: 1fr; }
   .svc-block-image-text:nth-child(even) { direction: ltr; }
   .service-results-section .results-grid { grid-template-columns: 1fr; }
-  .contact-grid { grid-template-columns: 1fr; }
+  .social-contact-title { font-size: 2rem; }
+  .social-channels { grid-template-columns: 1fr; max-width: 400px; }
+  .ortho-deco-1 { width: 140px; top: 100px; right: -30px; }
+  .ortho-deco-2 { display: none; }
+  .ortho-deco-3 { display: none; }
+  .ortho-bracket-line { width: 280px; }
 
   .page-header { padding: 120px 0 48px; }
 

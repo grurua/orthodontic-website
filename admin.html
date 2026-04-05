@@ -217,44 +217,72 @@
           </div>
 
           <div class="panel-card">
+            <h3><i class="fas fa-user"></i> Hero Section</h3>
+            <p class="field-help">Main heading and introduction text on the about page.</p>
+            <div class="form-field">
+              <label>Subtitle</label>
+              <input type="text" data-about-key="about.subtitle" placeholder="About Me" />
+            </div>
+            <div class="form-field">
+              <label>Title</label>
+              <input type="text" data-about-key="about.title" placeholder="Dedicated to Creating Beautiful Smiles" />
+            </div>
+            <div class="form-field">
+              <label>Description</label>
+              <textarea rows="4" data-about-key="about.description" placeholder="Main description..."></textarea>
+            </div>
+          </div>
+
+          <div class="panel-card">
             <h3><i class="fas fa-quote-left"></i> Philosophy Quote</h3>
-            <p class="field-help">A prominent quote displayed in the philosophy section. Edit text in the Translations tab under "About" — key: <code>about.philosophy</code></p>
+            <div class="form-field">
+              <label>Quote Label</label>
+              <input type="text" data-about-key="about.philosophyLabel" placeholder="My Philosophy" />
+            </div>
+            <div class="form-field">
+              <label>Quote Text</label>
+              <textarea rows="3" data-about-key="about.philosophy" placeholder="Philosophy quote..."></textarea>
+            </div>
           </div>
 
           <div class="panel-card">
             <h3><i class="fas fa-road"></i> Timeline / Journey</h3>
-            <p class="field-help">Four milestone entries shown on your journey timeline. Edit all text in the Translations tab under "About" — keys start with <code>about.timeline1...</code> through <code>about.timeline4...</code></p>
+            <p class="field-help">Four milestone entries shown on your journey timeline.</p>
+            <div class="form-field">
+              <label>Section Title</label>
+              <input type="text" data-about-key="about.journeyTitle" placeholder="My Journey" />
+            </div>
             <div class="about-timeline-admin">
               <div class="timeline-admin-item">
                 <span class="result-num">1</span>
-                <div>
-                  <strong>Year:</strong> <code>about.timeline1Year</code><br/>
-                  <strong>Title:</strong> <code>about.timeline1Title</code><br/>
-                  <strong>Description:</strong> <code>about.timeline1Desc</code>
+                <div class="timeline-admin-fields">
+                  <div class="form-field"><label>Year</label><input type="text" data-about-key="about.timeline1Year" placeholder="2005" /></div>
+                  <div class="form-field"><label>Title</label><input type="text" data-about-key="about.timeline1Title" placeholder="Medical Education" /></div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.timeline1Desc" placeholder="Description..."></textarea></div>
                 </div>
               </div>
               <div class="timeline-admin-item">
                 <span class="result-num">2</span>
-                <div>
-                  <strong>Year:</strong> <code>about.timeline2Year</code><br/>
-                  <strong>Title:</strong> <code>about.timeline2Title</code><br/>
-                  <strong>Description:</strong> <code>about.timeline2Desc</code>
+                <div class="timeline-admin-fields">
+                  <div class="form-field"><label>Year</label><input type="text" data-about-key="about.timeline2Year" placeholder="2010" /></div>
+                  <div class="form-field"><label>Title</label><input type="text" data-about-key="about.timeline2Title" placeholder="International Training" /></div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.timeline2Desc" placeholder="Description..."></textarea></div>
                 </div>
               </div>
               <div class="timeline-admin-item">
                 <span class="result-num">3</span>
-                <div>
-                  <strong>Year:</strong> <code>about.timeline3Year</code><br/>
-                  <strong>Title:</strong> <code>about.timeline3Title</code><br/>
-                  <strong>Description:</strong> <code>about.timeline3Desc</code>
+                <div class="timeline-admin-fields">
+                  <div class="form-field"><label>Year</label><input type="text" data-about-key="about.timeline3Year" placeholder="2015" /></div>
+                  <div class="form-field"><label>Title</label><input type="text" data-about-key="about.timeline3Title" placeholder="Private Practice" /></div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.timeline3Desc" placeholder="Description..."></textarea></div>
                 </div>
               </div>
               <div class="timeline-admin-item">
                 <span class="result-num">4</span>
-                <div>
-                  <strong>Year:</strong> <code>about.timeline4Year</code><br/>
-                  <strong>Title:</strong> <code>about.timeline4Title</code><br/>
-                  <strong>Description:</strong> <code>about.timeline4Desc</code>
+                <div class="timeline-admin-fields">
+                  <div class="form-field"><label>Year</label><input type="text" data-about-key="about.timeline4Year" placeholder="2020" /></div>
+                  <div class="form-field"><label>Title</label><input type="text" data-about-key="about.timeline4Title" placeholder="Digital Orthodontics" /></div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.timeline4Desc" placeholder="Description..."></textarea></div>
                 </div>
               </div>
             </div>
@@ -262,32 +290,72 @@
 
           <div class="panel-card">
             <h3><i class="fas fa-th-large"></i> Core Values / Pillars</h3>
-            <p class="field-help">Four value cards displayed on the about page. Edit text in the Translations tab under "About" — keys: <code>about.pillar1Title</code>, <code>about.pillar1Desc</code>, etc.</p>
-            <div class="form-row">
-              <div class="form-field">
-                <label>Pillar 1 Icon (Font Awesome)</label>
-                <input type="text" data-admin="about_pillar1_icon" placeholder="fas fa-graduation-cap" />
-              </div>
-              <div class="form-field">
-                <label>Pillar 2 Icon</label>
-                <input type="text" data-admin="about_pillar2_icon" placeholder="fas fa-heart" />
-              </div>
+            <div class="form-field">
+              <label>Section Title</label>
+              <input type="text" data-about-key="about.pillarsTitle" placeholder="What I Stand For" />
             </div>
-            <div class="form-row">
-              <div class="form-field">
-                <label>Pillar 3 Icon</label>
-                <input type="text" data-admin="about_pillar3_icon" placeholder="fas fa-microscope" />
+            <div class="form-field">
+              <label>Section Description</label>
+              <textarea rows="2" data-about-key="about.pillarsDesc" placeholder="Description..."></textarea>
+            </div>
+            <div class="about-timeline-admin">
+              <div class="timeline-admin-item">
+                <span class="result-num">1</span>
+                <div class="timeline-admin-fields">
+                  <div class="form-row">
+                    <div class="form-field"><label>Icon (Font Awesome)</label><input type="text" data-admin="about_pillar1_icon" placeholder="fas fa-graduation-cap" /></div>
+                    <div class="form-field"><label>Title</label><input type="text" data-about-key="about.pillar1Title" placeholder="Expertise" /></div>
+                  </div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.pillar1Desc" placeholder="Description..."></textarea></div>
+                </div>
               </div>
-              <div class="form-field">
-                <label>Pillar 4 Icon</label>
-                <input type="text" data-admin="about_pillar4_icon" placeholder="fas fa-handshake" />
+              <div class="timeline-admin-item">
+                <span class="result-num">2</span>
+                <div class="timeline-admin-fields">
+                  <div class="form-row">
+                    <div class="form-field"><label>Icon</label><input type="text" data-admin="about_pillar2_icon" placeholder="fas fa-heart" /></div>
+                    <div class="form-field"><label>Title</label><input type="text" data-about-key="about.pillar2Title" placeholder="Patient Care" /></div>
+                  </div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.pillar2Desc" placeholder="Description..."></textarea></div>
+                </div>
+              </div>
+              <div class="timeline-admin-item">
+                <span class="result-num">3</span>
+                <div class="timeline-admin-fields">
+                  <div class="form-row">
+                    <div class="form-field"><label>Icon</label><input type="text" data-admin="about_pillar3_icon" placeholder="fas fa-microscope" /></div>
+                    <div class="form-field"><label>Title</label><input type="text" data-about-key="about.pillar3Title" placeholder="Innovation" /></div>
+                  </div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.pillar3Desc" placeholder="Description..."></textarea></div>
+                </div>
+              </div>
+              <div class="timeline-admin-item">
+                <span class="result-num">4</span>
+                <div class="timeline-admin-fields">
+                  <div class="form-row">
+                    <div class="form-field"><label>Icon</label><input type="text" data-admin="about_pillar4_icon" placeholder="fas fa-handshake" /></div>
+                    <div class="form-field"><label>Title</label><input type="text" data-about-key="about.pillar4Title" placeholder="Trust" /></div>
+                  </div>
+                  <div class="form-field"><label>Description</label><textarea rows="2" data-about-key="about.pillar4Desc" placeholder="Description..."></textarea></div>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="panel-card">
             <h3><i class="fas fa-bullhorn"></i> Call to Action</h3>
-            <p class="field-help">The CTA section at the bottom of the about page. Edit text in the Translations tab — keys: <code>about.ctaTitle</code>, <code>about.ctaDesc</code>, <code>about.ctaBtn</code></p>
+            <div class="form-field">
+              <label>CTA Title</label>
+              <input type="text" data-about-key="about.ctaTitle" placeholder="Ready to Start Your Smile Journey?" />
+            </div>
+            <div class="form-field">
+              <label>CTA Description</label>
+              <textarea rows="2" data-about-key="about.ctaDesc" placeholder="Description..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>CTA Button Text</label>
+              <input type="text" data-about-key="about.ctaBtn" placeholder="Book a Consultation" />
+            </div>
           </div>
         </section>
 
@@ -357,6 +425,10 @@
             <div class="form-field">
               <label><i class="fab fa-facebook-f"></i> Facebook</label>
               <input type="url" data-admin="social_facebook" placeholder="https://facebook.com/yourpage" />
+            </div>
+            <div class="form-field">
+              <label><i class="fab fa-facebook-messenger"></i> Messenger</label>
+              <input type="url" data-admin="social_messenger" placeholder="https://m.me/yourpage" />
             </div>
             <div class="form-field">
               <label><i class="fab fa-telegram-plane"></i> Telegram</label>
