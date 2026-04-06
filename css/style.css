@@ -2180,8 +2180,8 @@ button { font-family: inherit; cursor: pointer; }
   }
 
   .hero-text { max-width: 100%; }
-  .hero-desc { margin-left: auto; margin-right: auto; max-width: 100%; }
-  .hero-buttons { justify-content: center; }
+  .hero-desc { margin-left: auto; margin-right: auto; max-width: 100%; margin-bottom: 32px; }
+  .hero-buttons { justify-content: center; gap: 12px; }
   .hero-photo { justify-content: center; }
   .hero-photo-wrapper { max-width: 280px; }
 
@@ -2375,10 +2375,28 @@ button { font-family: inherit; cursor: pointer; }
 
   .hero-content { padding: 90px 0 32px; gap: 32px; }
   .hero-label { font-size: 0.65rem; letter-spacing: 3px; margin-bottom: 16px; }
-  .hero-desc { font-size: 0.92rem; margin-bottom: 28px; }
+  .hero-desc { font-size: 0.92rem; margin-bottom: 24px; }
   .hero-photo-wrapper { max-width: 220px; }
-  .hero-buttons { flex-direction: column; align-items: stretch; }
-  .hero-buttons .btn { text-align: center; padding: 13px 24px; font-size: 0.82rem; }
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-buttons .btn {
+    text-align: center;
+    width: auto;
+    min-width: 220px;
+    max-width: 280px;
+    padding: 11px 28px;
+    font-size: 0.78rem;
+    letter-spacing: 0.8px;
+  }
+  .hero-buttons .btn-outline-light {
+    padding: 10px 28px;
+    font-size: 0.75rem;
+    letter-spacing: 0.6px;
+    border-width: 1.5px;
+  }
 
   .page-header { padding: 90px 0 32px; }
   .page-header .section-desc { font-size: 0.9rem; }
@@ -2521,6 +2539,8 @@ button { font-family: inherit; cursor: pointer; }
   .section-heading { font-size: 1.45rem; }
   .hero-content { padding: 84px 0 28px; }
   .hero-photo-wrapper { max-width: 200px; }
+  .hero-buttons .btn { min-width: 200px; max-width: 260px; padding: 10px 24px; font-size: 0.75rem; }
+  .hero-buttons .btn-outline-light { padding: 9px 24px; font-size: 0.72rem; }
 
   .page-header { padding: 84px 0 28px; }
 
