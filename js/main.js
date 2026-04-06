@@ -98,7 +98,7 @@
         const beforeImg = document.createElement('img');
         beforeImg.alt = 'Before';
         beforeImg.src = imgs[beforeKey];
-        if (positions[beforeKey]) beforeImg.style.objectPosition = positions[beforeKey];
+        applyImageTransform(beforeImg, positions[beforeKey]);
         const labelBefore = document.createElement('span');
         labelBefore.className = 'ba-label ba-label-before';
         labelBefore.setAttribute('data-i18n', 'results.before');
@@ -112,7 +112,7 @@
         const afterImg = document.createElement('img');
         afterImg.alt = 'After';
         afterImg.src = imgs[afterKey];
-        if (positions[afterKey]) afterImg.style.objectPosition = positions[afterKey];
+        applyImageTransform(afterImg, positions[afterKey]);
         const labelAfter = document.createElement('span');
         labelAfter.className = 'ba-label ba-label-after';
         labelAfter.setAttribute('data-i18n', 'results.after');
@@ -385,17 +385,50 @@
     });
   }
 
+  // ---- Image Position Helper (backward-compatible) ----
+  function resolveImagePos(raw) {
+    if (!raw) return { x: 50, y: 50, zoom: 1 };
+    if (typeof raw === 'object' && raw.x !== undefined) return raw;
+    // Legacy string format: "center center", "left top", etc.
+    const map = { left: 0, center: 50, right: 100, top: 0, bottom: 100 };
+    const parts = (raw || '').split(' ');
+    return { x: map[parts[0]] ?? 50, y: map[parts[1]] ?? 50, zoom: 1 };
+  }
+
+  // Apply position+zoom to an img element
+  function applyImageTransform(img, posData) {
+    const p = resolveImagePos(posData);
+    img.style.objectPosition = p.x + '% ' + p.y + '%';
+    if (p.zoom && p.zoom !== 1) {
+      img.style.transform = 'scale(' + p.zoom + ')';
+      img.style.transformOrigin = p.x + '% ' + p.y + '%';
+    }
+  }
+
+  // Generate inline style string for templates
+  function imgPosStyle(posData) {
+    const p = resolveImagePos(posData);
+    let s = 'object-position:' + p.x + '% ' + p.y + '%;';
+    if (p.zoom && p.zoom !== 1) {
+      s += 'transform:scale(' + p.zoom + ');transform-origin:' + p.x + '% ' + p.y + '%;';
+    }
+    return s;
+  }
+
   // ---- Before/After Drag Slider ----
-  function createCompareSlider(beforeSrc, afterSrc, beforePos, afterPos, height) {
+  function createCompareSlider(beforeSrc, afterSrc, beforePosRaw, afterPosRaw, height) {
     const wrap = document.createElement('div');
     wrap.className = 'ba-compare';
     if (height) wrap.style.height = height;
+
+    const bp = resolveImagePos(beforePosRaw);
+    const ap = resolveImagePos(afterPosRaw);
 
     // Before image (full, underneath)
     const beforeImg = document.createElement('img');
     beforeImg.alt = 'Before';
     beforeImg.src = beforeSrc;
-    if (beforePos) beforeImg.style.objectPosition = beforePos;
+    applyImageTransform(beforeImg, bp);
     wrap.appendChild(beforeImg);
 
     // After overlay (clipped)
@@ -405,7 +438,7 @@
     const afterImg = document.createElement('img');
     afterImg.alt = 'After';
     afterImg.src = afterSrc;
-    if (afterPos) afterImg.style.objectPosition = afterPos;
+    applyImageTransform(afterImg, ap);
     afterDiv.appendChild(afterImg);
     wrap.appendChild(afterDiv);
 
@@ -661,11 +694,11 @@
           card.innerHTML = `
             <div class="ba-stacked">
               <div class="ba-stacked-item">
-                <img src="${imgs[beforeKey]}" alt="Before" style="${pos[beforeKey] ? 'object-position:' + pos[beforeKey] : ''}" />
+                <img src="${imgs[beforeKey]}" alt="Before" style="${imgPosStyle(pos[beforeKey])}" />
                 <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
               </div>
               <div class="ba-stacked-item">
-                <img src="${imgs[afterKey]}" alt="After" style="${pos[afterKey] ? 'object-position:' + pos[afterKey] : ''}" />
+                <img src="${imgs[afterKey]}" alt="After" style="${imgPosStyle(pos[afterKey])}" />
                 <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
               </div>
             </div>
@@ -1048,11 +1081,11 @@
             thumbHtml = `
               <div class="ba-stacked">
                 <div class="ba-stacked-item">
-                  <img src="${beforeSrc}" alt="Before" style="${positions[beforeKey] ? 'object-position:' + positions[beforeKey] : ''}" />
+                  <img src="${beforeSrc}" alt="Before" style="${imgPosStyle(positions[beforeKey])}" />
                   <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
                 </div>
                 <div class="ba-stacked-item">
-                  <img src="${afterSrc}" alt="After" style="${positions[afterKey] ? 'object-position:' + positions[afterKey] : ''}" />
+                  <img src="${afterSrc}" alt="After" style="${imgPosStyle(positions[afterKey])}" />
                   <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
                 </div>
               </div>`;

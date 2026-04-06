@@ -349,66 +349,188 @@
     }
   }
 
+  // ---- Image Position Helpers ----
+  // Migrate old string positions ("center center") to new {x,y,zoom} format
+  function getImagePos(key) {
+    const raw = data.imagePositions[key];
+    if (!raw) return { x: 50, y: 50, zoom: 1 };
+    if (typeof raw === 'object' && raw.x !== undefined) return raw;
+    // Migrate legacy string format
+    const map = { left: 0, center: 50, right: 100, top: 0, bottom: 100 };
+    const parts = (raw || '').split(' ');
+    const x = map[parts[0]] ?? 50;
+    const y = map[parts[1]] ?? 50;
+    return { x, y, zoom: 1 };
+  }
+
+  function setImagePos(key, pos) {
+    data.imagePositions[key] = { x: pos.x, y: pos.y, zoom: pos.zoom };
+    saveData(data);
+  }
+
   function updateSmallImagePreview(key) {
     const preview = document.querySelector(`.image-preview-small[data-key="${key}"]`);
     if (!preview) return;
     if (data.images[key]) {
       preview.style.backgroundImage = `url(${data.images[key]})`;
       preview.classList.add('has-image');
-      const pos = data.imagePositions[key] || 'center center';
-      preview.style.backgroundPosition = pos;
+      const p = getImagePos(key);
+      preview.style.backgroundPosition = p.x + '% ' + p.y + '%';
+      preview.style.backgroundSize = (100 * p.zoom) + '%';
     } else {
       preview.style.backgroundImage = '';
       preview.classList.remove('has-image');
+      preview.style.backgroundSize = '';
     }
   }
 
-  // Create position control UI for an image
+  // Advanced image positioning control with drag, zoom, arrows, reset
   function createPositionControl(key, parentEl) {
     const wrapper = document.createElement('div');
-    wrapper.className = 'img-position-control';
+    wrapper.className = 'img-position-control-v2';
 
-    const current = data.imagePositions[key] || 'center center';
-    const [currentX, currentY] = parsePosition(current);
+    const p = getImagePos(key);
+    let posX = p.x, posY = p.y, zoom = p.zoom;
 
     wrapper.innerHTML = `
-      <div class="pos-grid">
-        <button class="pos-btn" data-pos="left top" title="Top Left"><i class="fas fa-arrow-up" style="transform:rotate(-45deg)"></i></button>
-        <button class="pos-btn" data-pos="center top" title="Top Center"><i class="fas fa-arrow-up"></i></button>
-        <button class="pos-btn" data-pos="right top" title="Top Right"><i class="fas fa-arrow-up" style="transform:rotate(45deg)"></i></button>
-        <button class="pos-btn" data-pos="left center" title="Center Left"><i class="fas fa-arrow-left"></i></button>
-        <button class="pos-btn" data-pos="center center" title="Center"><i class="fas fa-circle" style="font-size:0.5em"></i></button>
-        <button class="pos-btn" data-pos="right center" title="Center Right"><i class="fas fa-arrow-right"></i></button>
-        <button class="pos-btn" data-pos="left bottom" title="Bottom Left"><i class="fas fa-arrow-down" style="transform:rotate(45deg)"></i></button>
-        <button class="pos-btn" data-pos="center bottom" title="Bottom Center"><i class="fas fa-arrow-down"></i></button>
-        <button class="pos-btn" data-pos="right bottom" title="Bottom Right"><i class="fas fa-arrow-down" style="transform:rotate(-45deg)"></i></button>
+      <div class="ipc-preview-wrap">
+        <div class="ipc-preview" data-key="${key}">
+          <div class="ipc-crosshair"></div>
+        </div>
+        <span class="ipc-hint">Drag to reposition</span>
+      </div>
+      <div class="ipc-controls">
+        <div class="ipc-arrows">
+          <div class="ipc-arrow-row">
+            <button class="ipc-btn" data-dir="up" title="Move up"><i class="fas fa-chevron-up"></i></button>
+          </div>
+          <div class="ipc-arrow-row">
+            <button class="ipc-btn" data-dir="left" title="Move left"><i class="fas fa-chevron-left"></i></button>
+            <button class="ipc-btn ipc-btn-center" data-dir="center" title="Center"><i class="fas fa-crosshairs"></i></button>
+            <button class="ipc-btn" data-dir="right" title="Move right"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="ipc-arrow-row">
+            <button class="ipc-btn" data-dir="down" title="Move down"><i class="fas fa-chevron-down"></i></button>
+          </div>
+        </div>
+        <div class="ipc-zoom">
+          <label class="ipc-label"><i class="fas fa-search-plus"></i> Zoom</label>
+          <div class="ipc-zoom-row">
+            <button class="ipc-btn ipc-zoom-btn" data-zoom="out" title="Zoom out"><i class="fas fa-minus"></i></button>
+            <input type="range" class="ipc-zoom-slider" min="100" max="250" step="5" value="${Math.round(zoom * 100)}" />
+            <button class="ipc-btn ipc-zoom-btn" data-zoom="in" title="Zoom in"><i class="fas fa-plus"></i></button>
+          </div>
+          <span class="ipc-zoom-val">${Math.round(zoom * 100)}%</span>
+        </div>
+        <button class="ipc-btn ipc-reset" title="Reset to default"><i class="fas fa-undo"></i> Reset</button>
       </div>
     `;
 
-    // Highlight active button
-    wrapper.querySelectorAll('.pos-btn').forEach(btn => {
-      const [bx, by] = parsePosition(btn.dataset.pos);
-      if (bx === currentX && by === currentY) btn.classList.add('active');
+    const previewEl = wrapper.querySelector('.ipc-preview');
+    const slider = wrapper.querySelector('.ipc-zoom-slider');
+    const zoomVal = wrapper.querySelector('.ipc-zoom-val');
 
+    function applyToPreview() {
+      if (data.images[key]) {
+        previewEl.style.backgroundImage = `url(${data.images[key]})`;
+        previewEl.style.backgroundPosition = posX + '% ' + posY + '%';
+        previewEl.style.backgroundSize = (100 * zoom) + '%';
+      }
+      // Also update the small preview thumbnail
+      const smallPrev = parentEl.querySelector(`.image-preview-small[data-key="${key}"]`);
+      if (smallPrev && data.images[key]) {
+        smallPrev.style.backgroundPosition = posX + '% ' + posY + '%';
+        smallPrev.style.backgroundSize = (100 * zoom) + '%';
+      }
+      zoomVal.textContent = Math.round(zoom * 100) + '%';
+      slider.value = Math.round(zoom * 100);
+    }
+
+    function save() {
+      posX = Math.max(0, Math.min(100, posX));
+      posY = Math.max(0, Math.min(100, posY));
+      zoom = Math.max(1, Math.min(2.5, zoom));
+      setImagePos(key, { x: Math.round(posX * 10) / 10, y: Math.round(posY * 10) / 10, zoom: Math.round(zoom * 100) / 100 });
+      applyToPreview();
+    }
+
+    // Init preview
+    applyToPreview();
+
+    // Drag-to-reposition on preview
+    let dragging = false;
+    let startX, startY, startPosX, startPosY;
+    previewEl.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      dragging = true;
+      startX = e.clientX; startY = e.clientY;
+      startPosX = posX; startPosY = posY;
+      previewEl.classList.add('dragging');
+    });
+    previewEl.addEventListener('touchstart', (e) => {
+      dragging = true;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      startPosX = posX; startPosY = posY;
+      previewEl.classList.add('dragging');
+    }, { passive: true });
+
+    function onDragMove(cx, cy) {
+      if (!dragging) return;
+      const rect = previewEl.getBoundingClientRect();
+      // Sensitivity scaled to zoom: higher zoom = finer movement
+      const sens = 100 / (rect.width * zoom);
+      // Invert direction: dragging right moves viewport left (lower x%)
+      posX = startPosX - (cx - startX) * sens * 100;
+      posY = startPosY - (cy - startY) * sens * 100;
+      posX = Math.max(0, Math.min(100, posX));
+      posY = Math.max(0, Math.min(100, posY));
+      applyToPreview();
+    }
+    document.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
+    document.addEventListener('touchmove', (e) => { if (dragging) onDragMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    document.addEventListener('mouseup', () => { if (dragging) { dragging = false; previewEl.classList.remove('dragging'); save(); } });
+    document.addEventListener('touchend', () => { if (dragging) { dragging = false; previewEl.classList.remove('dragging'); save(); } });
+
+    // Arrow buttons
+    const STEP = 3;
+    wrapper.querySelectorAll('.ipc-btn[data-dir]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        data.imagePositions[key] = btn.dataset.pos;
-        saveData(data);
-        // Update preview
-        const preview = parentEl.querySelector(`.image-preview-small[data-key="${key}"]`);
-        if (preview) preview.style.backgroundPosition = btn.dataset.pos;
-        // Update active state
-        wrapper.querySelectorAll('.pos-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        const dir = btn.dataset.dir;
+        if (dir === 'up') posY = Math.max(0, posY - STEP);
+        else if (dir === 'down') posY = Math.min(100, posY + STEP);
+        else if (dir === 'left') posX = Math.max(0, posX - STEP);
+        else if (dir === 'right') posX = Math.min(100, posX + STEP);
+        else if (dir === 'center') { posX = 50; posY = 50; }
+        save();
       });
     });
 
-    return wrapper;
-  }
+    // Zoom slider
+    slider.addEventListener('input', () => {
+      zoom = parseInt(slider.value, 10) / 100;
+      applyToPreview();
+    });
+    slider.addEventListener('change', () => { save(); });
 
-  function parsePosition(pos) {
-    const parts = (pos || 'center center').split(' ');
-    return [parts[0] || 'center', parts[1] || 'center'];
+    // Zoom +/- buttons
+    wrapper.querySelectorAll('.ipc-zoom-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (btn.dataset.zoom === 'in') zoom = Math.min(2.5, zoom + 0.05);
+        else zoom = Math.max(1, zoom - 0.05);
+        save();
+      });
+    });
+
+    // Reset
+    wrapper.querySelector('.ipc-reset').addEventListener('click', (e) => {
+      e.preventDefault();
+      posX = 50; posY = 50; zoom = 1;
+      save();
+    });
+
+    return wrapper;
   }
 
   // ========================================
@@ -924,20 +1046,20 @@
         </div>
         <div class="result-images-row">
           <div class="image-upload-small">
+            <span class="upload-label"><i class="fas fa-image"></i> Before Photo</span>
             <div class="image-preview-small" data-key="${beforeKey}">
               <i class="fas fa-cloud-upload-alt"></i>
-              <span>Before</span>
+              <span>Click to upload</span>
             </div>
             <input type="file" accept="image/*" class="file-input" data-key="${beforeKey}" style="display:none;" />
-            <span class="upload-label">Before Photo</span>
           </div>
           <div class="image-upload-small">
+            <span class="upload-label"><i class="fas fa-image"></i> After Photo</span>
             <div class="image-preview-small" data-key="${afterKey}">
               <i class="fas fa-cloud-upload-alt"></i>
-              <span>After</span>
+              <span>Click to upload</span>
             </div>
             <input type="file" accept="image/*" class="file-input" data-key="${afterKey}" style="display:none;" />
-            <span class="upload-label">After Photo</span>
           </div>
         </div>
         <div class="form-field">
@@ -1165,6 +1287,10 @@
             saveData(data);
             renderDetailBlocks(caseObj, container);
           });
+        }
+        // Position control for single image blocks
+        if (hasImage) {
+          imgUpload.appendChild(createPositionControl(block.imageKey, imgUpload));
         }
         // Note: updateSmallImagePreview called after blockEl is in the DOM (below)
       }
