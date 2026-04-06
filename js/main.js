@@ -538,8 +538,9 @@
     }
 
     // Render detail blocks — only show admin-managed content
+    // Section is hidden by default (display:none in HTML). Only show if blocks render.
+    const detailSection = document.getElementById('caseDetailSection');
     if (container) {
-      const detailSection = container.closest('.case-detail');
       const blocks = caseData.detailBlocks;
       if (blocks && blocks.length > 0) {
         const fragment = document.createDocumentFragment();
@@ -613,10 +614,11 @@
           }
         });
 
-        // Only replace container content if blocks actually rendered
+        // Only show section and populate if blocks actually rendered
         if (renderedCount > 0) {
           container.innerHTML = '';
           container.appendChild(fragment);
+          if (detailSection) detailSection.style.display = '';
 
           // Observe for reveal animation
           const blockObserver = new IntersectionObserver(entries => {
@@ -629,22 +631,22 @@
           }, { threshold: 0.1 });
 
           container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
-        } else {
-          // Blocks exist in data but none rendered (no uploaded content) — hide the section
-          if (detailSection) detailSection.style.display = 'none';
         }
-      } else {
-        // No blocks at all — hide the entire detail section
-        if (detailSection) detailSection.style.display = 'none';
       }
+      // If no blocks or none rendered, section stays hidden (default display:none)
     }
 
-    // Related cases
+    // Related cases — only show cases that have actual uploaded before/after photos
     const relatedSection = document.getElementById('caseRelated');
     const relatedGrid = document.getElementById('caseRelatedGrid');
     if (relatedSection && relatedGrid) {
-      const otherCases = adminData.results.filter(r => r.id !== caseId);
-      // Show up to 3 other cases
+      const otherCases = adminData.results.filter(r => {
+        if (r.id === caseId) return false;
+        // Only include cases with real uploaded before AND after photos
+        const bk = `result_${r.id}_before`;
+        const ak = `result_${r.id}_after`;
+        return imgs[bk] && imgs[ak];
+      });
       const toShow = otherCases.slice(0, 3);
       if (toShow.length > 0) {
         relatedSection.style.display = '';
@@ -652,38 +654,21 @@
         toShow.forEach(rc => {
           const beforeKey = `result_${rc.id}_before`;
           const afterKey = `result_${rc.id}_after`;
-          const beforeSrc = imgs[beforeKey];
-          const afterSrc = imgs[afterKey];
 
           const card = document.createElement('a');
           card.className = 'case-related-card';
           card.href = `case.html?id=${rc.id}`;
-
-          let thumbHtml = '';
-          if (beforeSrc && afterSrc) {
-            thumbHtml = `
-              <div class="ba-stacked">
-                <div class="ba-stacked-item">
-                  <img src="${beforeSrc}" alt="Before" style="${pos[beforeKey] ? 'object-position:' + pos[beforeKey] : ''}" />
-                  <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
-                </div>
-                <div class="ba-stacked-item">
-                  <img src="${afterSrc}" alt="After" style="${pos[afterKey] ? 'object-position:' + pos[afterKey] : ''}" />
-                  <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
-                </div>
-              </div>
-            `;
-          } else {
-            thumbHtml = `
-              <div class="ba-placeholder">
-                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-                <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
-              </div>
-            `;
-          }
-
           card.innerHTML = `
-            ${thumbHtml}
+            <div class="ba-stacked">
+              <div class="ba-stacked-item">
+                <img src="${imgs[beforeKey]}" alt="Before" style="${pos[beforeKey] ? 'object-position:' + pos[beforeKey] : ''}" />
+                <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+              </div>
+              <div class="ba-stacked-item">
+                <img src="${imgs[afterKey]}" alt="After" style="${pos[afterKey] ? 'object-position:' + pos[afterKey] : ''}" />
+                <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
+              </div>
+            </div>
             <div class="case-related-card-body">
               <p data-i18n="${rc.captionKey}"></p>
             </div>
