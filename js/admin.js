@@ -1008,22 +1008,24 @@
         uploadSmall.appendChild(createPositionControl(key, uploadSmall));
       });
 
-      // Wire up case description textarea
+      // Wire up case description textarea (auto-save)
       const descTextarea = div.querySelector('.case-desc-input');
       if (descTextarea) {
         descTextarea.addEventListener('input', (e) => {
           if (!data.translations.en) data.translations.en = {};
           data.translations.en[res.descriptionKey] = e.target.value;
+          saveData(data);
         });
       }
 
-      // Wire up treatment info fields
+      // Wire up treatment info fields (auto-save)
       div.querySelectorAll('.treatment-field').forEach(input => {
         input.addEventListener('input', (e) => {
           const field = e.target.dataset.field;
           const caseObj = data.results.find(r => r.id === e.target.dataset.caseId);
           if (caseObj && caseObj.treatmentInfo) {
             caseObj.treatmentInfo[field] = e.target.value;
+            saveData(data);
           }
         });
       });
@@ -1130,6 +1132,7 @@
 
       // Image upload (single)
       if (block.type === 'image' || block.type === 'image_text') {
+        const hasImage = !!(data.images && data.images[block.imageKey]);
         const imgUpload = document.createElement('div');
         imgUpload.className = 'image-upload-small';
         imgUpload.innerHTML = `
@@ -1138,6 +1141,7 @@
             <span>Upload</span>
           </div>
           <input type="file" accept="image/*" class="file-input" style="display:none;" />
+          ${hasImage ? '<button class="btn-remove-img" title="Remove image"><i class="fas fa-times"></i> Remove</button>' : ''}
         `;
         body.appendChild(imgUpload);
 
@@ -1153,6 +1157,15 @@
         input.addEventListener('change', () => {
           if (input.files[0]) handleSmallImageFile(input.files[0], block.imageKey);
         });
+        const removeBtn = imgUpload.querySelector('.btn-remove-img');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', () => {
+            delete data.images[block.imageKey];
+            delete data.imagePositions[block.imageKey];
+            saveData(data);
+            renderDetailBlocks(caseObj, container);
+          });
+        }
         // Note: updateSmallImagePreview called after blockEl is in the DOM (below)
       }
 
@@ -1214,6 +1227,7 @@
         textField.querySelector('textarea').addEventListener('input', (e) => {
           if (!data.translations.en) data.translations.en = {};
           data.translations.en[block.textKey] = e.target.value;
+          saveData(data);
         });
       }
 

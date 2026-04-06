@@ -537,11 +537,13 @@
       }
     }
 
-    // Render detail blocks
+    // Render detail blocks — only show admin-managed content
     if (container) {
+      const detailSection = container.closest('.case-detail');
       const blocks = caseData.detailBlocks;
       if (blocks && blocks.length > 0) {
-        container.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+        let renderedCount = 0;
 
         blocks.forEach((block, idx) => {
           const el = document.createElement('div');
@@ -567,20 +569,22 @@
               el.appendChild(p);
             }
           } else if (block.type === 'image_text') {
-            el.classList.add('case-block-image-text');
             const imgSrc = imgs[block.imageKey];
-            if (imgSrc) {
-              const img = document.createElement('img');
-              img.alt = 'Case photo';
-              img.src = imgSrc;
-              el.appendChild(img);
-            }
             const text = getCaseText(block.textKey, currentLang);
-            if (text) {
-              const p = document.createElement('p');
-              p.setAttribute('data-i18n', block.textKey);
-              p.textContent = text;
-              el.appendChild(p);
+            if (imgSrc || text) {
+              el.classList.add('case-block-image-text');
+              if (imgSrc) {
+                const img = document.createElement('img');
+                img.alt = 'Case photo';
+                img.src = imgSrc;
+                el.appendChild(img);
+              }
+              if (text) {
+                const p = document.createElement('p');
+                p.setAttribute('data-i18n', block.textKey);
+                p.textContent = text;
+                el.appendChild(p);
+              }
             }
           } else if (block.type === 'before_after') {
             const beforeSrc = imgs[block.beforeKey];
@@ -602,20 +606,36 @@
             }
           }
 
-          container.appendChild(el);
+          // Only append if the block actually has rendered content
+          if (el.children.length > 0) {
+            fragment.appendChild(el);
+            renderedCount++;
+          }
         });
 
-        // Observe for reveal animation
-        const blockObserver = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              blockObserver.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.1 });
+        // Only replace container content if blocks actually rendered
+        if (renderedCount > 0) {
+          container.innerHTML = '';
+          container.appendChild(fragment);
 
-        container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
+          // Observe for reveal animation
+          const blockObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                blockObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.1 });
+
+          container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
+        } else {
+          // Blocks exist in data but none rendered (no uploaded content) — hide the section
+          if (detailSection) detailSection.style.display = 'none';
+        }
+      } else {
+        // No blocks at all — hide the entire detail section
+        if (detailSection) detailSection.style.display = 'none';
       }
     }
 
