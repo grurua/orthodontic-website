@@ -2169,6 +2169,68 @@ button { font-family: inherit; cursor: pointer; }
   .section-heading { font-size: 2rem; }
   .section-desc { font-size: 0.95rem; }
 
+  /* --- Mobile text alignment: left-align consistently --- */
+  /* Page headers (services, results, blog pages) */
+  .page-header { text-align: left; }
+  .page-header .section-desc { margin-left: 0; margin-right: 0; }
+
+  /* Hero section */
+  .hero-content { text-align: left; }
+  .hero-desc { margin-left: 0; margin-right: 0; }
+  .hero-buttons { justify-content: flex-start; }
+
+  /* About hero */
+  .about-hero-inner { text-align: left; }
+
+  /* About story */
+  .about-story-inner { text-align: left; }
+
+  /* About timeline / pillars headings */
+  .about-timeline .section-heading { text-align: left; }
+  .about-pillars .section-heading,
+  .about-pillars .section-desc { text-align: left; margin-left: 0; margin-right: 0; }
+
+  /* About CTA */
+  .about-cta { text-align: left; }
+  .about-cta .container { align-items: flex-start; }
+  .about-cta-desc { margin-left: 0; margin-right: 0; }
+
+  /* Service detail header */
+  .service-detail-header { text-align: left; }
+  .service-detail-icon { margin-left: 0; }
+
+  /* Service results section */
+  .service-results-section .section-label,
+  .service-results-section .section-heading { text-align: left; }
+
+  /* Contact / social contact page */
+  .social-contact-inner { text-align: left; }
+  .social-contact-desc { margin-left: 0; margin-right: 0; }
+  .smile-curve { margin-left: 0; margin-right: 0; }
+
+  /* Case related */
+  .case-related .section-heading { text-align: left; }
+
+  /* Blog post header */
+  .blog-post-header { text-align: left; }
+
+  /* Section desc: remove auto margins that center text blocks */
+  .section-desc { margin-left: 0; margin-right: 0; }
+  .section-desc.mx-auto { margin-left: 0; margin-right: 0; }
+
+  /* Override text-center on headings/descriptions (keep for button wrappers like .section-action) */
+  .text-center:not(.section-action) {
+    text-align: left;
+  }
+  .text-center .section-heading,
+  .text-center .section-desc,
+  .text-center .about-cta-title,
+  .text-center .about-cta-desc { text-align: left; }
+
+  /* Section labels: larger and more readable on mobile */
+  .section-label,
+  .hero-label { font-size: 1rem; font-weight: 500; letter-spacing: 2px; }
+
   /* Page header */
   .page-header { padding: 110px 0 48px; }
 
@@ -2177,12 +2239,11 @@ button { font-family: inherit; cursor: pointer; }
     grid-template-columns: 1fr;
     gap: 40px;
     padding: 100px 0 40px;
-    text-align: center;
   }
 
   .hero-text { max-width: 100%; }
-  .hero-desc { margin-left: auto; margin-right: auto; max-width: 100%; margin-bottom: 32px; }
-  .hero-buttons { justify-content: center; gap: 12px; }
+  .hero-desc { max-width: 100%; margin-bottom: 32px; }
+  .hero-buttons { gap: 12px; }
   .hero-photo { justify-content: center; }
   .hero-photo-wrapper { max-width: 280px; }
 
@@ -2194,7 +2255,6 @@ button { font-family: inherit; cursor: pointer; }
 
   /* About page */
   .about-hero { padding: 110px 0 60px; }
-  .about-hero-inner { text-align: center; }
   .about-hero-title { font-size: 1.8rem; }
   .about-hero-lead { font-size: 1rem; }
   .about-story { padding: 60px 0; }
@@ -2372,10 +2432,10 @@ button { font-family: inherit; cursor: pointer; }
 
   .hero-title { font-size: 1.85rem; }
   .section-heading { font-size: 1.65rem; }
-  .section-label { font-size: 0.7rem; letter-spacing: 2px; }
+  .section-label { font-size: 1rem; letter-spacing: 2px; font-weight: 500; }
+  .hero-label { font-size: 1rem; letter-spacing: 2px; font-weight: 500; margin-bottom: 16px; }
 
   .hero-content { padding: 90px 0 32px; gap: 32px; }
-  .hero-label { font-size: 0.65rem; letter-spacing: 3px; margin-bottom: 16px; }
   .hero-desc { font-size: 0.92rem; margin-bottom: 24px; }
   .hero-photo-wrapper { max-width: 220px; }
   .hero-buttons {
