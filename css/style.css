@@ -342,7 +342,8 @@ button { font-family: inherit; cursor: pointer; }
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: center;
-  padding: 120px 0 60px;
+  padding-top: 120px;
+  padding-bottom: 60px;
 }
 
 .hero-text { max-width: 520px; }
@@ -2238,7 +2239,8 @@ button { font-family: inherit; cursor: pointer; }
   .hero-content {
     grid-template-columns: 1fr;
     gap: 40px;
-    padding: 100px 0 40px;
+    padding-top: 100px;
+    padding-bottom: 40px;
   }
 
   .hero-text { max-width: 100%; }
@@ -2435,12 +2437,12 @@ button { font-family: inherit; cursor: pointer; }
   .section-label { font-size: 1rem; letter-spacing: 2px; font-weight: 500; }
   .hero-label { font-size: 1rem; letter-spacing: 2px; font-weight: 500; margin-bottom: 16px; }
 
-  .hero-content { padding: 90px 0 32px; gap: 32px; }
+  .hero-content { padding-top: 90px; padding-bottom: 32px; gap: 32px; }
   .hero-desc { font-size: 0.92rem; margin-bottom: 24px; }
   .hero-photo-wrapper { max-width: 220px; }
   .hero-buttons {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
   }
   .hero-buttons .btn {
@@ -2598,7 +2600,7 @@ button { font-family: inherit; cursor: pointer; }
 
   .hero-title { font-size: 1.6rem; }
   .section-heading { font-size: 1.45rem; }
-  .hero-content { padding: 84px 0 28px; }
+  .hero-content { padding-top: 84px; padding-bottom: 28px; }
   .hero-photo-wrapper { max-width: 200px; }
   .hero-buttons .btn { min-width: 200px; max-width: 260px; padding: 10px 24px; font-size: 0.75rem; }
   .hero-buttons .btn-outline-light { padding: 9px 24px; font-size: 0.72rem; }
