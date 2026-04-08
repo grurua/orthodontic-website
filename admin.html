@@ -369,11 +369,68 @@
           </div>
         </section>
 
-        <!-- Before/After Tab -->
+        <!-- Results Page Content Tab -->
         <section class="tab-panel" id="tab-results">
           <div class="panel-card">
-            <h3>Before / After Cases</h3>
-            <p class="field-help">Upload before and after photos for each treatment case. You can also add detail page content (images and text blocks) that visitors see when they click "View Details" on a case.</p>
+            <h3><i class="fas fa-file-alt"></i> Results Page Content</h3>
+            <p class="field-help">Manage the editorial content shown on the Results listing page above the transformation cards.</p>
+
+            <div class="form-field">
+              <label>Hero Image (optional)</label>
+              <p class="field-help">Appears in the header area of the results page.</p>
+              <div class="image-upload-small">
+                <div class="image-preview-small" data-key="results_hero_image">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Click to upload</span>
+                </div>
+                <input type="file" accept="image/*" class="file-input" data-key="results_hero_image" style="display:none;" />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>Editorial Heading</label>
+              <input type="text" data-results-page="results.editorialTitle" placeholder="Real Transformations, Real Confidence" />
+            </div>
+            <div class="form-field">
+              <label>Editorial Description</label>
+              <textarea rows="4" data-results-page="results.editorialDesc" placeholder="Every treatment journey is unique..."></textarea>
+            </div>
+
+            <div class="form-field">
+              <label>Quote Text</label>
+              <textarea rows="3" data-results-page="results.quoteText" placeholder="A beautiful smile is more than aesthetics..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>Quote Author</label>
+              <input type="text" data-results-page="results.quoteAuthor" placeholder="— Dr. Ana Vepkhvadze" />
+            </div>
+
+            <div class="form-field">
+              <label>Gallery Section Label</label>
+              <input type="text" data-results-page="results.galleryLabel" placeholder="Our Gallery" />
+            </div>
+            <div class="form-field">
+              <label>Gallery Section Title</label>
+              <input type="text" data-results-page="results.galleryTitle" placeholder="Patient Transformations" />
+            </div>
+
+            <div class="form-field">
+              <label>CTA Title</label>
+              <input type="text" data-results-page="results.ctaTitle" placeholder="Ready to Start Your Transformation?" />
+            </div>
+            <div class="form-field">
+              <label>CTA Description</label>
+              <textarea rows="2" data-results-page="results.ctaDesc" placeholder="Book a consultation..."></textarea>
+            </div>
+            <div class="form-field">
+              <label>CTA Button Text</label>
+              <input type="text" data-results-page="results.ctaBtn" placeholder="Book a Consultation" />
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h3><i class="fas fa-exchange-alt"></i> Before / After Cases</h3>
+            <p class="field-help">Upload before and after photos for each treatment case. Each case has a main before/after pair, optional additional before/after images, narrative text, and detail page content blocks.</p>
             <div id="resultsList"></div>
             <button class="btn-add" id="btnAddResult"><i class="fas fa-plus"></i> Add Case</button>
           </div>

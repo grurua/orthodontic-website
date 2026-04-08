@@ -68,7 +68,7 @@
     }
   }
 
-  // ---- Apply Admin Before/After Photos (stacked layout) ----
+  // ---- Apply Admin Before/After Photos (stacked layout — for landing page) ----
   function applyResultPhotos() {
     if (!adminData || !adminData.results || !adminData.images) return;
     const sliders = document.querySelectorAll('.ba-slider');
@@ -86,7 +86,6 @@
       if (imgs[beforeKey] && imgs[afterKey]) {
         const placeholder = slider.querySelector('.ba-placeholder');
         if (placeholder) placeholder.style.display = 'none';
-        // Remove old labels
         slider.querySelectorAll('.ba-label').forEach(l => l.remove());
 
         const stacked = document.createElement('div');
@@ -125,6 +124,131 @@
         slider.appendChild(stacked);
       }
     });
+  }
+
+  // ---- Apply Results Hero Image ----
+  function applyResultsHeroImage() {
+    if (!adminData || !adminData.images) return;
+    const wrapper = document.getElementById('resultsHeroImage');
+    if (!wrapper) return;
+    const heroKey = 'results_hero_image';
+    if (adminData.images[heroKey]) {
+      wrapper.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'Results';
+      img.src = adminData.images[heroKey];
+      const pos = adminData.imagePositions || {};
+      applyImageTransform(img, pos[heroKey]);
+      wrapper.appendChild(img);
+    }
+  }
+
+  // ---- Results Listing Page V2 (editorial layout) ----
+  function applyResultsListingV2() {
+    const grid = document.getElementById('resultsGrid');
+    if (!grid || !grid.classList.contains('results-grid-v2')) return;
+    if (!adminData || !adminData.results) return;
+
+    const imgs = adminData.images || {};
+    const pos = adminData.imagePositions || {};
+
+    grid.innerHTML = '';
+    let hasCards = false;
+
+    adminData.results.forEach(res => {
+      const beforeKey = `result_${res.id}_before`;
+      const afterKey = `result_${res.id}_after`;
+      const hasBefore = !!imgs[beforeKey];
+      const hasAfter = !!imgs[afterKey];
+
+      const card = document.createElement('a');
+      card.className = 'result-card-v2 reveal';
+      card.href = `case.html?id=${res.id}`;
+
+      // Image area
+      const imageArea = document.createElement('div');
+      imageArea.className = 'result-card-v2-image';
+
+      if (hasBefore && hasAfter) {
+        const preview = document.createElement('div');
+        preview.className = 'result-card-v2-ba-preview';
+
+        const beforeSide = document.createElement('div');
+        beforeSide.className = 'result-card-v2-ba-side';
+        const beforeImg = document.createElement('img');
+        beforeImg.alt = 'Before';
+        beforeImg.src = imgs[beforeKey];
+        applyImageTransform(beforeImg, pos[beforeKey]);
+        const divider = document.createElement('div');
+        divider.className = 'result-card-v2-ba-divider';
+        beforeSide.appendChild(beforeImg);
+        beforeSide.appendChild(divider);
+        const lblBefore = document.createElement('span');
+        lblBefore.className = 'ba-label ba-label-before';
+        lblBefore.setAttribute('data-i18n', 'results.before');
+        lblBefore.textContent = 'Before';
+        beforeSide.appendChild(lblBefore);
+
+        const afterSide = document.createElement('div');
+        afterSide.className = 'result-card-v2-ba-side';
+        const afterImg = document.createElement('img');
+        afterImg.alt = 'After';
+        afterImg.src = imgs[afterKey];
+        applyImageTransform(afterImg, pos[afterKey]);
+        afterSide.appendChild(afterImg);
+        const lblAfter = document.createElement('span');
+        lblAfter.className = 'ba-label ba-label-after';
+        lblAfter.setAttribute('data-i18n', 'results.after');
+        lblAfter.textContent = 'After';
+        afterSide.appendChild(lblAfter);
+
+        preview.appendChild(beforeSide);
+        preview.appendChild(afterSide);
+        imageArea.appendChild(preview);
+      } else {
+        // Placeholder
+        imageArea.innerHTML = `
+          <div class="result-card-v2-placeholder">
+            <div class="result-card-v2-placeholder-inner">
+              <div class="result-card-v2-ph-side"><i class="fas fa-image"></i><span>Before</span></div>
+              <div class="result-card-v2-ph-side"><i class="fas fa-image"></i><span>After</span></div>
+            </div>
+          </div>`;
+      }
+
+      card.appendChild(imageArea);
+
+      // Body
+      const body = document.createElement('div');
+      body.className = 'result-card-v2-body';
+
+      const title = document.createElement('h3');
+      title.className = 'result-card-v2-title';
+      title.setAttribute('data-i18n', res.captionKey);
+      body.appendChild(title);
+
+      if (res.shortTextKey) {
+        const text = document.createElement('p');
+        text.className = 'result-card-v2-text';
+        text.setAttribute('data-i18n', res.shortTextKey);
+        body.appendChild(text);
+      }
+
+      const cta = document.createElement('span');
+      cta.className = 'result-card-v2-cta';
+      cta.setAttribute('data-i18n', 'landing.viewCase');
+      cta.innerHTML = 'View Details <i class="fas fa-arrow-right"></i>';
+      body.appendChild(cta);
+
+      card.appendChild(body);
+      grid.appendChild(card);
+      revealObserver.observe(card);
+      hasCards = true;
+    });
+
+    if (!hasCards) {
+      grid.innerHTML = '<p class="case-empty" data-i18n="results.emptyResults">No results have been added yet.</p>';
+    }
   }
 
   // ---- Apply Admin Social Links ----
@@ -570,8 +694,65 @@
       }
     }
 
+    // Narrative text
+    const narrativeSection = document.getElementById('caseNarrativeSection');
+    const narrativeText = document.getElementById('caseNarrativeText');
+    if (narrativeSection && narrativeText && caseData.narrativeKey) {
+      const nText = getCaseText(caseData.narrativeKey, currentLang);
+      if (nText) {
+        narrativeText.textContent = nText;
+        narrativeText.setAttribute('data-i18n', caseData.narrativeKey);
+        narrativeSection.style.display = '';
+      }
+    }
+
+    // Before images section
+    const beforeSection = document.getElementById('caseBeforeSection');
+    const beforeGrid = document.getElementById('caseBeforeGrid');
+    if (beforeSection && beforeGrid && caseData.beforeImages && caseData.beforeImages.length > 0) {
+      let hasBeforeImgs = false;
+      beforeGrid.innerHTML = '';
+      caseData.beforeImages.forEach(bImg => {
+        const src = imgs[bImg.imageKey];
+        if (src) {
+          hasBeforeImgs = true;
+          const item = document.createElement('div');
+          item.className = 'case-ba-image-item';
+          const img = document.createElement('img');
+          img.alt = 'Before';
+          img.src = src;
+          applyImageTransform(img, pos[bImg.imageKey]);
+          item.appendChild(img);
+          beforeGrid.appendChild(item);
+        }
+      });
+      if (hasBeforeImgs) beforeSection.style.display = '';
+    }
+
+    // After images section
+    const afterSection = document.getElementById('caseAfterSection');
+    const afterGrid = document.getElementById('caseAfterGrid');
+    if (afterSection && afterGrid && caseData.afterImages && caseData.afterImages.length > 0) {
+      let hasAfterImgs = false;
+      afterGrid.innerHTML = '';
+      caseData.afterImages.forEach(aImg => {
+        const src = imgs[aImg.imageKey];
+        if (src) {
+          hasAfterImgs = true;
+          const item = document.createElement('div');
+          item.className = 'case-ba-image-item';
+          const img = document.createElement('img');
+          img.alt = 'After';
+          img.src = src;
+          applyImageTransform(img, pos[aImg.imageKey]);
+          item.appendChild(img);
+          afterGrid.appendChild(item);
+        }
+      });
+      if (hasAfterImgs) afterSection.style.display = '';
+    }
+
     // Render detail blocks — only show admin-managed content
-    // Section is hidden by default (display:none in HTML). Only show if blocks render.
     const detailSection = document.getElementById('caseDetailSection');
     if (container) {
       const blocks = caseData.detailBlocks;
@@ -640,20 +821,17 @@
             }
           }
 
-          // Only append if the block actually has rendered content
           if (el.children.length > 0) {
             fragment.appendChild(el);
             renderedCount++;
           }
         });
 
-        // Only show section and populate if blocks actually rendered
         if (renderedCount > 0) {
           container.innerHTML = '';
           container.appendChild(fragment);
           if (detailSection) detailSection.style.display = '';
 
-          // Observe for reveal animation
           const blockObserver = new IntersectionObserver(entries => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
@@ -666,21 +844,30 @@
           container.querySelectorAll('.case-block').forEach(el => blockObserver.observe(el));
         }
       }
-      // If no blocks or none rendered, section stays hidden (default display:none)
     }
 
-    // Related cases — only show cases that have actual uploaded before/after photos
+    // Related cases
     const relatedSection = document.getElementById('caseRelated');
     const relatedGrid = document.getElementById('caseRelatedGrid');
     if (relatedSection && relatedGrid) {
-      const otherCases = adminData.results.filter(r => {
-        if (r.id === caseId) return false;
-        // Only include cases with real uploaded before AND after photos
-        const bk = `result_${r.id}_before`;
-        const ak = `result_${r.id}_after`;
-        return imgs[bk] && imgs[ak];
-      });
-      const toShow = otherCases.slice(0, 3);
+      let selectedRelated = [];
+
+      // Check if case has manually selected related cases
+      if (caseData.relatedCaseIds && caseData.relatedCaseIds.length > 0) {
+        selectedRelated = caseData.relatedCaseIds
+          .map(rid => adminData.results.find(r => r.id === rid))
+          .filter(r => r && r.id !== caseId);
+      } else {
+        // Auto-select other cases with images
+        selectedRelated = adminData.results.filter(r => {
+          if (r.id === caseId) return false;
+          const bk = `result_${r.id}_before`;
+          const ak = `result_${r.id}_after`;
+          return imgs[bk] && imgs[ak];
+        });
+      }
+
+      const toShow = selectedRelated.slice(0, 3);
       if (toShow.length > 0) {
         relatedSection.style.display = '';
         relatedGrid.innerHTML = '';
@@ -691,19 +878,35 @@
           const card = document.createElement('a');
           card.className = 'case-related-card';
           card.href = `case.html?id=${rc.id}`;
+
+          let imageHtml = '';
+          if (imgs[beforeKey] && imgs[afterKey]) {
+            imageHtml = `
+              <div class="case-related-card-image">
+                <div class="result-card-v2-ba-preview">
+                  <div class="result-card-v2-ba-side">
+                    <img src="${imgs[beforeKey]}" alt="Before" style="${imgPosStyle(pos[beforeKey])}" />
+                    <div class="result-card-v2-ba-divider"></div>
+                    <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
+                  </div>
+                  <div class="result-card-v2-ba-side">
+                    <img src="${imgs[afterKey]}" alt="After" style="${imgPosStyle(pos[afterKey])}" />
+                    <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
+                  </div>
+                </div>
+              </div>`;
+          } else {
+            imageHtml = `
+              <div class="case-related-card-image" style="background:var(--cream);display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-image" style="font-size:2rem;color:var(--text-muted);"></i>
+              </div>`;
+          }
+
           card.innerHTML = `
-            <div class="ba-stacked">
-              <div class="ba-stacked-item">
-                <img src="${imgs[beforeKey]}" alt="Before" style="${imgPosStyle(pos[beforeKey])}" />
-                <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
-              </div>
-              <div class="ba-stacked-item">
-                <img src="${imgs[afterKey]}" alt="After" style="${imgPosStyle(pos[afterKey])}" />
-                <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
-              </div>
-            </div>
+            ${imageHtml}
             <div class="case-related-card-body">
               <p data-i18n="${rc.captionKey}"></p>
+              <span class="result-card-v2-cta" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></span>
             </div>
           `;
           relatedGrid.appendChild(card);
@@ -712,18 +915,17 @@
     }
   }
 
-  // ---- Dynamic Results Grid (for results.html with dynamically added cases) ----
+  // ---- Dynamic Results Grid (for landing page with dynamically added cases) ----
   function applyDynamicResultsGrid() {
     const grid = document.getElementById('resultsGrid');
     if (!grid || !adminData || !adminData.results) return;
-    // Only on results.html (not landing page - landing has .hero)
-    if (document.querySelector('.hero')) return;
+    // Only on landing page (has .hero) — results.html uses V2 grid
+    if (!document.querySelector('.hero')) return;
 
     const existingCards = grid.querySelectorAll('.result-card');
     const existingCount = existingCards.length;
     const totalCases = adminData.results.length;
 
-    // Update existing card links
     existingCards.forEach((card, idx) => {
       if (idx < adminData.results.length) {
         const link = card.querySelector('.btn-view-case');
@@ -731,7 +933,6 @@
       }
     });
 
-    // Add extra cards if admin has more cases than the static HTML
     for (let i = existingCount; i < totalCases; i++) {
       const res = adminData.results[i];
       const card = document.createElement('div');
@@ -1120,6 +1321,8 @@
   applyDynamicServices();
   applyDynamicResultsGrid();
   applyResultPhotos();
+  applyResultsHeroImage();
+  applyResultsListingV2();
   applyAdminSocial();
   applyAdminContact();
   applyLandingSettings();

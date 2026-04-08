@@ -38,68 +38,66 @@
     </div>
   </nav>
 
-  <!-- Page Header -->
-  <section class="page-header">
+  <!-- Page Header — Editorial Introduction -->
+  <section class="results-hero">
     <div class="container">
-      <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
-      <h1 class="section-heading" data-i18n="results.title">Before &amp; After</h1>
-      <p class="section-desc" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
-    </div>
-  </section>
-
-  <!-- Results Content -->
-  <section class="results" id="results">
-    <div class="container">
-      <div class="results-grid stagger" id="resultsGrid">
-        <div class="result-card reveal" data-case-idx="0">
-          <div class="ba-slider" data-idx="0">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
-            </div>
-          </div>
-          <div class="result-card-bottom">
-            <p class="result-caption" data-i18n="results.case1">Crowding correction — 14 months with ceramic braces</p>
-            <a href="case.html?id=r1" class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></a>
-          </div>
+      <div class="results-hero-inner">
+        <div class="results-hero-content">
+          <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
+          <h1 class="results-hero-title" data-i18n="results.title">Before &amp; After</h1>
+          <p class="results-hero-desc" data-i18n="results.description">See the transformations achieved through our orthodontic treatments. Every smile tells a story of dedication and expert care.</p>
         </div>
-        <div class="result-card reveal" data-case-idx="1">
-          <div class="ba-slider" data-idx="1">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
-            </div>
-          </div>
-          <div class="result-card-bottom">
-            <p class="result-caption" data-i18n="results.case2">Open bite treatment — 18 months with clear aligners</p>
-            <a href="case.html?id=r2" class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></a>
-          </div>
-        </div>
-        <div class="result-card reveal" data-case-idx="2">
-          <div class="ba-slider" data-idx="2">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
-            </div>
-          </div>
-          <div class="result-card-bottom">
-            <p class="result-caption" data-i18n="results.case3">Overbite correction — 12 months with metal braces</p>
-            <a href="case.html?id=r3" class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></a>
-          </div>
-        </div>
-        <div class="result-card reveal" data-case-idx="3">
-          <div class="ba-slider" data-idx="3">
-            <div class="ba-placeholder">
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>Before</span></div>
-              <div class="ba-placeholder-half"><i class="fas fa-image"></i><span>After</span></div>
-            </div>
-          </div>
-          <div class="result-card-bottom">
-            <p class="result-caption" data-i18n="results.case4">Spacing treatment — 10 months with lingual braces</p>
-            <a href="case.html?id=r4" class="btn-view-case" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></a>
+        <div class="results-hero-image" id="resultsHeroImage">
+          <div class="results-hero-placeholder">
+            <i class="fas fa-teeth"></i>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Editorial Description Section -->
+  <section class="results-editorial" id="resultsEditorial">
+    <div class="container">
+      <div class="results-editorial-inner">
+        <div class="results-editorial-text">
+          <h2 class="results-editorial-heading" data-i18n="results.editorialTitle">Real Transformations, Real Confidence</h2>
+          <p class="results-editorial-desc" data-i18n="results.editorialDesc">Every treatment journey is unique. Browse through our collection of before and after results to see the quality and precision of our orthodontic care. These results represent months of dedicated treatment planning and expert execution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote / Highlighted Text Section -->
+  <section class="results-quote" id="resultsQuote">
+    <div class="container">
+      <blockquote class="results-quote-text">
+        <i class="fas fa-quote-left results-quote-icon"></i>
+        <p data-i18n="results.quoteText">A beautiful smile is more than aesthetics — it's about health, confidence, and the freedom to express yourself fully.</p>
+        <cite data-i18n="results.quoteAuthor">— Dr. Ana Vepkhvadze</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Transformation Listing Section -->
+  <section class="results-listing" id="results">
+    <div class="container">
+      <div class="results-listing-header">
+        <span class="section-label" data-i18n="results.galleryLabel">Our Gallery</span>
+        <h2 class="section-heading" data-i18n="results.galleryTitle">Patient Transformations</h2>
+      </div>
+      <div class="results-grid-v2" id="resultsGrid">
+        <!-- Populated by JS from admin data -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="results-cta">
+    <div class="container text-center">
+      <h2 class="results-cta-title" data-i18n="results.ctaTitle">Ready to Start Your Transformation?</h2>
+      <p class="results-cta-desc" data-i18n="results.ctaDesc">Book a consultation and take the first step toward your dream smile.</p>
+      <a href="contact.html" class="btn btn-primary results-cta-btn" data-i18n="results.ctaBtn">Book a Consultation</a>
     </div>
   </section>
 

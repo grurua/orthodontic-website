@@ -1587,3 +1587,77 @@ body {
   /* Sidebar footer buttons */
   .btn-view-site, .btn-logout { font-size: 0.8rem; padding: 8px; }
 }
+
+/* ========================================
+   Related Cases Picker
+   ======================================== */
+.related-cases-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.related-case-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #f7f7f8;
+  border: 1px solid #e5e5e7;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: #555;
+  transition: all 0.2s ease;
+}
+
+.related-case-checkbox:hover {
+  border-color: #534AB7;
+  color: #534AB7;
+}
+
+.related-case-checkbox.checked {
+  background: rgba(83,74,183,0.08);
+  border-color: #534AB7;
+  color: #534AB7;
+}
+
+.related-case-checkbox input {
+  margin: 0;
+  accent-color: #534AB7;
+}
+
+/* Result item controls row */
+.result-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.result-item-controls .btn-move-result {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #e5e5e7;
+  border-radius: 6px;
+  background: #fff;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+}
+
+.result-item-controls .btn-move-result:hover {
+  border-color: #534AB7;
+  color: #534AB7;
+}
+
+.result-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

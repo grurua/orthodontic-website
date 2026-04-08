@@ -58,11 +58,18 @@
       'services.digital.title', 'services.digital.desc',
       'services.jaw.title', 'services.jaw.desc',
     ],
-    'Results': ['results.subtitle', 'results.title', 'results.description', 'results.before', 'results.after', 'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
+    'Results': ['results.subtitle', 'results.title', 'results.description',
+      'results.editorialTitle', 'results.editorialDesc',
+      'results.quoteText', 'results.quoteAuthor',
+      'results.galleryLabel', 'results.galleryTitle',
+      'results.ctaTitle', 'results.ctaDesc', 'results.ctaBtn',
+      'results.emptyResults',
+      'results.before', 'results.after',
+      'results.case1', 'results.case2', 'results.case3', 'results.case4', 'results.case5', 'results.case6'],
     'Contact': ['contact.subtitle', 'contact.title', 'contact.description', 'contact.facebookDesc', 'contact.messengerDesc', 'contact.telegramDesc', 'contact.whatsappDesc'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
     'Blog': ['blog.subtitle', 'blog.title', 'blog.description', 'blog.viewAll', 'blog.readMore', 'blog.empty', 'blog.emptyPost', 'blog.backToBlog'],
-    'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
+    'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.beforeTitle', 'case.afterTitle', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
 
@@ -168,6 +175,7 @@
     setupLanding();
     setupServices();
     setupResults();
+    setupResultsPageContent();
     setupSocial();
     setupContact();
     setupStats();
@@ -984,6 +992,49 @@
   }
 
   // ========================================
+  // Results Page Content
+  // ========================================
+  function setupResultsPageContent() {
+    // Results page editorial content fields
+    document.querySelectorAll('[data-results-page]').forEach(el => {
+      const key = el.dataset.resultsPage;
+      el.addEventListener('input', () => {
+        if (!data.translations.en) data.translations.en = {};
+        data.translations.en[key] = el.value;
+        saveData(data);
+      });
+    });
+
+    // Results hero image upload
+    const heroPreview = document.querySelector('.image-preview-small[data-key="results_hero_image"]');
+    const heroInput = heroPreview ? heroPreview.closest('.image-upload-small').querySelector('.file-input') : null;
+    if (heroPreview && heroInput) {
+      heroPreview.addEventListener('click', () => heroInput.click());
+      heroPreview.addEventListener('dragover', (e) => e.preventDefault());
+      heroPreview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleSmallImageFile(file, 'results_hero_image');
+      });
+      heroInput.addEventListener('change', () => {
+        if (heroInput.files[0]) handleSmallImageFile(heroInput.files[0], 'results_hero_image');
+      });
+      updateSmallImagePreview('results_hero_image');
+    }
+  }
+
+  function populateResultsPageContent() {
+    loadLangFile('en').then(defaults => {
+      const overrides = data.translations.en || {};
+      document.querySelectorAll('[data-results-page]').forEach(el => {
+        const key = el.dataset.resultsPage;
+        const val = overrides[key] !== undefined ? overrides[key] : (defaults[key] || '');
+        el.value = val;
+      });
+    });
+  }
+
+  // ========================================
   // Results (Before/After)
   // ========================================
   function setupResults() {
@@ -993,18 +1044,27 @@
       const ts = Date.now();
       const captionKey = `results.case${num}_${ts}`;
       const descriptionKey = `case_${id}_description`;
+      const narrativeKey = `case_${id}_narrative`;
+      const shortTextKey = `case_${id}_short`;
 
       data.results.push({
         id,
         captionKey,
         descriptionKey,
-        treatmentInfo: { procedure: '', duration: '', appliance: '', doctor: '' }
+        narrativeKey,
+        shortTextKey,
+        treatmentInfo: { procedure: '', duration: '', appliance: '', doctor: '' },
+        beforeImages: [],
+        afterImages: [],
+        relatedCaseIds: []
       });
 
       ['en', 'ka', 'ru'].forEach(lang => {
         if (!data.translations[lang]) data.translations[lang] = {};
         data.translations[lang][captionKey] = 'New case description';
         data.translations[lang][descriptionKey] = '';
+        data.translations[lang][narrativeKey] = '';
+        data.translations[lang][shortTextKey] = '';
       });
 
       saveData(data);
@@ -1018,15 +1078,11 @@
     container.innerHTML = '';
 
     data.results.forEach((res, idx) => {
-      // Ensure detailBlocks array exists
+      // Ensure arrays/objects exist (migration for old cases)
       if (!res.detailBlocks) res.detailBlocks = [];
-
-      const div = document.createElement('div');
-      div.className = 'result-item';
-      const beforeKey = `result_${res.id}_before`;
-      const afterKey = `result_${res.id}_after`;
-
-      // Ensure treatmentInfo and descriptionKey exist (migration for old cases)
+      if (!res.beforeImages) res.beforeImages = [];
+      if (!res.afterImages) res.afterImages = [];
+      if (!res.relatedCaseIds) res.relatedCaseIds = [];
       if (!res.treatmentInfo) res.treatmentInfo = { procedure: '', duration: '', appliance: '', doctor: '' };
       if (!res.descriptionKey) {
         res.descriptionKey = `case_${res.id}_description`;
@@ -1035,18 +1091,43 @@
           if (!data.translations[lang][res.descriptionKey]) data.translations[lang][res.descriptionKey] = '';
         });
       }
+      if (!res.narrativeKey) {
+        res.narrativeKey = `case_${res.id}_narrative`;
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          if (!data.translations[lang][res.narrativeKey]) data.translations[lang][res.narrativeKey] = '';
+        });
+      }
+      if (!res.shortTextKey) {
+        res.shortTextKey = `case_${res.id}_short`;
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          if (!data.translations[lang][res.shortTextKey]) data.translations[lang][res.shortTextKey] = '';
+        });
+      }
+
+      const div = document.createElement('div');
+      div.className = 'result-item';
+      const beforeKey = `result_${res.id}_before`;
+      const afterKey = `result_${res.id}_after`;
 
       const descText = (data.translations.en && data.translations.en[res.descriptionKey]) || '';
+      const narrativeText = (data.translations.en && data.translations.en[res.narrativeKey]) || '';
+      const shortText = (data.translations.en && data.translations.en[res.shortTextKey]) || '';
 
       div.innerHTML = `
         <div class="result-item-header">
           <span class="result-num">${idx + 1}</span>
           <h4>Case: ${res.captionKey}</h4>
-          <button class="btn-delete-item" data-id="${res.id}" title="Delete"><i class="fas fa-trash"></i></button>
+          <div class="result-item-controls">
+            <button class="btn-move-result" data-dir="up" data-id="${res.id}" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-move-result" data-dir="down" data-id="${res.id}" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-delete-item" data-id="${res.id}" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
         </div>
         <div class="result-images-row">
           <div class="image-upload-small">
-            <span class="upload-label"><i class="fas fa-image"></i> Before Photo</span>
+            <span class="upload-label"><i class="fas fa-image"></i> Main Before Photo</span>
             <div class="image-preview-small" data-key="${beforeKey}">
               <i class="fas fa-cloud-upload-alt"></i>
               <span>Click to upload</span>
@@ -1054,7 +1135,7 @@
             <input type="file" accept="image/*" class="file-input" data-key="${beforeKey}" style="display:none;" />
           </div>
           <div class="image-upload-small">
-            <span class="upload-label"><i class="fas fa-image"></i> After Photo</span>
+            <span class="upload-label"><i class="fas fa-image"></i> Main After Photo</span>
             <div class="image-preview-small" data-key="${afterKey}">
               <i class="fas fa-cloud-upload-alt"></i>
               <span>Click to upload</span>
@@ -1063,13 +1144,24 @@
           </div>
         </div>
         <div class="form-field">
-          <label>Caption Key</label>
-          <input type="text" value="${res.captionKey}" readonly />
+          <label>Caption / Title (English)</label>
+          <input type="text" class="case-caption-input" data-caption-key="${res.captionKey}" value="${escapeAttr((data.translations.en && data.translations.en[res.captionKey]) || '')}" placeholder="e.g. Crowding Correction — 14 months" />
+          <span class="field-hint">Key: <code>${res.captionKey}</code></span>
+        </div>
+        <div class="form-field">
+          <label>Short Text for Listing Card (English)</label>
+          <textarea rows="2" class="case-short-input" data-short-key="${res.shortTextKey}" placeholder="Brief preview text shown on the results listing card...">${escapeHtml(shortText)}</textarea>
+          <span class="field-hint">Key: <code>${res.shortTextKey}</code></span>
         </div>
         <div class="form-field">
           <label>Case Description (English)</label>
           <textarea rows="3" class="case-desc-input" data-desc-key="${res.descriptionKey}" placeholder="Describe the patient's case, concerns, and treatment approach...">${escapeHtml(descText)}</textarea>
-          <span class="field-hint">This appears on the case detail page. Edit other languages in Translations tab — key: <code>${res.descriptionKey}</code></span>
+          <span class="field-hint">Shown next to the hero slider. Key: <code>${res.descriptionKey}</code></span>
+        </div>
+        <div class="form-field">
+          <label>Narrative Text (English)</label>
+          <textarea rows="3" class="case-narrative-input" data-narrative-key="${res.narrativeKey}" placeholder="Extended narrative about the treatment journey...">${escapeHtml(narrativeText)}</textarea>
+          <span class="field-hint">Shown as a centered text block below the hero. Key: <code>${res.narrativeKey}</code></span>
         </div>
         <div class="treatment-info-section">
           <h5><i class="fas fa-clipboard-list"></i> Treatment Information</h5>
@@ -1096,8 +1188,20 @@
           </div>
         </div>
         <div class="detail-blocks-section">
-          <h5>Detail Page Content</h5>
-          <p class="field-help">Add content blocks for the case detail page. Blocks appear in order: image, text, or image with text.</p>
+          <h5><i class="fas fa-images"></i> Before Images (Gallery)</h5>
+          <p class="field-help">Additional before photos shown in a dedicated gallery section on the detail page.</p>
+          <div class="before-images-list" data-case-id="${res.id}"></div>
+          <button class="btn-add btn-add-before-img" data-case-id="${res.id}"><i class="fas fa-plus"></i> Add Before Image</button>
+        </div>
+        <div class="detail-blocks-section">
+          <h5><i class="fas fa-images"></i> After Images (Gallery)</h5>
+          <p class="field-help">Additional after photos shown in a dedicated gallery section on the detail page.</p>
+          <div class="after-images-list" data-case-id="${res.id}"></div>
+          <button class="btn-add btn-add-after-img" data-case-id="${res.id}"><i class="fas fa-plus"></i> Add After Image</button>
+        </div>
+        <div class="detail-blocks-section">
+          <h5><i class="fas fa-layer-group"></i> Extra Content Blocks</h5>
+          <p class="field-help">Additional content blocks below the before/after sections. Reorder with arrows.</p>
           <div class="detail-blocks-list" data-case-id="${res.id}"></div>
           <div class="detail-blocks-actions">
             <button class="btn-add-block" data-case-id="${res.id}" data-type="image"><i class="fas fa-image"></i> Add Image</button>
@@ -1106,10 +1210,15 @@
             <button class="btn-add-block" data-case-id="${res.id}" data-type="image_text"><i class="fas fa-photo-video"></i> Add Image + Text</button>
           </div>
         </div>
+        <div class="detail-blocks-section">
+          <h5><i class="fas fa-link"></i> Related Transformations</h5>
+          <p class="field-help">Select which cases appear in the "More Transformations" section. Leave empty for automatic selection.</p>
+          <div class="related-cases-picker" data-case-id="${res.id}"></div>
+        </div>
       `;
       container.appendChild(div);
 
-      // Wire up small image uploads
+      // Wire up main before/after image uploads
       [beforeKey, afterKey].forEach(key => {
         const uploadSmall = div.querySelector(`.image-preview-small[data-key="${key}"]`).closest('.image-upload-small');
         const preview = div.querySelector(`.image-preview-small[data-key="${key}"]`);
@@ -1124,13 +1233,31 @@
         input.addEventListener('change', () => {
           if (input.files[0]) handleSmallImageFile(input.files[0], key);
         });
-        // Restore existing image
         updateSmallImagePreview(key);
-        // Add position control
         uploadSmall.appendChild(createPositionControl(key, uploadSmall));
       });
 
-      // Wire up case description textarea (auto-save)
+      // Wire caption input
+      const captionInput = div.querySelector('.case-caption-input');
+      if (captionInput) {
+        captionInput.addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[res.captionKey] = e.target.value;
+          saveData(data);
+        });
+      }
+
+      // Wire short text input
+      const shortInput = div.querySelector('.case-short-input');
+      if (shortInput) {
+        shortInput.addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[res.shortTextKey] = e.target.value;
+          saveData(data);
+        });
+      }
+
+      // Wire case description textarea
       const descTextarea = div.querySelector('.case-desc-input');
       if (descTextarea) {
         descTextarea.addEventListener('input', (e) => {
@@ -1140,7 +1267,17 @@
         });
       }
 
-      // Wire up treatment info fields (auto-save)
+      // Wire narrative textarea
+      const narrativeTextarea = div.querySelector('.case-narrative-input');
+      if (narrativeTextarea) {
+        narrativeTextarea.addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[res.narrativeKey] = e.target.value;
+          saveData(data);
+        });
+      }
+
+      // Wire treatment info fields
       div.querySelectorAll('.treatment-field').forEach(input => {
         input.addEventListener('input', (e) => {
           const field = e.target.dataset.field;
@@ -1152,14 +1289,33 @@
         });
       });
 
+      // Wire move result buttons
+      div.querySelectorAll('.btn-move-result').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const dir = btn.dataset.dir;
+          if (dir === 'up' && idx > 0) {
+            [data.results[idx - 1], data.results[idx]] = [data.results[idx], data.results[idx - 1]];
+          } else if (dir === 'down' && idx < data.results.length - 1) {
+            [data.results[idx], data.results[idx + 1]] = [data.results[idx + 1], data.results[idx]];
+          } else return;
+          saveData(data);
+          renderResults();
+        });
+      });
+
       // Delete case
       div.querySelector('.btn-delete-item').addEventListener('click', () => {
         if (confirm('Delete this case?')) {
-          // Clean up images and positions (before/after + detail block images)
           delete data.images[beforeKey];
           delete data.images[afterKey];
           delete data.imagePositions[beforeKey];
           delete data.imagePositions[afterKey];
+          if (res.beforeImages) {
+            res.beforeImages.forEach(bi => { delete data.images[bi.imageKey]; delete data.imagePositions[bi.imageKey]; });
+          }
+          if (res.afterImages) {
+            res.afterImages.forEach(ai => { delete data.images[ai.imageKey]; delete data.imagePositions[ai.imageKey]; });
+          }
           if (res.detailBlocks) {
             res.detailBlocks.forEach(block => {
               if (block.imageKey) { delete data.images[block.imageKey]; delete data.imagePositions[block.imageKey]; }
@@ -1174,7 +1330,29 @@
         }
       });
 
-      // Wire up add block buttons
+      // Before images gallery management
+      renderBAGallery(res, 'before', div.querySelector(`.before-images-list[data-case-id="${res.id}"]`));
+      div.querySelector(`.btn-add-before-img[data-case-id="${res.id}"]`).addEventListener('click', () => {
+        const ts = Date.now();
+        const imgKey = `case_${res.id}_before_${res.beforeImages.length}_${ts}`;
+        res.beforeImages.push({ imageKey: imgKey });
+        saveData(data);
+        renderBAGallery(res, 'before', div.querySelector(`.before-images-list[data-case-id="${res.id}"]`));
+        toast('Before image slot added', 'success');
+      });
+
+      // After images gallery management
+      renderBAGallery(res, 'after', div.querySelector(`.after-images-list[data-case-id="${res.id}"]`));
+      div.querySelector(`.btn-add-after-img[data-case-id="${res.id}"]`).addEventListener('click', () => {
+        const ts = Date.now();
+        const imgKey = `case_${res.id}_after_${res.afterImages.length}_${ts}`;
+        res.afterImages.push({ imageKey: imgKey });
+        saveData(data);
+        renderBAGallery(res, 'after', div.querySelector(`.after-images-list[data-case-id="${res.id}"]`));
+        toast('After image slot added', 'success');
+      });
+
+      // Wire add block buttons
       div.querySelectorAll('.btn-add-block').forEach(btn => {
         btn.addEventListener('click', () => {
           const caseId = btn.dataset.caseId;
@@ -1211,6 +1389,9 @@
 
       // Render existing detail blocks
       renderDetailBlocks(res, div.querySelector(`.detail-blocks-list[data-case-id="${res.id}"]`));
+
+      // Render related cases picker
+      renderRelatedCasesPicker(res, div.querySelector(`.related-cases-picker[data-case-id="${res.id}"]`));
     });
 
     const countEl = document.getElementById('dashResultCount');
@@ -1396,6 +1577,133 @@
       }
       if (block.beforeKey) updateSmallImagePreview(block.beforeKey);
       if (block.afterKey) updateSmallImagePreview(block.afterKey);
+    });
+  }
+
+  // ========================================
+  // Before/After Gallery Images (per case)
+  // ========================================
+  function renderBAGallery(caseObj, baType, container) {
+    if (!container) return;
+    container.innerHTML = '';
+    const arr = baType === 'before' ? caseObj.beforeImages : caseObj.afterImages;
+
+    if (!arr || arr.length === 0) {
+      container.innerHTML = '<p class="detail-empty">No additional images yet.</p>';
+      return;
+    }
+
+    arr.forEach((item, itemIdx) => {
+      const el = document.createElement('div');
+      el.className = 'detail-block-item';
+      el.innerHTML = `
+        <div class="detail-block-header">
+          <span class="detail-block-num"><i class="fas fa-image"></i></span>
+          <span class="detail-block-type">${baType === 'before' ? 'Before' : 'After'} Image ${itemIdx + 1}</span>
+          <div class="detail-block-controls">
+            <button class="btn-block-move" data-dir="up" title="Move up"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-block-move" data-dir="down" title="Move down"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-block-delete" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="detail-block-body">
+          <div class="image-upload-small">
+            <div class="image-preview-small" data-key="${item.imageKey}">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>Upload</span>
+            </div>
+            <input type="file" accept="image/*" class="file-input" style="display:none;" />
+          </div>
+        </div>
+      `;
+
+      const preview = el.querySelector('.image-preview-small');
+      const input = el.querySelector('.file-input');
+      preview.addEventListener('click', () => input.click());
+      preview.addEventListener('dragover', (e) => e.preventDefault());
+      preview.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handleSmallImageFile(file, item.imageKey);
+      });
+      input.addEventListener('change', () => {
+        if (input.files[0]) handleSmallImageFile(input.files[0], item.imageKey);
+      });
+
+      // Move up
+      el.querySelector('.btn-block-move[data-dir="up"]').addEventListener('click', () => {
+        if (itemIdx === 0) return;
+        [arr[itemIdx - 1], arr[itemIdx]] = [arr[itemIdx], arr[itemIdx - 1]];
+        saveData(data);
+        renderBAGallery(caseObj, baType, container);
+      });
+
+      // Move down
+      el.querySelector('.btn-block-move[data-dir="down"]').addEventListener('click', () => {
+        if (itemIdx === arr.length - 1) return;
+        [arr[itemIdx], arr[itemIdx + 1]] = [arr[itemIdx + 1], arr[itemIdx]];
+        saveData(data);
+        renderBAGallery(caseObj, baType, container);
+      });
+
+      // Delete
+      el.querySelector('.btn-block-delete').addEventListener('click', () => {
+        if (confirm('Remove this image?')) {
+          delete data.images[item.imageKey];
+          delete data.imagePositions[item.imageKey];
+          arr.splice(itemIdx, 1);
+          saveData(data);
+          renderBAGallery(caseObj, baType, container);
+          toast('Image removed', 'success');
+        }
+      });
+
+      container.appendChild(el);
+      updateSmallImagePreview(item.imageKey);
+
+      // Add position control if image exists
+      if (data.images && data.images[item.imageKey]) {
+        const uploadSmall = el.querySelector('.image-upload-small');
+        uploadSmall.appendChild(createPositionControl(item.imageKey, uploadSmall));
+      }
+    });
+  }
+
+  // ========================================
+  // Related Cases Picker
+  // ========================================
+  function renderRelatedCasesPicker(caseObj, container) {
+    if (!container) return;
+    container.innerHTML = '';
+
+    const otherCases = data.results.filter(r => r.id !== caseObj.id);
+    if (otherCases.length === 0) {
+      container.innerHTML = '<p class="detail-empty">No other cases to select from.</p>';
+      return;
+    }
+
+    otherCases.forEach(other => {
+      const isSelected = caseObj.relatedCaseIds && caseObj.relatedCaseIds.includes(other.id);
+      const label = document.createElement('label');
+      label.className = 'related-case-checkbox' + (isSelected ? ' checked' : '');
+      const captionText = (data.translations.en && data.translations.en[other.captionKey]) || other.captionKey;
+      label.innerHTML = `
+        <input type="checkbox" ${isSelected ? 'checked' : ''} data-related-id="${other.id}" />
+        <span>${escapeHtml(captionText)}</span>
+      `;
+      label.querySelector('input').addEventListener('change', (e) => {
+        if (!caseObj.relatedCaseIds) caseObj.relatedCaseIds = [];
+        if (e.target.checked) {
+          if (!caseObj.relatedCaseIds.includes(other.id)) {
+            caseObj.relatedCaseIds.push(other.id);
+          }
+        } else {
+          caseObj.relatedCaseIds = caseObj.relatedCaseIds.filter(id => id !== other.id);
+        }
+        saveData(data);
+        label.classList.toggle('checked', e.target.checked);
+      });
+      container.appendChild(label);
     });
   }
 
@@ -1925,6 +2233,7 @@
 
     // Results
     renderResults();
+    populateResultsPageContent();
 
     // Blog
     renderBlogPosts();
