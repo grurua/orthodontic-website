@@ -69,7 +69,7 @@
     'Contact': ['contact.subtitle', 'contact.title', 'contact.description', 'contact.facebookDesc', 'contact.messengerDesc', 'contact.telegramDesc', 'contact.whatsappDesc'],
     'Landing Page Buttons': ['landing.viewCase', 'landing.aboutBtn', 'landing.servicesBtn', 'landing.resultsBtn', 'landing.contactBtn'],
     'Blog': ['blog.subtitle', 'blog.title', 'blog.description', 'blog.viewAll', 'blog.readMore', 'blog.empty', 'blog.emptyPost', 'blog.backToBlog'],
-    'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.beforeTitle', 'case.afterTitle', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
+    'Case Detail': ['case.backToResults', 'case.empty', 'case.relatedCases', 'case.moreLabel', 'case.moreDesc', 'case.seeTransformation', 'case.viewAll', 'case.compareSlider', 'case.splitView', 'case.beforeTitle', 'case.afterTitle', 'case.infoProcedure', 'case.infoDuration', 'case.infoAppliance', 'case.infoDoctor'],
     'Footer': ['footer.tagline', 'footer.rights'],
   };
 
@@ -1046,6 +1046,7 @@
       const descriptionKey = `case_${id}_description`;
       const narrativeKey = `case_${id}_narrative`;
       const shortTextKey = `case_${id}_short`;
+      const labelKey = `case_${id}_label`;
 
       data.results.push({
         id,
@@ -1053,6 +1054,7 @@
         descriptionKey,
         narrativeKey,
         shortTextKey,
+        labelKey,
         treatmentInfo: { procedure: '', duration: '', appliance: '', doctor: '' },
         beforeImages: [],
         afterImages: [],
@@ -1065,6 +1067,7 @@
         data.translations[lang][descriptionKey] = '';
         data.translations[lang][narrativeKey] = '';
         data.translations[lang][shortTextKey] = '';
+        data.translations[lang][labelKey] = '';
       });
 
       saveData(data);
@@ -1105,6 +1108,13 @@
           if (!data.translations[lang][res.shortTextKey]) data.translations[lang][res.shortTextKey] = '';
         });
       }
+      if (!res.labelKey) {
+        res.labelKey = `case_${res.id}_label`;
+        ['en', 'ka', 'ru'].forEach(lang => {
+          if (!data.translations[lang]) data.translations[lang] = {};
+          if (!data.translations[lang][res.labelKey]) data.translations[lang][res.labelKey] = '';
+        });
+      }
 
       const div = document.createElement('div');
       div.className = 'result-item';
@@ -1114,6 +1124,7 @@
       const descText = (data.translations.en && data.translations.en[res.descriptionKey]) || '';
       const narrativeText = (data.translations.en && data.translations.en[res.narrativeKey]) || '';
       const shortText = (data.translations.en && data.translations.en[res.shortTextKey]) || '';
+      const labelText = (data.translations.en && data.translations.en[res.labelKey]) || '';
 
       div.innerHTML = `
         <div class="result-item-header">
@@ -1142,6 +1153,11 @@
             </div>
             <input type="file" accept="image/*" class="file-input" data-key="${afterKey}" style="display:none;" />
           </div>
+        </div>
+        <div class="form-field">
+          <label>Patient / Case Label (English)</label>
+          <input type="text" class="case-label-input" data-label-key="${res.labelKey}" value="${escapeAttr(labelText)}" placeholder="e.g. Orthodontic Treatment, Adult Patient" />
+          <span class="field-hint">Shown as category label above the title on the detail page. Key: <code>${res.labelKey}</code></span>
         </div>
         <div class="form-field">
           <label>Caption / Title (English)</label>
@@ -1236,6 +1252,16 @@
         updateSmallImagePreview(key);
         uploadSmall.appendChild(createPositionControl(key, uploadSmall));
       });
+
+      // Wire label input
+      const labelInput = div.querySelector('.case-label-input');
+      if (labelInput) {
+        labelInput.addEventListener('input', (e) => {
+          if (!data.translations.en) data.translations.en = {};
+          data.translations.en[res.labelKey] = e.target.value;
+          saveData(data);
+        });
+      }
 
       // Wire caption input
       const captionInput = div.querySelector('.case-caption-input');

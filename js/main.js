@@ -236,8 +236,8 @@
 
       const cta = document.createElement('span');
       cta.className = 'result-card-v2-cta';
-      cta.setAttribute('data-i18n', 'landing.viewCase');
-      cta.innerHTML = 'View Details <i class="fas fa-arrow-right"></i>';
+      cta.setAttribute('data-i18n', 'case.seeTransformation');
+      cta.innerHTML = 'See Full Transformation <i class="fas fa-arrow-right"></i>';
       body.appendChild(cta);
 
       card.appendChild(body);
@@ -618,9 +618,9 @@
   }
 
   function applyCaseDetail() {
-    const heroSlider = document.getElementById('caseHeroSlider');
+    const introSection = document.getElementById('caseIntroSection');
     const container = document.getElementById('caseDetailBlocks');
-    if (!heroSlider && !container) return;
+    if (!introSection && !container) return;
 
     const params = new URLSearchParams(window.location.search);
     const caseId = params.get('id');
@@ -632,7 +632,7 @@
     const imgs = adminData.images || {};
     const pos = adminData.imagePositions || {};
 
-    // Set title
+    // Set title & breadcrumb
     const titleEl = document.getElementById('caseTitle');
     const breadcrumbTitle = document.getElementById('caseBreadcrumbTitle');
     if (caseData.captionKey) {
@@ -640,7 +640,17 @@
       if (breadcrumbTitle) breadcrumbTitle.setAttribute('data-i18n', caseData.captionKey);
     }
 
-    // Set description
+    // Set patient label
+    const labelEl = document.getElementById('caseLabel');
+    if (labelEl && caseData.labelKey) {
+      const labelText = getCaseText(caseData.labelKey, currentLang);
+      if (labelText) {
+        labelEl.setAttribute('data-i18n', caseData.labelKey);
+        labelEl.textContent = labelText;
+      }
+    }
+
+    // Set description/summary
     const descEl = document.getElementById('caseDescription');
     if (descEl && caseData.descriptionKey) {
       const descText = getCaseText(caseData.descriptionKey, currentLang);
@@ -650,25 +660,69 @@
       }
     }
 
-    // Hero before/after slider
-    if (heroSlider) {
-      const beforeKey = `result_${caseId}_before`;
-      const afterKey = `result_${caseId}_after`;
-      const beforeSrc = imgs[beforeKey];
-      const afterSrc = imgs[afterKey];
+    // Main transformation showcase — side-by-side images
+    const beforeKey = `result_${caseId}_before`;
+    const afterKey = `result_${caseId}_after`;
+    const beforeSrc = imgs[beforeKey];
+    const afterSrc = imgs[afterKey];
 
-      if (beforeSrc && afterSrc) {
-        heroSlider.innerHTML = '';
-        const slider = createCompareSlider(
-          beforeSrc, afterSrc,
-          pos[beforeKey], pos[afterKey],
-          '480px'
-        );
-        heroSlider.appendChild(slider);
+    const transformBeforeWrap = document.getElementById('caseTransformBeforeImg');
+    const transformAfterWrap = document.getElementById('caseTransformAfterImg');
+
+    if (transformBeforeWrap && beforeSrc) {
+      transformBeforeWrap.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'Before';
+      img.src = beforeSrc;
+      applyImageTransform(img, pos[beforeKey]);
+      transformBeforeWrap.appendChild(img);
+    }
+
+    if (transformAfterWrap && afterSrc) {
+      transformAfterWrap.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'After';
+      img.src = afterSrc;
+      applyImageTransform(img, pos[afterKey]);
+      transformAfterWrap.appendChild(img);
+    }
+
+    // Slider toggle functionality
+    const sliderToggle = document.getElementById('caseSliderToggle');
+    const sliderContainer = document.getElementById('caseSliderContainer');
+    const heroSlider = document.getElementById('caseHeroSlider');
+    const transformGrid = document.querySelector('.case-transformation-grid');
+    const btnToggle = document.getElementById('btnToggleSlider');
+    const btnClose = document.getElementById('btnCloseSlider');
+
+    if (beforeSrc && afterSrc && sliderToggle) {
+      sliderToggle.style.display = '';
+
+      if (btnToggle) {
+        btnToggle.addEventListener('click', () => {
+          if (transformGrid) transformGrid.style.display = 'none';
+          sliderToggle.style.display = 'none';
+          if (sliderContainer) {
+            sliderContainer.style.display = '';
+            if (heroSlider && !heroSlider.children.length) {
+              const slider = createCompareSlider(beforeSrc, afterSrc, pos[beforeKey], pos[afterKey], '500px');
+              heroSlider.appendChild(slider);
+            }
+          }
+        });
+      }
+
+      if (btnClose) {
+        btnClose.addEventListener('click', () => {
+          if (sliderContainer) sliderContainer.style.display = 'none';
+          if (transformGrid) transformGrid.style.display = '';
+          sliderToggle.style.display = '';
+        });
       }
     }
 
-    // Treatment info grid
+    // Treatment info strip
+    const infoStripSection = document.getElementById('caseInfoStripSection');
     const infoGrid = document.getElementById('caseInfoGrid');
     if (infoGrid && caseData.treatmentInfo) {
       const info = caseData.treatmentInfo;
@@ -684,13 +738,14 @@
         infoGrid.innerHTML = '';
         activeFields.forEach(f => {
           const item = document.createElement('div');
-          item.className = 'case-info-item';
+          item.className = 'case-info-strip-item';
           item.innerHTML = `
-            <div class="case-info-label" data-i18n="${f.labelKey}">${f.label}</div>
-            <div class="case-info-value">${f.value}</div>
+            <div class="case-info-strip-label" data-i18n="${f.labelKey}">${f.label}</div>
+            <div class="case-info-strip-value">${f.value}</div>
           `;
           infoGrid.appendChild(item);
         });
+        if (infoStripSection) infoStripSection.style.display = '';
       }
     }
 
@@ -706,50 +761,58 @@
       }
     }
 
-    // Before images section
+    // Before images gallery
     const beforeSection = document.getElementById('caseBeforeSection');
     const beforeGrid = document.getElementById('caseBeforeGrid');
     if (beforeSection && beforeGrid && caseData.beforeImages && caseData.beforeImages.length > 0) {
-      let hasBeforeImgs = false;
+      let count = 0;
       beforeGrid.innerHTML = '';
       caseData.beforeImages.forEach(bImg => {
         const src = imgs[bImg.imageKey];
         if (src) {
-          hasBeforeImgs = true;
+          count++;
           const item = document.createElement('div');
-          item.className = 'case-ba-image-item';
+          item.className = 'case-gallery-item';
           const img = document.createElement('img');
           img.alt = 'Before';
           img.src = src;
           applyImageTransform(img, pos[bImg.imageKey]);
           item.appendChild(img);
+          item.addEventListener('click', () => openLightbox(src));
           beforeGrid.appendChild(item);
         }
       });
-      if (hasBeforeImgs) beforeSection.style.display = '';
+      if (count > 0) {
+        beforeGrid.setAttribute('data-count', count);
+        beforeSection.style.display = '';
+      }
     }
 
-    // After images section
+    // After images gallery
     const afterSection = document.getElementById('caseAfterSection');
     const afterGrid = document.getElementById('caseAfterGrid');
     if (afterSection && afterGrid && caseData.afterImages && caseData.afterImages.length > 0) {
-      let hasAfterImgs = false;
+      let count = 0;
       afterGrid.innerHTML = '';
       caseData.afterImages.forEach(aImg => {
         const src = imgs[aImg.imageKey];
         if (src) {
-          hasAfterImgs = true;
+          count++;
           const item = document.createElement('div');
-          item.className = 'case-ba-image-item';
+          item.className = 'case-gallery-item';
           const img = document.createElement('img');
           img.alt = 'After';
           img.src = src;
           applyImageTransform(img, pos[aImg.imageKey]);
           item.appendChild(img);
+          item.addEventListener('click', () => openLightbox(src));
           afterGrid.appendChild(item);
         }
       });
-      if (hasAfterImgs) afterSection.style.display = '';
+      if (count > 0) {
+        afterGrid.setAttribute('data-count', count);
+        afterSection.style.display = '';
+      }
     }
 
     // Render detail blocks — only show admin-managed content
@@ -802,21 +865,17 @@
               }
             }
           } else if (block.type === 'before_after') {
-            const beforeSrc = imgs[block.beforeKey];
-            const afterSrc = imgs[block.afterKey];
-            if (beforeSrc && afterSrc) {
+            const bSrc = imgs[block.beforeKey];
+            const aSrc = imgs[block.afterKey];
+            if (bSrc && aSrc) {
               el.classList.add('case-block-ba');
-              const slider = createCompareSlider(
-                beforeSrc, afterSrc,
-                pos[block.beforeKey], pos[block.afterKey],
-                '400px'
-              );
+              const slider = createCompareSlider(bSrc, aSrc, pos[block.beforeKey], pos[block.afterKey], '400px');
               el.appendChild(slider);
-            } else if (beforeSrc || afterSrc) {
+            } else if (bSrc || aSrc) {
               el.classList.add('case-block-image');
               const img = document.createElement('img');
-              img.alt = beforeSrc ? 'Before' : 'After';
-              img.src = beforeSrc || afterSrc;
+              img.alt = bSrc ? 'Before' : 'After';
+              img.src = bSrc || aSrc;
               el.appendChild(img);
             }
           }
@@ -846,19 +905,17 @@
       }
     }
 
-    // Related cases
+    // More Transformations section
     const relatedSection = document.getElementById('caseRelated');
     const relatedGrid = document.getElementById('caseRelatedGrid');
     if (relatedSection && relatedGrid) {
       let selectedRelated = [];
 
-      // Check if case has manually selected related cases
       if (caseData.relatedCaseIds && caseData.relatedCaseIds.length > 0) {
         selectedRelated = caseData.relatedCaseIds
           .map(rid => adminData.results.find(r => r.id === rid))
           .filter(r => r && r.id !== caseId);
       } else {
-        // Auto-select other cases with images
         selectedRelated = adminData.results.filter(r => {
           if (r.id === caseId) return false;
           const bk = `result_${r.id}_before`;
@@ -872,47 +929,71 @@
         relatedSection.style.display = '';
         relatedGrid.innerHTML = '';
         toShow.forEach(rc => {
-          const beforeKey = `result_${rc.id}_before`;
-          const afterKey = `result_${rc.id}_after`;
+          const bKey = `result_${rc.id}_before`;
+          const aKey = `result_${rc.id}_after`;
 
           const card = document.createElement('a');
-          card.className = 'case-related-card';
+          card.className = 'case-more-card';
           card.href = `case.html?id=${rc.id}`;
 
           let imageHtml = '';
-          if (imgs[beforeKey] && imgs[afterKey]) {
+          if (imgs[bKey] && imgs[aKey]) {
             imageHtml = `
-              <div class="case-related-card-image">
+              <div class="case-more-card-image">
                 <div class="result-card-v2-ba-preview">
                   <div class="result-card-v2-ba-side">
-                    <img src="${imgs[beforeKey]}" alt="Before" style="${imgPosStyle(pos[beforeKey])}" />
+                    <img src="${imgs[bKey]}" alt="Before" style="${imgPosStyle(pos[bKey])}" />
                     <div class="result-card-v2-ba-divider"></div>
                     <span class="ba-label ba-label-before" data-i18n="results.before">Before</span>
                   </div>
                   <div class="result-card-v2-ba-side">
-                    <img src="${imgs[afterKey]}" alt="After" style="${imgPosStyle(pos[afterKey])}" />
+                    <img src="${imgs[aKey]}" alt="After" style="${imgPosStyle(pos[aKey])}" />
                     <span class="ba-label ba-label-after" data-i18n="results.after">After</span>
                   </div>
                 </div>
               </div>`;
           } else {
             imageHtml = `
-              <div class="case-related-card-image" style="background:var(--cream);display:flex;align-items:center;justify-content:center;">
+              <div class="case-more-card-image" style="background:var(--cream);display:flex;align-items:center;justify-content:center;">
                 <i class="fas fa-image" style="font-size:2rem;color:var(--text-muted);"></i>
               </div>`;
           }
 
           card.innerHTML = `
             ${imageHtml}
-            <div class="case-related-card-body">
-              <p data-i18n="${rc.captionKey}"></p>
-              <span class="result-card-v2-cta" data-i18n="landing.viewCase">View Details <i class="fas fa-arrow-right"></i></span>
+            <div class="case-more-card-body">
+              <h3 class="case-more-card-title" data-i18n="${rc.captionKey}"></h3>
+              <span class="result-card-v2-cta" data-i18n="case.seeTransformation">See Full Transformation <i class="fas fa-arrow-right"></i></span>
             </div>
           `;
           relatedGrid.appendChild(card);
         });
       }
     }
+  }
+
+  // Lightbox for gallery images
+  function openLightbox(src) {
+    const overlay = document.createElement('div');
+    overlay.className = 'case-lightbox';
+    overlay.innerHTML = `
+      <button class="case-lightbox-close"><i class="fas fa-times"></i></button>
+      <img src="${src}" alt="Gallery image" />
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('active'));
+
+    function close() {
+      overlay.classList.remove('active');
+      setTimeout(() => overlay.remove(), 300);
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('.case-lightbox-close')) close();
+    });
+    document.addEventListener('keydown', function handler(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', handler); }
+    });
   }
 
   // ---- Dynamic Results Grid (for landing page with dynamically added cases) ----

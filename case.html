@@ -47,31 +47,67 @@
     </div>
   </div>
 
-  <!-- Case Hero: Title + Main Before/After Slider -->
-  <section class="case-hero">
+  <!-- Case Intro / Patient Header -->
+  <section class="case-intro" id="caseIntroSection">
     <div class="container">
-      <div class="case-hero-inner">
-        <div class="case-hero-slider-wrap" id="caseHeroSlider">
-          <!-- Populated by JS: main before/after drag slider -->
-          <div class="case-hero-placeholder">
-            <div class="case-hero-placeholder-side">
+      <div class="case-intro-inner">
+        <span class="case-intro-label" id="caseLabel" data-i18n="results.subtitle">Treatment Results</span>
+        <h1 class="case-intro-title" id="caseTitle">Case Details</h1>
+        <p class="case-intro-summary" id="caseDescription"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Transformation Showcase — Before & After Side-by-Side -->
+  <section class="case-transformation" id="caseTransformation">
+    <div class="container">
+      <div class="case-transformation-grid">
+        <div class="case-transformation-side case-transformation-before" id="caseTransformBefore">
+          <div class="case-transformation-label-wrap">
+            <span class="case-transformation-label case-transformation-label--before" data-i18n="results.before">Before</span>
+          </div>
+          <div class="case-transformation-image" id="caseTransformBeforeImg">
+            <div class="case-transformation-placeholder">
               <i class="fas fa-image"></i>
               <span>Before</span>
             </div>
-            <div class="case-hero-placeholder-side">
+          </div>
+        </div>
+        <div class="case-transformation-side case-transformation-after" id="caseTransformAfter">
+          <div class="case-transformation-label-wrap">
+            <span class="case-transformation-label case-transformation-label--after" data-i18n="results.after">After</span>
+          </div>
+          <div class="case-transformation-image" id="caseTransformAfterImg">
+            <div class="case-transformation-placeholder">
               <i class="fas fa-image"></i>
               <span>After</span>
             </div>
           </div>
         </div>
-        <div class="case-hero-info">
-          <span class="section-label" data-i18n="results.subtitle">Treatment Results</span>
-          <h1 class="case-hero-title" id="caseTitle">Case Details</h1>
-          <p class="case-hero-desc" id="caseDescription"></p>
-          <div class="case-info-grid" id="caseInfoGrid">
-            <!-- Populated by JS: treatment info items -->
-          </div>
-        </div>
+      </div>
+      <!-- Interactive slider toggle -->
+      <div class="case-slider-toggle" id="caseSliderToggle" style="display:none;">
+        <button class="case-slider-toggle-btn" id="btnToggleSlider">
+          <i class="fas fa-sliders-h"></i>
+          <span data-i18n="case.compareSlider">Compare with Slider</span>
+        </button>
+      </div>
+      <!-- Slider container (hidden by default, activated by toggle) -->
+      <div class="case-slider-container" id="caseSliderContainer" style="display:none;">
+        <div class="case-slider-wrap" id="caseHeroSlider"></div>
+        <button class="case-slider-close-btn" id="btnCloseSlider">
+          <i class="fas fa-th-large"></i>
+          <span data-i18n="case.splitView">Back to Split View</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Treatment Info Strip -->
+  <section class="case-info-strip" id="caseInfoStripSection" style="display:none;">
+    <div class="container">
+      <div class="case-info-strip-grid" id="caseInfoGrid">
+        <!-- Populated by JS: treatment info items -->
       </div>
     </div>
   </section>
@@ -85,27 +121,27 @@
     </div>
   </section>
 
-  <!-- Before Images Section -->
-  <section class="case-before-section" id="caseBeforeSection" style="display:none;">
+  <!-- Before Images Gallery Section -->
+  <section class="case-gallery-section case-gallery-before" id="caseBeforeSection" style="display:none;">
     <div class="container">
-      <div class="case-ba-section-header">
-        <span class="case-ba-label-tag case-ba-label-before" data-i18n="results.before">Before</span>
-        <h2 class="case-ba-section-title" data-i18n="case.beforeTitle">Before Treatment</h2>
+      <div class="case-gallery-header">
+        <span class="case-gallery-tag case-gallery-tag--before" data-i18n="results.before">Before</span>
+        <h2 class="case-gallery-title" data-i18n="case.beforeTitle">Before Treatment</h2>
       </div>
-      <div class="case-ba-images-grid" id="caseBeforeGrid">
+      <div class="case-gallery-grid" id="caseBeforeGrid">
         <!-- Populated by JS -->
       </div>
     </div>
   </section>
 
-  <!-- After Images Section -->
-  <section class="case-after-section" id="caseAfterSection" style="display:none;">
+  <!-- After Images Gallery Section -->
+  <section class="case-gallery-section case-gallery-after" id="caseAfterSection" style="display:none;">
     <div class="container">
-      <div class="case-ba-section-header">
-        <span class="case-ba-label-tag case-ba-label-after" data-i18n="results.after">After</span>
-        <h2 class="case-ba-section-title" data-i18n="case.afterTitle">After Treatment</h2>
+      <div class="case-gallery-header">
+        <span class="case-gallery-tag case-gallery-tag--after" data-i18n="results.after">After</span>
+        <h2 class="case-gallery-title" data-i18n="case.afterTitle">After Treatment</h2>
       </div>
-      <div class="case-ba-images-grid" id="caseAfterGrid">
+      <div class="case-gallery-grid" id="caseAfterGrid">
         <!-- Populated by JS -->
       </div>
     </div>
@@ -118,21 +154,20 @@
     </div>
   </section>
 
-  <!-- Related Transformations -->
-  <section class="case-related" id="caseRelated" style="display:none;">
+  <!-- More Transformations Section -->
+  <section class="case-more" id="caseRelated" style="display:none;">
     <div class="container">
-      <span class="section-label text-center" style="display:block;" data-i18n="results.galleryLabel">Our Gallery</span>
-      <h2 class="section-heading text-center" data-i18n="case.relatedCases">More Transformations</h2>
-      <div class="case-related-grid" id="caseRelatedGrid">
+      <div class="case-more-header">
+        <span class="section-label" data-i18n="case.moreLabel">Explore</span>
+        <h2 class="case-more-title" data-i18n="case.relatedCases">More Transformations</h2>
+        <p class="case-more-desc" data-i18n="case.moreDesc">See more real results from our orthodontic treatments.</p>
+      </div>
+      <div class="case-more-grid" id="caseRelatedGrid">
         <!-- Populated by JS -->
       </div>
-    </div>
-  </section>
-
-  <!-- Back Button -->
-  <section class="case-back-section">
-    <div class="container text-center">
-      <a href="results.html" class="btn btn-outline-dark" data-i18n="case.backToResults"><i class="fas fa-arrow-left"></i> Back to Results</a>
+      <div class="case-more-cta">
+        <a href="results.html" class="btn btn-outline-dark case-more-btn" data-i18n="case.viewAll">View All Results</a>
+      </div>
     </div>
   </section>
 
